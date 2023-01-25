@@ -16,7 +16,7 @@ This is a team project that is developed by seven University of Bristol CS MEng 
 ## How to develop using C# and unity 
 You should first download the unity through this [website](https://unity.com/)
 Since you are using C# obviously you need to download the [.Net](https://dotnet.microsoft.com/en-us/)
-
+Also the [documentation website](https://docs.unity3d.com/ScriptReference/index.html)
 
 ## What does the folders contains
 All the C# scripts that are stored in the `Asset/Script`
@@ -28,4 +28,13 @@ Used by Everyone to keep track of the development process
 
 2023-1-25   
     a working cube that is able to move using WASD key 
-    the the moving area is restricted       by Dexter Ding
+    the the moving area is restricted       
+    
+    the start() define the starting point of the cube 
+    the update is called per frame
+    the movement of the object is updated using transform.Translate
+    the restriced area by updating the position using if statement and transform.position
+
+    
+    
+    by Dexter Ding
