@@ -23,13 +23,15 @@ Here is the Link for the game idea : [hitfox idea](https://docs.google.com/docum
 3. For the VS entension please ensure you got the `c#` `Unity Code Snippets` `VS Live Share`  
 4. Also please refer to the [documentation of unity](https://docs.unity3d.com/ScriptReference/index.html)    
 
-
-
+## How to get the model of the Royal Fort Garden 
+1. download the [blender](https://www.blender.org/thanks/) and install the [RenderDoc](https://renderdoc.org/builds)
+2. the offical guildance of how to use this is [here](https://github.com/eliemichel/MapsModelsImporter) 
 
 
 ## What does the folders contains
-All the C# scripts that are stored in the `Asset/Script`  
-The script that contains the movement logic of the player is in the `Assets/Script/Player.cs`
+1. All the C# scripts that are stored in the `Asset/Script`  
+2. The script that contains the movement logic of the player is in the `Assets/Script/Player.cs`  
+3. The basic scene that contains the moveable cube in the `Asset/Scenes/basic.unity`
 
 
 ## Development log book 
