@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     public float sBound = -3.8f;
     public float aBound = 3.8f;
     public float dBound = -3.8f;
+    
+
     // define the speed of an object
 
 
@@ -26,9 +28,9 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal"); 
         // moving towards left or right using key A and D
         
-        float verticalInput = Input.GetAxis("Vertical");    
+        float verticalInput = Input.GetAxis("Vertical");
         //moving forwards or backwards using key W and S
-        
+
         
         
         //transform.Translate(Vector3.right * horizontalInput *speed * Time.deltaTime);
