@@ -226,6 +226,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 466634679}
+  - component: {fileID: 466634681}
+  - component: {fileID: 466634680}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -249,6 +251,41 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &466634680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 466634678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfd9bf6f162c0c897975da58354c324b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transformToFollow: {fileID: 597872196}
+--- !u!195 &466634681
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 466634678}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &471642770
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -596,6 +633,7 @@ GameObject:
   - component: {fileID: 1197653580}
   - component: {fileID: 1197653579}
   - component: {fileID: 1197653578}
+  - component: {fileID: 1197653581}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -669,6 +707,18 @@ Transform:
   m_Father: {fileID: 597872196}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1197653581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1197653577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e99e30f09ef3c6c75b3c14f450d157f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1315765089
 GameObject:
   m_ObjectHideFlags: 0
