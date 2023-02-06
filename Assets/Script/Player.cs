@@ -1,8 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+//using System.Diagnostics;
+//new version
+public class Player : MonoBehaviourPunCallbacks
+{
+    void Start()
+    {
+        UnityEngine.Debug.Log("Connnected to Master");
+        PhotonNetwork.ConnectUsingSettings();
+    }
+    public override void OnConnectedToMaster()
+    {
+        UnityEngine.Debug.Log("Connnected to Master");
+        PhotonNetwork.JoinLobby();
+    }
+    public override void OnJoinedLobby()
+    {
+        MenuManager.Instance.OpenMenu("title");
+        UnityEngine.Debug.Log("Joined Lobby");
+    }
+    void Update()
+    {
 
-public class Player : MonoBehaviour
+    }
+}
+/*public class Player : MonoBehaviour
 {
     public float speed = 3.5f;
     
@@ -63,5 +87,5 @@ public class Player : MonoBehaviour
             transform.position = new Vector3(dBound, transform.position.y, transform.position.z );
         }
     }
-}
+}*/
 
