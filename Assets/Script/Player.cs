@@ -4,63 +4,59 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speed = 3.5f;
-    
-    public float wBound = 3.8f;
-    public float sBound = -3.8f;
-    public float aBound = 3.8f;
-    public float dBound = -3.8f;
-    // define the speed of an object
+    public float speed = 7.5f;
+    public float jumpSpeed = 8.0f;
+    public float gravity = 20.0f;
+    public Camera playerCamera;
+    public float lookSpeed = 2.0f;
+    public float lookXLimit = 45.0f;
 
+    public CharacterController characterController;
+    Vector3 moveDirection = Vector3.zero;
+    Vector2 rotation = Vector2.zero;
 
-    // Start is called before the first frame update
+    [HideInInspector]
+    public bool canMove = true;
+
     void Start()
     {
-        // take the current position = new position (0,0,0)
-        transform.position = new Vector3(0, 0, 0);
+        characterController = GetComponent<CharacterController>();
+        rotation.y = transform.eulerAngles.y;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        float horizontalInput = Input.GetAxis("Horizontal"); 
-        // moving towards left or right using key A and D
-        
-        float verticalInput = Input.GetAxis("Vertical");    
-        //moving forwards or backwards using key W and S
-        
-        
-        
-        //transform.Translate(Vector3.right * horizontalInput *speed * Time.deltaTime);
-        //transform.Translate(Vector3.forward * verticalInput *speed * Time.deltaTime); 
-        
-        Vector3 direction = new Vector3(horizontalInput,0,verticalInput);
-        transform.Translate(direction * speed * Time.deltaTime);
-        // used to replace the two line of code above 
-        //https://docs.unity3d.com/ScriptReference/Vector3.html
-        // the url above is the doc for vector3
-
-        
-        
-        //code used to constriain the movement of the object
-        // restrict the movement of W and S 
-
-        
-        if(transform.position.z >=wBound){
-            transform.position = new Vector3(transform.position.x, transform.position.y, wBound );
-        }
-        else if(transform.position.z <= sBound)
+        if (characterController.isGrounded)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, sBound );
+            // We are grounded, so recalculate move direction based on axes
+            Vector3 forward = transform.TransformDirection(Vector3.forward);
+            Vector3 right = transform.TransformDirection(Vector3.right);
+            float curSpeedX = speed * Input.GetAxis("Vertical");
+            float curSpeedY = speed * Input.GetAxis("Horizontal");
+            moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+
+            if (Input.GetButton("Jump"))
+            {
+                moveDirection.y = jumpSpeed;
+            }
         }
-        
-        // restrict the movement of A and D
-        if(transform.position.x >=aBound){
-            transform.position = new Vector3(aBound, transform.position.y, transform.position.z );
-        }
-        else if(transform.position.x <= dBound)
+
+        // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
+        // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
+        // as an acceleration (ms^-2)
+        moveDirection.y -= gravity * Time.deltaTime;
+
+        // Move the controller
+        characterController.Move(moveDirection * Time.deltaTime);
+
+        // Player and Camera rotation
+        if (canMove)
         {
-            transform.position = new Vector3(dBound, transform.position.y, transform.position.z );
+            rotation.y += Input.GetAxis("Mouse X") * lookSpeed;
+            rotation.x += -Input.GetAxis("Mouse Y") * lookSpeed;
+            rotation.x = Mathf.Clamp(rotation.x, -lookXLimit, lookXLimit);
+            playerCamera.transform.localRotation = Quaternion.Euler(rotation.x, 0, 0);
+            transform.eulerAngles = new Vector2(0, rotation.y);
         }
     }
 }
