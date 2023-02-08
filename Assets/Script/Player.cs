@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+
     // define the speed of an object
     public float walkingSpeed;
     public float speed;
@@ -41,9 +42,7 @@ public class PlayerMovement : MonoBehaviour
 
         // moving towards left or right using key A and D
         float horizontalInput = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
-        
-        // moving forwards or backwards using key W and S
-        float verticalInput = Input.GetAxis("Vertical") * speed * Time.deltaTime; 
+       
 
         Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput);
         float magnitude = Mathf.Clamp01(movementDirection.magnitude) * speed;
