@@ -21,6 +21,8 @@ public class DoggoBehaviour : MonoBehaviour{
     public GameObject player;
     public GameObject woof;
 
+    UnityEngine.AI.NavMeshAgent agent;
+
     public enum DoggoState { 
         WALK,
         RUNTOWARD,
@@ -38,6 +40,7 @@ public class DoggoBehaviour : MonoBehaviour{
         fearfulness = Random.Range(0, 100); 
         responsiveness = Random.Range(0, 100);
         aggression = Random.Range(0, 100);
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
 
     // Update is called once per frame
@@ -50,16 +53,21 @@ public class DoggoBehaviour : MonoBehaviour{
                 break;
             case DoggoState.RUNTOWARD:
                 if (player != null) {
-                    if (distance > Mathf.Lerp(2,5,fearfulness/100))
-                        transform.Translate(speed * Vector3.Normalize(player.transform.position - transform.position), Space.World);
-                    else state = DoggoState.BARK;
+                    if (distance > Mathf.Lerp(2, 5, fearfulness / 100))
+                        agent.destination = player.transform.position;
+                    else { 
+                        state = DoggoState.BARK;
+                        agent.destination = transform.position;
+                    }
                 }
                 break;
             case DoggoState.BARK:
-                if (timer > 20) {
-                    if (distance > 0.5 * reactivity) state = DoggoState.SEARCH;
-                    if (Random.Range(0, 100) < aggression)
-                        state = DoggoState.ATTACK;
+                if (Random.Range(0, 100) <0.001) Instantiate(woof, transform);
+                if (timer > 10) {
+                    
+                    if (distance > 3) state = DoggoState.SEARCH;
+                    /*if (Random.Range(0, 100) < aggression)
+                        state = DoggoState.ATTACK;*/
                     else if (Random.Range(0, 100) < fearfulness) state = DoggoState.RUNAWAY;
                     timer = 0;
                 }
@@ -72,6 +80,9 @@ public class DoggoBehaviour : MonoBehaviour{
             case DoggoState.SEARCH:
                 //Temp
                 state = DoggoState.RUNTOWARD;
+                break;
+            case DoggoState.RUNAWAY:
+                agent.destination = player.transform.position + Random.Range(5,10)*(transform.position-player.transform.position);
                 break;
             default:
                 break;
