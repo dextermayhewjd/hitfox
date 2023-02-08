@@ -48,10 +48,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Photon/PhotonUnityNetworking/Demos/DemoSlotRacer/SlotCar-Scene.unity
     guid: 711b38c07f2cf904f81b3422c67f1825
-  - enabled: 1
+  - enabled: 0
     path: Assets/infoGamerPhoton/Scene/QuickStartDemo.unity
     guid: b9506a29fff474f5ca4dd60c867da5f4
-  - enabled: 1
+  - enabled: 0
     path: Assets/infoGamerPhoton/Scene/MultiplayerScene.unity
     guid: cc3cbe8d13d7b6e43a73262f756cc227
   m_configObjects: {}

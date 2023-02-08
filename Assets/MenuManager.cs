@@ -12,13 +12,15 @@ public class MenuManager : MonoBehaviour
         Instance = this;
     }
 
-    public void OpenMenu(string menuName)
+    public void OpenMenu(string menuName) // using string as a key to access the menu
     {
         for(int i = 0; i < menus.Length; i++)
         {
             if (menus[i].menuName == menuName)
             {
                 OpenMenu(menus[i]);
+
+
             }
             else if (menus[i].open)
             {
@@ -28,6 +30,15 @@ public class MenuManager : MonoBehaviour
     }
     public void OpenMenu(Menu menu)
     {
+        for(int i = 0; i < menus.Length; i++)
+        {
+            if (menus[i].open)
+            {
+                CloseMenu(menus[i]);
+
+            }
+        }
+
         menu.Open();
     }
     public void CloseMenu(Menu menu)
