@@ -4,6 +4,13 @@ Launcher.cs(in tutorial) == PLayer.cs(in implementation + commented out prev cod
 Made Canvas in scene to hold menu ( w 2 menus LoadingMenu and TitleMenu titles are self explanatory, should show loading then title but doesn't connect fully)
 
 Err: "Can not instantiate before client joined/created a room State: PeerCreated"(possibly due to previous scripts as works in vid, tho it is not recent too) + does not switch from loading menu to title menu(possibly due to this error stopping execution)
-Note: we could assign region to photon so users don't have to pick one(Assets>PhotonUnityNetwork>Resources>Photon Server Settings components) (vid picked USW as less ping) by changing Inspector Window of 
+Note: we could assign region to photon so users don't have to pick one(Assets>PhotonUnityNetwork>Resources>Photon Server Settings components) (vid picked USW as less ping) by changing Inspector Window of
 Note2: found out with free version photon PUN can have max 20 players
 
+Dexter 7&8 Feb
+
+follow the first two tutorial
+basiclly realize the function of create room and find room with system generated user name
+
+you could follow the 3&4&5 tutorial but not the sixth one
+since it is related with the movement implementation of the player so it need to be talked with jaqob
