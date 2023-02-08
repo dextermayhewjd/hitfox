@@ -9,8 +9,6 @@ public class PlayerMovement : MonoBehaviour
     public float speed;
     public float rotationSpeed;
     public float jumpSpeed;
-
-    public bool sprinting = false;
     public bool hidden;
 
     [SerializeField]
@@ -35,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
         // sprint
         if (characterController.isGrounded) {
-            speed = Input.GetKey(KeyCode.LeftShift) ? walkingSpeed * 1.5f : walkingSpeed;  
+            speed = Input.GetButtonDown(KeyCode.LeftShift) ? walkingSpeed * 1.5f : walkingSpeed;  
         }
 
         // moving towards left or right using key A and D
@@ -53,8 +51,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (characterController.isGrounded) {
 
-            verticalSpeed = -0.5f;
             characterController.stepOffset = stepOffset;
+            verticalSpeed = -0.5f;
 
             if (Input.GetButtonDown("Jump")) {
                 verticalSpeed = jumpSpeed;
@@ -63,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
             characterController.stepOffset = 0.0f;
         }
 
-        // transform.Translate(movementDirection * speed * magnitude * Time.deltaTime, Space.World);
+        transform.Translate(movementDirection * speed * magnitude * Time.deltaTime, Space.World);
 
         Vector3 velocity = movementDirection * magnitude;
         velocity.y = verticalSpeed;
