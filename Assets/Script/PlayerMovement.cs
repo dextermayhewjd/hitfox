@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
         // sprint
         if (characterController.isGrounded) {
-            speed = Input.GetButtonDown(KeyCode.LeftShift) ? walkingSpeed * 1.5f : walkingSpeed;  
+            speed = Input.GetButtonDown("Sprint") ? walkingSpeed * 1.5f : walkingSpeed;  
         }
 
         // moving towards left or right using key A and D
