@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9140337751510435539}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49,10 +49,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9cb510eb4fb4d3369b964b5379bf04b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkingSpeed: 15
-  speed: 20
+  walkSpeed: 0
   rotationSpeed: 500
   jumpSpeed: 5
+  jumpGracePeriod: 0.2
   hidden: 0
   cameraTransform: {fileID: 0}
 --- !u!143 &5849248995649383711
@@ -208,7 +208,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3845527029008584000}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.8, z: 0.08486998}
+  m_LocalPosition: {x: 0, y: 0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
