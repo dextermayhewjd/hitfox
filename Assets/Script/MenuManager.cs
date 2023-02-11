@@ -4,45 +4,44 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
-    public static MenuManager Instance;
-    [SerializeField] Menu[] menus;
-    
-    void Awake()
-    {
-        Instance = this;
-    }
+	public static MenuManager Instance;
 
-    public void OpenMenu(string menuName) // using string as a key to access the menu
-    {
-        for(int i = 0; i < menus.Length; i++)
-        {
-            if (menus[i].menuName == menuName)
-            {
-                OpenMenu(menus[i]);
+	[SerializeField] Menu[] menus;
 
+	void Awake()
+	{
+		Instance = this;
+	}
 
-            }
-            else if (menus[i].open)
-            {
-                CloseMenu(menus[i]);
-            }
-        }
-    }
-    public void OpenMenu(Menu menu)
-    {
-        for(int i = 0; i < menus.Length; i++)
-        {
-            if (menus[i].open)
-            {
-                CloseMenu(menus[i]);
+	public void OpenMenu(string menuName)
+	{
+		for(int i = 0; i < menus.Length; i++)
+		{
+			if(menus[i].menuName == menuName)
+			{
+				menus[i].Open();
+			}
+			else if(menus[i].open)
+			{
+				CloseMenu(menus[i]);
+			}
+		}
+	}
 
-            }
-        }
+	public void OpenMenu(Menu menu)
+	{
+		for(int i = 0; i < menus.Length; i++)
+		{
+			if(menus[i].open)
+			{
+				CloseMenu(menus[i]);
+			}
+		}
+		menu.Open();
+	}
 
-        menu.Open();
-    }
-    public void CloseMenu(Menu menu)
-    {
-        menu.Close();
-    }
+	public void CloseMenu(Menu menu)
+	{
+		menu.Close();
+	}
 }
