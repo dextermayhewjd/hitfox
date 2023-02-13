@@ -10,6 +10,8 @@ public class SC_CharacterController : MonoBehaviour
     public Camera playerCamera;
     public float lookSpeed = 2.0f;
     public float lookXLimit = 45.0f;
+    [SerializeField] private AudioSource jumpSFX;
+
 
     CharacterController characterController;
     Vector3 moveDirection = Vector3.zero;
@@ -37,6 +39,7 @@ public class SC_CharacterController : MonoBehaviour
 
             if (Input.GetButton("Jump"))
             {
+                jumpSFX.Play();
                 moveDirection.y = jumpSpeed;
             }
         }
