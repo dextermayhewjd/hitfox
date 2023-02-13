@@ -18,12 +18,16 @@ public class PlayerMovement : MonoBehaviour
     private float stepOffset;
     private CharacterController characterController;
 
+    private Inventory inventory;
+
     // Start is called before the first frame update
     void Start()
     {
 
         characterController = GetComponent<CharacterController>();
         stepOffset = characterController.stepOffset;
+
+        inventory = new Inventory();
 
     }
     
