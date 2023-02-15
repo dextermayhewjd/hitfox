@@ -9,6 +9,10 @@ public class ColourChanger : MonoBehaviour, IInteractable {
     private void Start() {
         mat = GetComponent<MeshRenderer>().material;
     }
+
+    private void Update() {
+        
+    }
  
     public void Interact() {
         mat.color = new Color(Random.value, Random.value, Random.value);

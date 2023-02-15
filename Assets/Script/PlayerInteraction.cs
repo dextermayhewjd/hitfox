@@ -23,6 +23,8 @@ public class PlayerInteraction : MonoBehaviour {
             if (interactable != null) { 
                 if (Input.GetKeyDown(KeyCode.E)) {
                     interactable.Interact();
+                    Debug.Log("Interacting with:");
+                    Debug.Log(interactable);
                 }
             }
         }

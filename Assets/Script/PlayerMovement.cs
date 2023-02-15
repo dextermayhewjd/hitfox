@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
         inventory = new Inventory();
 
     }
-    
+
     // Update is called once per frame
     void Update()
     {
