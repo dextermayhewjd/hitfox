@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Cinemachine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpSpeed;
     public float jumpGracePeriod;
     public bool hidden;
+    public bool captured;
+    public CinemachineFreeLook cam;
 
     public Transform cameraTransform;
 
@@ -19,12 +23,24 @@ public class PlayerMovement : MonoBehaviour
     private float? jumpedTime;
     private CharacterController characterController;
 
+    public PhotonView view;
+
     // Start is called before the first frame update
     void Start()
     {
+        captured = false;
         characterController = GetComponent<CharacterController>();
         stepOffset = characterController.stepOffset;
         Cursor.lockState = CursorLockMode.Locked;
+        view = GetComponent<PhotonView>();
+        Debug.Log(view);
+        if (view.IsMine)
+        {
+            cameraTransform = Camera.main.transform;
+            cam = FindObjectOfType<CinemachineFreeLook>();
+            cam.LookAt = transform.GetChild(0);
+            cam.Follow = transform.GetChild(0);
+        }
     }
     
     public void Teleport(Vector3 position, Quaternion rotation)
@@ -35,11 +51,9 @@ public class PlayerMovement : MonoBehaviour
         cameraTransform.rotation = rotation;
         //velocity = Vector3.zero;
     }
-    
-    // Update is called once per frame
-    void Update()
-    {
 
+    void Movement()
+    {
         float horizontalInput = Input.GetAxisRaw("Horizontal") * walkSpeed * Time.deltaTime;
         float verticalInput = Input.GetAxisRaw("Vertical") * walkSpeed * Time.deltaTime; 
 
@@ -95,6 +109,22 @@ public class PlayerMovement : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(movementDirection, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
 
+        }
+    }
+    
+    // Update is called once per frame
+    void Update()
+    {
+        if (view.IsMine)
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                captured = true;
+            }
+            if (!captured)
+            {
+                Movement();
+            }
         }
     }
 

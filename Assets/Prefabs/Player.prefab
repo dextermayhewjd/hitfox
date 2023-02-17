@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9cb510eb4fb4d3369b964b5379bf04b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 0
+  walkSpeed: 15
   rotationSpeed: 500
   jumpSpeed: 5
   jumpGracePeriod: 0.2
@@ -85,7 +85,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75824261c07e9c76c8c61933741a4c5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 1180456146910659787}
   interactionDistance: 10
 --- !u!1 &3406651585373861169
 GameObject:

@@ -18,6 +18,8 @@ public class SC_NPCFollow : MonoBehaviour
     void Update()
     {
         //Follow the player
+        transformToFollow = GameObject.FindGameObjectsWithTag("Player")[0].transform;
         agent.destination = transformToFollow.position;
+        
     }
 }
