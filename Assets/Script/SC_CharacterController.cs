@@ -12,7 +12,6 @@ public class SC_CharacterController : MonoBehaviour
     public float lookSpeed = 2.0f;
     public float lookXLimit = 45.0f;
     [SerializeField] private AudioSource jumpSFX;
-    [SerializeField] private AudioSource footstepsSFX;
 
 
     CharacterController characterController;
@@ -44,10 +43,7 @@ public class SC_CharacterController : MonoBehaviour
                 jumpSFX.Play();
                 moveDirection.y = jumpSpeed;
             }
-            if (Input.GetKey("w") || Input.GetKey("a") || Input.GetKey("s") || Input.GetKey("d"))
-            {
-                footstepsSFX.Play();
-            }
+           
         }
 
         // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
