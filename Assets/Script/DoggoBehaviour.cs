@@ -20,7 +20,7 @@ public class DoggoBehaviour : MonoBehaviour{
     private float timer = 0;
 
     public DoggoState state = DoggoState.WALK;
-    public GameObject player;
+    public GameObject interactingWith;
     public GameObject woof;
 
     UnityEngine.AI.NavMeshAgent agent;
@@ -35,8 +35,8 @@ public class DoggoBehaviour : MonoBehaviour{
 
     }
     void Start(){
-        if (player == null) {
-            player = GameObject.FindGameObjectWithTag("Player");
+        if (interactingWith == null) {
+            interactingWith = GameObject.FindGameObjectWithTag("Player");
         }
         reactivity = Random.Range(5, 10);
         fearfulness = Random.Range(0, 100); 
@@ -47,21 +47,21 @@ public class DoggoBehaviour : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
-        float distance = Vector3.Distance(player.transform.position, transform.position);
-        float angle = Vector3.Angle(player.transform.position - transform.position, transform.forward);
+        float distance = Vector3.Distance(interactingWith.transform.position, transform.position);
+        float angle = Vector3.Angle(interactingWith.transform.position - transform.position, transform.forward);
         switch (state) {
             
             case DoggoState.WALK:
-                if (distance < reactivity && Mathf.Abs(angle) < fov && !Physics.Raycast(transform.position, Vector3.Normalize(player.transform.position - transform.position),distance-2)) { 
+                if (distance < reactivity && CanSee(interactingWith,distance)) { 
                     state = DoggoState.RUNTOWARD;
                 }
 
                     break;
             case DoggoState.RUNTOWARD:
-                if (player != null) {
+                if (interactingWith != null) {
                     if (distance > Mathf.Lerp(2, 5, fearfulness / 100))
-                        agent.destination = player.transform.position;
-                    else { 
+                        agent.destination = interactingWith.transform.position;
+                    else if(interactingWith.tag == "Player") { 
                         state = DoggoState.BARK;
                         agent.destination = transform.position;
                     }
@@ -76,11 +76,18 @@ public class DoggoBehaviour : MonoBehaviour{
                         state = DoggoState.ATTACK;*/
                     else if (Random.Range(0, 100) < fearfulness) { 
                         state = DoggoState.RUNAWAY;
-                        agent.destination = player.transform.position + Random.Range(5, 10) * (transform.position - player.transform.position);
+                        agent.destination = interactingWith.transform.position + Random.Range(5, 10) * Vector3.Normalize(transform.position - interactingWith.transform.position);
                     }
                     timer = 0;
                 }
                 timer += Time.deltaTime;
+                GameObject[] chasables = GameObject.FindGameObjectsWithTag("DogChase");
+                foreach (GameObject i in chasables) {
+                    if (CanSee(i, distance)) { 
+                        interactingWith = i; 
+                    }
+                }
+                
                 break;
             case DoggoState.ATTACK:
 
@@ -96,5 +103,20 @@ public class DoggoBehaviour : MonoBehaviour{
             default:
                 break;
         }
+    }
+    bool CanSee(GameObject o,float distance) { 
+        float angle = Vector3.Angle(Vector3.Normalize(o.transform.position - transform.position), transform.forward);
+
+        if (Mathf.Abs(angle) < fov) {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.Normalize(o.transform.position - transform.position), out hit, distance)) {
+                //Debug.Log("Hit " + hit.collider.gameObject.name+","+o.name, hit.collider.gameObject);
+                if (hit.transform.parent != null) {
+                    return hit.transform.parent.gameObject.GetInstanceID() == o.GetInstanceID();
+                }
+                return false;
+            }
+        }
+        return false;
     }
 }
