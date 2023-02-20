@@ -11,6 +11,8 @@ public class SC_CharacterController : MonoBehaviour
     public float lookSpeed = 2.0f;
     public float lookXLimit = 45.0f;
 
+    public Inventory inventory;
+
     CharacterController characterController;
     Vector3 moveDirection = Vector3.zero;
     Vector2 rotation = Vector2.zero;
@@ -22,6 +24,7 @@ public class SC_CharacterController : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         rotation.y = transform.eulerAngles.y;
+        inventory = new Inventory();
     }
 
     void Update()

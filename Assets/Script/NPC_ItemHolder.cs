@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPC_ItemHolder : MonoBehaviour, IInteractable
+public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
 {
     public enum State {IDLE, CHASE}
+
+    public Inventory inventory;
     State state;
 
     //Transform that NPC has to follow
@@ -37,5 +39,15 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable
         Debug.Log("Interacted");
         state = State.CHASE;
         Debug.Log("Interacted; chasing!");
+    }
+
+    public void StealFrom(SC_CharacterController characterController, Item item) {
+        this.inventory.RemoveItem(item);
+        characterController.inventory.AddItem(item);
+        Debug.Log("stolen");
+    }
+
+    public List<Item> CheckItems() {
+        return this.inventory.GetItemList();    
     }
 }

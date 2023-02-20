@@ -18,6 +18,12 @@ public class Inventory {
         Debug.Log("got item");
     }
 
+    public void RemoveItem(Item item) {
+        itemList.Remove(item);
+        Debug.Log("Removed item: ");
+        Debug.Log(item);
+    }
+
     public int NumberOfItems(Item.ItemType itemType) {
         foreach (Item item in itemList) {
             if(item.itemType == itemType && item.amount > 0) {
@@ -26,6 +32,10 @@ public class Inventory {
         }
 
         return 0;
+    }
+
+    public List<Item> GetItemList() {
+        return itemList;
     }
 
 }
