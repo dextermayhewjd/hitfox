@@ -39,7 +39,7 @@ public class SC_CharacterController : MonoBehaviour
 
             if (Input.GetButton("Jump"))
             {
-                jumpSFX.Play();
+                jumpSFX.Play(); 
                 moveDirection.y = jumpSpeed;
             }
         }

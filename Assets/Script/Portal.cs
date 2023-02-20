@@ -5,11 +5,13 @@ using UnityEngine;
 public class Portal : MonoBehaviour
 {
     [SerializeField] Transform destination;
+    [SerializeField] private AudioSource teleportSFX;
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && other.TryGetComponent<PlayerMovement>(out var player))
         {
+            teleportSFX.Play();
             player.Teleport(destination.position, destination.rotation);
         }    
     }
