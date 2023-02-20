@@ -19,6 +19,8 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
     void Start()
     {
         Inventory inventory = new Inventory();
+        this.inventory = inventory;
+
         state = State.IDLE;
 
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -30,7 +32,6 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
     {
         if(state == State.CHASE) {
             agent.destination = transformToFollow.position;
-            Debug.Log("itemholder NPC chasing");
         }
         // Debug.Log(state);
     }
@@ -39,15 +40,23 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
         Debug.Log("Interacted");
         state = State.CHASE;
         Debug.Log("Interacted; chasing!");
+        CalmDown(5);
     }
 
     public void StealFrom(SC_CharacterController characterController, Item item) {
         this.inventory.RemoveItem(item);
         characterController.inventory.AddItem(item);
         Debug.Log("stolen");
+        state = State.CHASE;
+        CalmDown(5);
     }
 
     public List<Item> CheckItems() {
         return this.inventory.GetItemList();    
+    }
+
+    private IEnumerator CalmDown(int secs) {
+        yield return new WaitForSeconds(secs);
+        state = State.IDLE;
     }
 }
