@@ -14,10 +14,12 @@ public class DoggoBehaviour : MonoBehaviour{
     public float responsiveness;
     //Chance to attack
     public float aggression;
+    //Dog's field of view
+    public float fov = 120;
 
     private float timer = 0;
 
-    public DoggoState state = DoggoState.RUNTOWARD;
+    public DoggoState state = DoggoState.WALK;
     public GameObject player;
     public GameObject woof;
 
@@ -46,11 +48,15 @@ public class DoggoBehaviour : MonoBehaviour{
     // Update is called once per frame
     void Update(){
         float distance = Vector3.Distance(player.transform.position, transform.position);
+        float angle = Vector3.Angle(player.transform.position - transform.position, transform.forward);
         switch (state) {
             
             case DoggoState.WALK:
-                if (distance < reactivity) state = DoggoState.RUNTOWARD;
-                break;
+                if (distance < reactivity && Mathf.Abs(angle) < fov && !Physics.Raycast(transform.position, Vector3.Normalize(player.transform.position - transform.position),distance-2)) { 
+                    state = DoggoState.RUNTOWARD;
+                }
+
+                    break;
             case DoggoState.RUNTOWARD:
                 if (player != null) {
                     if (distance > Mathf.Lerp(2, 5, fearfulness / 100))
@@ -63,12 +69,15 @@ public class DoggoBehaviour : MonoBehaviour{
                 break;
             case DoggoState.BARK:
                 if (Random.Range(0, 100) <0.001) Instantiate(woof, transform);
-                if (timer > 10) {
-                    
+                if (timer > 5) {
+
                     if (distance > 3) state = DoggoState.SEARCH;
                     /*if (Random.Range(0, 100) < aggression)
                         state = DoggoState.ATTACK;*/
-                    else if (Random.Range(0, 100) < fearfulness) state = DoggoState.RUNAWAY;
+                    else if (Random.Range(0, 100) < fearfulness) { 
+                        state = DoggoState.RUNAWAY;
+                        agent.destination = player.transform.position + Random.Range(5, 10) * (transform.position - player.transform.position);
+                    }
                     timer = 0;
                 }
                 timer += Time.deltaTime;
@@ -82,7 +91,7 @@ public class DoggoBehaviour : MonoBehaviour{
                 state = DoggoState.RUNTOWARD;
                 break;
             case DoggoState.RUNAWAY:
-                agent.destination = player.transform.position + Random.Range(5,10)*(transform.position-player.transform.position);
+                
                 break;
             default:
                 break;
