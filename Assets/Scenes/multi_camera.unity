@@ -1615,6 +1615,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bush
       objectReference: {fileID: 0}
+    - target: {fileID: 9197301200144804677, guid: a0163af8b42e69e8aa566190e76d68a1, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: a0163af8b42e69e8aa566190e76d68a1, type: 3}
