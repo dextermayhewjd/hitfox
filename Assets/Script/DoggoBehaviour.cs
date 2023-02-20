@@ -110,10 +110,12 @@ public class DoggoBehaviour : MonoBehaviour{
         if (Mathf.Abs(angle) < fov) {
             RaycastHit hit;
             if (Physics.Raycast(transform.position, Vector3.Normalize(o.transform.position - transform.position), out hit, distance)) {
-                //Debug.Log("Hit " + hit.collider.gameObject.name+","+o.name, hit.collider.gameObject);
-                if (hit.transform.parent != null) {
-                    return hit.transform.parent.gameObject.GetInstanceID() == o.GetInstanceID();
+                Debug.Log("Hit " + hit.collider.gameObject.name + "," + o.name, hit.collider.gameObject);
+                if (hit.collider.transform.parent != null) {
+                    
+                    return hit.collider.transform.parent.gameObject.GetInstanceID() == o.GetInstanceID();
                 }
+                Debug.Log("Hit nothing");
                 return false;
             }
         }
