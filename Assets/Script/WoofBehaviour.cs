@@ -7,7 +7,7 @@ public class WoofBehaviour : MonoBehaviour{
     private float maxLife;
     // Start is called before the first frame update
     void Start(){
-        transform.localScale *= Random.Range(0.2f, 0.5f);
+        transform.localScale *= Random.Range(0.2f, 1f);
         maxLife = Random.Range(1,3);
         life = maxLife;
     }

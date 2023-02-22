@@ -68,13 +68,14 @@ public class DoggoBehaviour : MonoBehaviour{
                 }
                 break;
             case DoggoState.BARK:
+                transform.LookAt(interactingWith.transform, Vector3.up);
                 if (Random.Range(0, 100) <0.001) Instantiate(woof, transform);
                 if (timer > 5) {
 
                     if (distance > 3) state = DoggoState.SEARCH;
                     /*if (Random.Range(0, 100) < aggression)
                         state = DoggoState.ATTACK;*/
-                    else if (Random.Range(0, 100) < fearfulness) { 
+                    else if (Random.Range(0, 100) < fearfulness && interactingWith.tag == "Player") { 
                         state = DoggoState.RUNAWAY;
                         agent.destination = interactingWith.transform.position + Random.Range(5, 10) * Vector3.Normalize(transform.position - interactingWith.transform.position);
                     }
@@ -83,7 +84,7 @@ public class DoggoBehaviour : MonoBehaviour{
                 timer += Time.deltaTime;
                 GameObject[] chasables = GameObject.FindGameObjectsWithTag("DogChase");
                 foreach (GameObject i in chasables) {
-                    if (CanSee(i, distance)) { 
+                    if (CanSee(i, distance+2)) {
                         interactingWith = i; 
                     }
                 }
@@ -106,16 +107,15 @@ public class DoggoBehaviour : MonoBehaviour{
     }
     bool CanSee(GameObject o,float distance) { 
         float angle = Vector3.Angle(Vector3.Normalize(o.transform.position - transform.position), transform.forward);
-
+       
         if (Mathf.Abs(angle) < fov) {
             RaycastHit hit;
             if (Physics.Raycast(transform.position, Vector3.Normalize(o.transform.position - transform.position), out hit, distance)) {
-                Debug.Log("Hit " + hit.collider.gameObject.name + "," + o.name, hit.collider.gameObject);
                 if (hit.collider.transform.parent != null) {
                     
                     return hit.collider.transform.parent.gameObject.GetInstanceID() == o.GetInstanceID();
                 }
-                Debug.Log("Hit nothing");
+                
                 return false;
             }
         }
