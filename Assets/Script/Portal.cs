@@ -5,13 +5,36 @@ using UnityEngine;
 public class Portal : MonoBehaviour
 {
     [SerializeField] Transform destination;
+    [SerializeField] private bool triggerActive = false;
+    private Collider collider;
 
-    void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Player") && other.TryGetComponent<PlayerMovement>(out var player))
+            {
+                triggerActive = true;
+                collider = other;
+            }
+        }
+ 
+    public void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player") && other.TryGetComponent<PlayerMovement>(out var player))
         {
-            player.Teleport(destination.position, destination.rotation);
-        }    
+            triggerActive = false;
+            collider = null;
+        }
+    }
+ 
+    private void Update()
+    {
+        if (triggerActive && Input.GetButton("Interact"))
+        {
+            if (collider.TryGetComponent<PlayerMovement>(out var player))
+            {
+                player.Teleport(destination.position, destination.rotation);
+            }
+        }
     }
 
     void OnDrawGizmos() 
