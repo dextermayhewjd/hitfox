@@ -84,7 +84,7 @@ public class DoggoBehaviour : MonoBehaviour{
                 timer += Time.deltaTime;
                 GameObject[] chasables = GameObject.FindGameObjectsWithTag("DogChase");
                 foreach (GameObject i in chasables) {
-                    if (CanSee(i, distance+2)) {
+                    if (CanSee(i, distance)) {
                         interactingWith = i; 
                     }
                 }
