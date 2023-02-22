@@ -9,7 +9,7 @@ public class PlayerInteraction : MonoBehaviour {
     public float interactionDistance;
     bool active = false;
 
-    private SC_CharacterController characterController;
+    SC_CharacterController characterController;
  
     private void Start() {
         characterController = GetComponent<SC_CharacterController>();
@@ -36,6 +36,7 @@ public class PlayerInteraction : MonoBehaviour {
             }
             if (stealable != null) {
                 if(Input.GetKeyDown(KeyCode.R)) {
+                    Debug.Log(stealable.CheckItems());
                     foreach(Item item in stealable.CheckItems()) {
                         stealable.StealFrom(characterController, item);
                     }

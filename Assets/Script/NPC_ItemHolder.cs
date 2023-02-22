@@ -20,8 +20,9 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
     {
         Inventory inventory = new Inventory();
         this.inventory = inventory;
+        this.inventory.AddItem(new Item{itemType=Item.ItemType.Chainsaw, amount=1});
 
-        state = State.IDLE;
+        this.state = State.IDLE;
 
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         Debug.Log("itemholder NPC started");
@@ -30,7 +31,7 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
     // Update is called once per frame
     void Update()
     {
-        if(state == State.CHASE) {
+        if(this.state == State.CHASE) {
             agent.destination = transformToFollow.position;
         }
         // Debug.Log(state);
@@ -38,25 +39,34 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
 
     public void Interact() {
         Debug.Log("Interacted");
-        state = State.CHASE;
+        this.state = State.CHASE;
         Debug.Log("Interacted; chasing!");
-        CalmDown(5);
+        AngerThenCalmDown(5);
     }
 
     public void StealFrom(SC_CharacterController characterController, Item item) {
         this.inventory.RemoveItem(item);
         characterController.inventory.AddItem(item);
-        Debug.Log("stolen");
-        state = State.CHASE;
-        CalmDown(5);
+        Debug.Log("stolen:");
+        Debug.Log(item.itemType);
+        this.state = State.CHASE;
+        AngerThenCalmDown(3);
     }
 
     public List<Item> CheckItems() {
         return this.inventory.GetItemList();    
     }
 
+    private void AngerThenCalmDown(int secs) {
+        this.state = State.CHASE;
+        StartCoroutine(CalmDown(secs));
+        this.state = State.IDLE;
+    }
+
+
     private IEnumerator CalmDown(int secs) {
         yield return new WaitForSeconds(secs);
-        state = State.IDLE;
+        this.state = State.IDLE;
+        Debug.Log("calmed down");
     }
 }
