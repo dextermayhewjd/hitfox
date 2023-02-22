@@ -47,7 +47,7 @@ public class PlayerInteraction : MonoBehaviour, IInteractable {
             IInteractable interactable = hit.collider.GetComponent<IInteractable>();
  
             if (interactable != null) { 
-                if (Input.GetButton("Interact")) {
+                if (Input.GetButtonDown("Interact")) {
                     interactable.Interact();
                 }
             }
