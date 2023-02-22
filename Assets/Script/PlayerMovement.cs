@@ -11,8 +11,8 @@ public class PlayerMovement : MonoBehaviour
     public float rotationSpeed;
     public float jumpSpeed;
     public float jumpGracePeriod;
-    public bool hidden;
-    public bool captured;
+    public bool hidden = false;
+    public bool captured = false;
     public CinemachineFreeLook cam;
 
     public Transform cameraTransform;
