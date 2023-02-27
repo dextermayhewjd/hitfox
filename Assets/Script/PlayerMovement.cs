@@ -22,10 +22,14 @@ public class PlayerMovement : MonoBehaviour
     private float? lastGroundedTime;
     private float? jumpedTime;
     private CharacterController characterController;
+    [SerializeField] AudioSource jumpSFX;
+
 
     public PhotonView view;
+    public static bool onground = false;
 
-    // Start is called before the first frame update
+
+
     void Start()
     {
         captured = false;
@@ -55,11 +59,11 @@ public class PlayerMovement : MonoBehaviour
     void Movement()
     {
         float horizontalInput = Input.GetAxisRaw("Horizontal") * walkSpeed * Time.deltaTime;
-        float verticalInput = Input.GetAxisRaw("Vertical") * walkSpeed * Time.deltaTime; 
+        float verticalInput = Input.GetAxisRaw("Vertical") * walkSpeed * Time.deltaTime;
 
         Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput);
         float inputMagnitude = Mathf.Clamp01(movementDirection.magnitude);
-        
+
         if (Input.GetButton("Sprint")) {
             inputMagnitude *= 1.5f;
         }
@@ -69,16 +73,23 @@ public class PlayerMovement : MonoBehaviour
         movementDirection.Normalize();
 
         verticalSpeed += Physics.gravity.y * Time.deltaTime;
-
-        if (characterController.isGrounded) 
-        {
-            lastGroundedTime = Time.time;
-        }
-
         if (Input.GetButtonDown("Jump"))
         {
             jumpedTime = Time.time;
+            jumpSFX.Play();
+
         }
+        //so footsteps SFX don't play when in air (share with Footsteps.cs)
+        if (characterController.isGrounded)
+        {
+            onground = true;
+        }
+        else
+        {
+            onground = false;
+        }
+        lastGroundedTime = Time.time;
+
 
         if (Time.time - lastGroundedTime <= jumpGracePeriod) 
         {
