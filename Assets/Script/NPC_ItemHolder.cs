@@ -41,7 +41,12 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
         Debug.Log("Interacted");
         this.state = State.CHASE;
         Debug.Log("Interacted; chasing!");
-        AngerThenCalmDown(5);
+        this.state = State.CHASE;
+
+        foreach(GameObject npc in GameObject.FindGameObjectsWithTag("BlueNPC")) {
+            npc.GetComponent<NPC_ItemHolder>().state = State.CHASE;
+            StartCoroutine(npc.GetComponent<NPC_ItemHolder>().CalmDown(5));
+        }
     }
 
     public void StealFrom(SC_CharacterController characterController, Item item) {
@@ -50,17 +55,11 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
         Debug.Log("stolen:");
         Debug.Log(item.itemType);
         this.state = State.CHASE;
-        AngerThenCalmDown(3);
+        StartCoroutine(CalmDown(5));
     }
 
     public List<Item> CheckItems() {
         return this.inventory.GetItemList();    
-    }
-
-    private void AngerThenCalmDown(int secs) {
-        this.state = State.CHASE;
-        StartCoroutine(CalmDown(secs));
-        this.state = State.IDLE;
     }
 
 
