@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
             cam.Follow = transform.GetChild(0);
         }
     }
-    
+
     public void Teleport(Vector3 position, Quaternion rotation)
     {
         transform.position = position;

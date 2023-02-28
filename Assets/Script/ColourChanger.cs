@@ -10,6 +10,10 @@ public class ColourChanger : MonoBehaviourPun, IInteractable {
     private void Start() {
         mat = GetComponent<MeshRenderer>().material;
     }
+
+    private void Update() {
+        
+    }
  
     public void Interact() {
         float r = Random.Range(0f, 1f);
