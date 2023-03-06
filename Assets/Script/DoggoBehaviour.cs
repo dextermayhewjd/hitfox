@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class DoggoBehaviour : MonoBehaviour{
     // Start is called before the first frame update
@@ -22,6 +23,7 @@ public class DoggoBehaviour : MonoBehaviour{
     public DoggoState state = DoggoState.WALK;
     public GameObject interactingWith;
     public GameObject woof;
+    PhotonView view;
 
     UnityEngine.AI.NavMeshAgent agent;
 
@@ -43,66 +45,80 @@ public class DoggoBehaviour : MonoBehaviour{
         responsiveness = Random.Range(0, 100);
         aggression = Random.Range(0, 100);
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        view = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame
     void Update(){
-        float distance = Vector3.Distance(interactingWith.transform.position, transform.position);
-        float angle = Vector3.Angle(interactingWith.transform.position - transform.position, transform.forward);
-        switch (state) {
-            
-            case DoggoState.WALK:
-                if (distance < reactivity && CanSee(interactingWith,distance)) { 
-                    state = DoggoState.RUNTOWARD;
-                }
+        if (view.IsMine) {
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            float distance = 0;
+            if (interactingWith != null) {
+                distance = Vector3.Distance(interactingWith.transform.position, transform.position);
+                
+            }
+            switch (state) {
+
+                case DoggoState.WALK:
+                    foreach (GameObject player in players) {
+                        float pdistance = Vector3.Distance(player.transform.position, transform.position);
+                        float pangle = Vector3.Angle(player.transform.position - transform.position, transform.forward);
+                        if (pdistance < reactivity && CanSee(player, pdistance)) {
+                            interactingWith = player;
+
+                            state = DoggoState.RUNTOWARD;
+                        }
+                    }
+                    
 
                     break;
-            case DoggoState.RUNTOWARD:
-                if (interactingWith != null) {
-                    if (distance > Mathf.Lerp(2, 5, fearfulness / 100))
-                        agent.destination = interactingWith.transform.position;
-                    else if(interactingWith.tag == "Player") { 
-                        state = DoggoState.BARK;
-                        agent.destination = transform.position;
+                case DoggoState.RUNTOWARD:
+                    if (interactingWith != null) {
+                        if (distance > Mathf.Lerp(2, 5, fearfulness / 100))
+                            agent.destination = interactingWith.transform.position;
+                        else if (interactingWith.tag == "Player") {
+                            state = DoggoState.BARK;
+                            agent.destination = transform.position;
+                        }
                     }
-                }
-                break;
-            case DoggoState.BARK:
-                transform.LookAt(interactingWith.transform, Vector3.up);
-                if (Random.Range(0, 100) <0.001) Instantiate(woof, transform);
-                if (timer > 5) {
+                    break;
+                case DoggoState.BARK:
+                    transform.LookAt(interactingWith.transform, Vector3.up);
+                    if (Random.Range(0, 100) < 0.001) Instantiate(woof, transform);
+                    if (timer > 5) {
 
-                    if (distance > 3) state = DoggoState.SEARCH;
-                    /*if (Random.Range(0, 100) < aggression)
-                        state = DoggoState.ATTACK;*/
-                    else if (Random.Range(0, 100) < fearfulness && interactingWith.tag == "Player") { 
-                        state = DoggoState.RUNAWAY;
-                        agent.destination = interactingWith.transform.position + Random.Range(5, 10) * Vector3.Normalize(transform.position - interactingWith.transform.position);
+                        if (distance > 3) state = DoggoState.SEARCH;
+                        /*if (Random.Range(0, 100) < aggression)
+                            state = DoggoState.ATTACK;*/
+                        else if (Random.Range(0, 100) < fearfulness && interactingWith.tag == "Player") {
+                            state = DoggoState.RUNAWAY;
+                            agent.destination = interactingWith.transform.position + Random.Range(5, 10) * Vector3.Normalize(transform.position - interactingWith.transform.position);
+                        }
+                        timer = 0;
                     }
-                    timer = 0;
-                }
-                timer += Time.deltaTime;
-                GameObject[] chasables = GameObject.FindGameObjectsWithTag("DogChase");
-                foreach (GameObject i in chasables) {
-                    if (CanSee(i, distance)) {
-                        interactingWith = i; 
+                    timer += Time.deltaTime;
+                    GameObject[] chasables = GameObject.FindGameObjectsWithTag("DogChase");
+                    foreach (GameObject i in chasables) {
+                        if (CanSee(i, distance)) {
+                            interactingWith = i;
+                        }
                     }
-                }
-                
-                break;
-            case DoggoState.ATTACK:
 
-                break;
-            
-            case DoggoState.SEARCH:
-                //Temp
-                state = DoggoState.RUNTOWARD;
-                break;
-            case DoggoState.RUNAWAY:
-                
-                break;
-            default:
-                break;
+                    break;
+                case DoggoState.ATTACK:
+
+                    break;
+
+                case DoggoState.SEARCH:
+                    //Temp
+                    state = DoggoState.RUNTOWARD;
+                    break;
+                case DoggoState.RUNAWAY:
+
+                    break;
+                default:
+                    break;
+            }
         }
     }
     bool CanSee(GameObject o,float distance) { 
