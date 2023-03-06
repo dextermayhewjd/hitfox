@@ -42,8 +42,8 @@ public class PlayerMovement : MonoBehaviour
         {
             cameraTransform = Camera.main.transform;
             cam = FindObjectOfType<CinemachineFreeLook>();
-            cam.LookAt = transform.GetChild(0);
-            cam.Follow = transform.GetChild(0);
+            cam.LookAt = transform;
+            cam.Follow = transform;
         }
     }
 

@@ -1952,14 +1952,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2069118338}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c35e76bfbe829c8b85f05d66bc4dca3, type: 3}
+  m_Script: {fileID: 11500000, guid: be9cbfd60e819ec10ad4526a603da820, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 199324029112467782, guid: e5b6f19dbefe105c5898f28c6f210c59, type: 3}
-  minX: -8
-  maxX: 8
-  minY: -16
-  maxY: 0
+  player: {fileID: 0}
+  minX: -9
+  maxX: 7
+  minZ: -18
+  maxZ: -11
+  heightY: 1
 --- !u!4 &2069118340
 Transform:
   m_ObjectHideFlags: 0
@@ -1968,7 +1969,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2069118338}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.21, y: 0, z: -15.14}
+  m_LocalPosition: {x: 7.42, y: 0, z: -18.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -32,7 +32,7 @@ public class Portal : MonoBehaviour
         {
             if (collider.TryGetComponent<PlayerMovement>(out var player))
             {
-                player.Teleport(destination.position, destination.rotation);
+                player.Teleport(destination.position + new Vector3(0, 0, 3), destination.rotation);
             }
         }
     }
