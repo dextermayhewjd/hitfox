@@ -83,12 +83,13 @@ public class PlayerMovement : MonoBehaviour
         if (characterController.isGrounded)
         {
             onground = true;
+            lastGroundedTime = Time.time;
         }
         else
         {
             onground = false;
         }
-        lastGroundedTime = Time.time;
+        
 
 
         if (Time.time - lastGroundedTime <= jumpGracePeriod) 
