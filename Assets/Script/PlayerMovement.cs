@@ -73,22 +73,22 @@ public class PlayerMovement : MonoBehaviour
         movementDirection.Normalize();
 
         verticalSpeed += Physics.gravity.y * Time.deltaTime;
+
+        //so footsteps SFX don't play when in air (share with Footsteps.cs)
+        if (characterController.isGrounded) {
+            onground = true;
+            lastGroundedTime = Time.time;
+        } else {
+            onground = false;
+        }
         if (Input.GetButtonDown("Jump"))
         {
             jumpedTime = Time.time;
             jumpSFX.Play();
 
         }
-        //so footsteps SFX don't play when in air (share with Footsteps.cs)
-        if (characterController.isGrounded)
-        {
-            onground = true;
-            lastGroundedTime = Time.time;
-        }
-        else
-        {
-            onground = false;
-        }
+        
+        
         
 
 
