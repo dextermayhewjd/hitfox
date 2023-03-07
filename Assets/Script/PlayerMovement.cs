@@ -10,25 +10,20 @@ public class PlayerMovement : MonoBehaviour
     public float walkSpeed;
     public float rotationSpeed;
     public float jumpSpeed;
-    public float jumpGracePeriod;
+    private float jumpGracePeriod;
+    public float sprintMultiplier;
     public bool hidden = false;
     public bool captured = false;
     public CinemachineFreeLook cam;
-
     public Transform cameraTransform;
-
     private float verticalSpeed;
     private float stepOffset;
     private float? lastGroundedTime;
     private float? jumpedTime;
     private CharacterController characterController;
     [SerializeField] AudioSource jumpSFX;
-
-
     public PhotonView view;
     public static bool onground = false;
-
-
 
     void Start()
     {
@@ -65,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
         float inputMagnitude = Mathf.Clamp01(movementDirection.magnitude);
 
         if (Input.GetButton("Sprint")) {
-            inputMagnitude *= 1.5f;
+            inputMagnitude *= sprintMultiplier;
         }
 
         float speed = inputMagnitude * walkSpeed;
@@ -81,30 +76,22 @@ public class PlayerMovement : MonoBehaviour
         } else {
             onground = false;
         }
+
         if (Input.GetButtonDown("Jump"))
         {
             jumpedTime = Time.time;
             jumpSFX.Play();
-
         }
-        
-        
-        
 
-
-        if (Time.time - lastGroundedTime <= jumpGracePeriod) 
-        {
-
+        if (Time.time - lastGroundedTime <= jumpGracePeriod) {
             characterController.stepOffset = stepOffset;
             verticalSpeed = -0.5f;
 
-            if (Time.time - jumpedTime <= jumpGracePeriod) 
-            {
+            if (Time.time - jumpedTime <= jumpGracePeriod) {
                 verticalSpeed = jumpSpeed;
                 jumpedTime = null;
                 lastGroundedTime = null;
             }
-
         } else {
             characterController.stepOffset = 0.0f;
         }
@@ -124,6 +111,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     
+    private bool locked = true;
+
     // Update is called once per frame
     void Update()
     {
@@ -133,6 +122,20 @@ public class PlayerMovement : MonoBehaviour
             {
                 captured = true;
             }
+
+            // temporary cursor unlock 
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                locked = locked ? false : true;
+                
+            } 
+            if (locked) {
+                Cursor.lockState = CursorLockMode.Locked;
+            } else {
+                Cursor.lockState = CursorLockMode.None;
+            }
+            
+
             if (!captured)
             {
                 Movement();
