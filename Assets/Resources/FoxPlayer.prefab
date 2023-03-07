@@ -37,7 +37,7 @@ Transform:
   m_Children:
   - {fileID: 2897188162338834329}
   - {fileID: 4052979745166704973}
-  - {fileID: 5130433287517552971}
+  - {fileID: 6861243612704410682}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -63,6 +63,7 @@ MonoBehaviour:
   cameraTransform: {fileID: 0}
   jumpSFX: {fileID: -4719139342963270801}
   view: {fileID: 0}
+  footstep: {fileID: 8057309156042801675}
 --- !u!143 &5849248995649383711
 CharacterController:
   m_ObjectHideFlags: 0
@@ -456,7 +457,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &8073136572617147794
+--- !u!1 &8057309156042801675
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -464,38 +465,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5130433287517552971}
-  - component: {fileID: 3616536165851292794}
-  - component: {fileID: 1838045653001071140}
+  - component: {fileID: 6861243612704410682}
+  - component: {fileID: 8746306020798440577}
   m_Layer: 0
-  m_Name: Footsteps
+  m_Name: Footsteps-extended0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5130433287517552971
+--- !u!4 &6861243612704410682
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8073136572617147794}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.13486755, z: 0.08486998}
+  m_GameObject: {fileID: 8057309156042801675}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1180456146910659787}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &3616536165851292794
+--- !u!82 &8746306020798440577
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8073136572617147794}
+  m_GameObject: {fileID: 8057309156042801675}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
@@ -585,16 +585,3 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1838045653001071140
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8073136572617147794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7910036b74f9ac84d8b91f8065e40cd0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  footstep: {fileID: 0}
