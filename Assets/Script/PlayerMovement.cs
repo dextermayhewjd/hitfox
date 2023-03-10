@@ -137,7 +137,6 @@ public class PlayerMovement : MonoBehaviour
             } else {
                 Cursor.lockState = CursorLockMode.None;
             }
-            
 
             if (!captured)
             {
