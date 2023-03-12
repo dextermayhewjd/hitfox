@@ -42,7 +42,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         MenuManager.Instance.OpenMenu("title"); // maybe
         UnityEngine.Debug.Log("Joined Lobby");
-			   PhotonNetwork.NickName = "Player "+Random.Range(0,1000).ToString("0000");
 				// later would be replaced with user name system
     }
     
