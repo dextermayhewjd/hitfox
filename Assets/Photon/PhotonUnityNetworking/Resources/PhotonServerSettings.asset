@@ -43,6 +43,8 @@ MonoBehaviour:
   - Interact
   - RPC_Revive
   - RPC_ColourChange
+  - RPC_HidePlayer
+  - RPC_UnhidePlayer
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
