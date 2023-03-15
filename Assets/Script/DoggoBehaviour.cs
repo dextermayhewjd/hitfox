@@ -6,6 +6,7 @@ using Photon.Pun;
 public class DoggoBehaviour : MonoBehaviour {
     // Start is called before the first frame update
     public float speed = 3;
+    public float walkSpeed = 1.5f;
     public float stopDist = 2;
     //Distance from player that it will run towards player
     public float reactivity;
@@ -47,6 +48,7 @@ public class DoggoBehaviour : MonoBehaviour {
         aggression = Random.Range(0, 100);
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         view = GetComponent<PhotonView>();
+        transform.localScale *= Random.Range(0.3f, 0.8f);
     }
 
     // Update is called once per frame
@@ -62,26 +64,29 @@ public class DoggoBehaviour : MonoBehaviour {
             switch (state) {
 
                 case DoggoState.WALK:
+                    agent.speed = walkSpeed;
                     foreach (GameObject dog in dogs) {
-                        float ddistance = Vector3.Distance(dog.transform.position, transform.position);
-                        if (ddistance < reactivity && CanSee(dog, ddistance)) {
+                        if (CanSee(dog, reactivity)) {
                             interactingWith = dog;
 
                             state = DoggoState.RUNTOWARD;
                         }
                     }
                     foreach (GameObject player in players) {
-                        float pdistance = Vector3.Distance(player.transform.position, transform.position);
-                        if (pdistance < reactivity && CanSee(player, pdistance)) {
+                        if(CanSee(player, reactivity)) {
                             interactingWith = player;
 
                             state = DoggoState.RUNTOWARD;
                         }
                     }
-
+                    transform.RotateAround(transform.position, transform.up, Random.Range(-100f, 100f)/40f * agent.angularSpeed*Time.deltaTime);
+                    agent.SetDestination(transform.forward + transform.position);
+                    
+                    
 
                     break;
                 case DoggoState.RUNTOWARD:
+                    agent.speed = speed;
                     if (interactingWith != null) {
                         if (distance > Mathf.Lerp(2, 5, fearfulness / 100))
                             agent.destination = interactingWith.transform.position;
@@ -126,10 +131,18 @@ public class DoggoBehaviour : MonoBehaviour {
                     state = DoggoState.RUNTOWARD;
                     break;
                 case DoggoState.RUNAWAY:
-
+                    if (distance > reactivity) state = DoggoState.WALK;
                     break;
                 case DoggoState.PLAY:
+                    agent.speed = speed;
                     agent.destination = interactingWith.transform.GetChild(2).position;
+                    foreach (GameObject player in players) {
+                        if (CanSee(player, reactivity)) {
+                            interactingWith = player;
+
+                            state = DoggoState.RUNTOWARD;
+                        }
+                    }
                     break;
 
                 default:
