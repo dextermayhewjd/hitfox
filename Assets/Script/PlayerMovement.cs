@@ -24,9 +24,12 @@ public class PlayerMovement : MonoBehaviour
     public PhotonView view;
     public static bool onground = false;
     public bool driving = false;
+    public GameObject footstep;
 
     void Start()
     {
+        footstep.SetActive(false);
+        captured = false;
         characterController = GetComponent<CharacterController>();
         stepOffset = characterController.stepOffset;
         Cursor.lockState = CursorLockMode.Locked;
@@ -138,6 +141,56 @@ public class PlayerMovement : MonoBehaviour
                 Movement();
             }
         }
+        //added for footsteps
+        if (Input.GetKey("w") && onground)
+        {
+            footsteps();
+        }
+
+        if (Input.GetKeyDown("s") && onground)
+        {
+            footsteps();
+        }
+
+        if (Input.GetKeyDown("a") && onground)
+        {
+            footsteps();
+        }
+
+        if (Input.GetKeyDown("d") && onground)
+        {
+            footsteps();
+        }
+
+        if (Input.GetKeyUp("w"))
+        {
+            StopFootsteps();
+        }
+
+        if (Input.GetKeyUp("s"))
+        {
+            StopFootsteps();
+        }
+
+        if (Input.GetKeyUp("a"))
+        {
+            StopFootsteps();
+        }
+
+        if (Input.GetKeyUp("d"))
+        {
+            StopFootsteps();
+        }
+    }
+
+    void footsteps()
+    {
+        footstep.SetActive(true);
+    }
+
+    void StopFootsteps()
+    {
+        footstep.SetActive(false);
     }
 
     private void OnApplicationFocus(bool focusStatus) {
