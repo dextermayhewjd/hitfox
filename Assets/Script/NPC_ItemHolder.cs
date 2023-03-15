@@ -6,6 +6,8 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
 {
     public enum State {IDLE, CHASE}
 
+    public SC_CharacterController aggro;
+
     public Inventory inventory;
     State state;
 
@@ -25,16 +27,19 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
         this.state = State.IDLE;
 
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        view = GetComponent<PhotonView>();
         Debug.Log("itemholder NPC started");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(this.state == State.CHASE) {
-            agent.destination = transformToFollow.position;
+        if(view.IsMine) {    
+            if(this.state == State.CHASE) {
+                agent.destination = transformToFollow.position;
+            }
+            // Debug.Log(state);
         }
-        // Debug.Log(state);
     }
 
     public void Interact() {
