@@ -31,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 199324029112467782}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.3853, z: 0.028506}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -54,16 +54,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9cb510eb4fb4d3369b964b5379bf04b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 15
+  walkSpeed: 5
   rotationSpeed: 500
   jumpSpeed: 5
   sprintMultiplier: 2.5
-  hidden: 0
   captured: 0
   cam: {fileID: 0}
   cameraTransform: {fileID: 0}
   jumpSFX: {fileID: -4719139342963270801}
   view: {fileID: 0}
+  driving: 0
   footstep: {fileID: 8057309156042801675}
 --- !u!143 &5849248995649383711
 CharacterController:
@@ -112,7 +112,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 3
+  Synchronization: 1
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
@@ -161,7 +161,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 199324029112467782}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2

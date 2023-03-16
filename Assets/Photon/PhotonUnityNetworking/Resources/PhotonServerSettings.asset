@@ -43,6 +43,14 @@ MonoBehaviour:
   - Interact
   - RPC_Revive
   - RPC_ColourChange
+  - RPC_HidePlayer
+  - RPC_UnhidePlayer
+  - RPC_Drop
+  - RPC_PickUp
+  - RPC_EnterAccSeat
+  - RPC_ExitAccSeat
+  - RPC_EnterAccPlayer
+  - RPC_ExitAccPlayer
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

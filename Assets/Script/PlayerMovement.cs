@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     public float jumpSpeed;
     private float jumpGracePeriod;
     public float sprintMultiplier;
-    public bool hidden = false;
     public bool captured = false;
     public CinemachineFreeLook cam;
     public Transform cameraTransform;
@@ -24,8 +23,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] AudioSource jumpSFX;
     public PhotonView view;
     public static bool onground = false;
+    public bool driving = false;
     public GameObject footstep;
-
 
     void Start()
     {
@@ -35,7 +34,6 @@ public class PlayerMovement : MonoBehaviour
         stepOffset = characterController.stepOffset;
         Cursor.lockState = CursorLockMode.Locked;
         view = GetComponent<PhotonView>();
-        Debug.Log(view);
         if (view.IsMine)
         {
             cameraTransform = Camera.main.transform;
@@ -138,7 +136,7 @@ public class PlayerMovement : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
             }
 
-            if (!captured)
+            if (!captured && !driving)
             {
                 Movement();
             }

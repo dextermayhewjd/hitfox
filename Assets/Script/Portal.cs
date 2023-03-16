@@ -6,16 +6,16 @@ public class Portal : MonoBehaviour
 {
     [SerializeField] Transform destination;
     [SerializeField] private bool triggerActive = false;
-    private Collider collider;
+    private Collider collider = null;
 
     public void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player") && other.TryGetComponent<PlayerMovement>(out var player))
         {
-            if (other.CompareTag("Player") && other.TryGetComponent<PlayerMovement>(out var player))
-            {
-                triggerActive = true;
-                collider = other;
-            }
+            triggerActive = true;
+            collider = other;
         }
+    }
  
     public void OnTriggerExit(Collider other)
     {

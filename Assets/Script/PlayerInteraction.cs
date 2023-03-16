@@ -24,7 +24,6 @@ public class PlayerInteraction : MonoBehaviour, IInteractable {
     public void Interact() 
     {    
         PlayerMovement PM = GetComponent<PlayerMovement>();
-        Debug.Log(PM.gameObject.name);
         PM.view.RPC("RPC_Revive", RpcTarget.All);
     }
 
@@ -34,7 +33,6 @@ public class PlayerInteraction : MonoBehaviour, IInteractable {
         PlayerMovement PM = GetComponent<PlayerMovement>();
         if (!PM.view.IsMine) {
             Debug.Log(PM.view);
-            Debug.Log("Returned");
             return;
         }
         Debug.Log(PM.captured);

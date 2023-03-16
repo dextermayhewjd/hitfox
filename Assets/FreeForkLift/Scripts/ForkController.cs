@@ -16,7 +16,7 @@ public class ForkController : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate () {
 
-        Debug.Log(mastMoveTrue);
+        // Debug.Log(mastMoveTrue);
         if(fork.transform.localPosition.y >= maxYmast.y && fork.transform.localPosition.y < maxY.y)
         {
             mastMoveTrue = true;
