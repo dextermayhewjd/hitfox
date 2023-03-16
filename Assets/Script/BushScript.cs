@@ -16,42 +16,43 @@ public class BushScript : Interact
         {
             if (inUse && playerInBush.IsMine)
             {
-                this.photonView.RPC("RPC_UnhidePlayer", RpcTarget.All, playerInBush.ViewID);
                 CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
                 cam.LookAt = playerInBush.transform;
                 cam.Follow = playerInBush.transform;
-                playerInBush = null;
+                this.photonView.RPC("RPC_UnhidePlayer", RpcTarget.All);
+                
             }
 
             else if (!inUse) 
             {
-                Debug.Log("If not in use");
-                playerInBush = colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>();
-                if (playerInBush.IsMine) {
+                this.photonView.RPC("RPC_HidePlayer", RpcTarget.All, colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>().ViewID);
+                if (playerInBush.IsMine) 
+                {
                     CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
                     cam.LookAt = transform;
                     cam.Follow = transform;
                 }
-                this.photonView.RPC("RPC_HidePlayer", RpcTarget.All, playerInBush.ViewID);
             }
         }
     }
 
     [PunRPC]
-    void RPC_UnhidePlayer(int disablePlayer)
+    void RPC_UnhidePlayer()
     {
-        inUse = !inUse;
-        PhotonView dp = PhotonView.Find(disablePlayer);
-        dp.transform.SetParent(null);
-        dp.gameObject.SetActive(true);
+        Debug.Log("Player left hiding spot");
+        playerInBush.transform.SetParent(null);
+        playerInBush.gameObject.SetActive(true);
+        playerInBush = null;
+        inUse = false;
     }
 
     [PunRPC]
-    void RPC_HidePlayer(int disablePlayer)
+    void RPC_HidePlayer(int player)
     {
-        inUse = !inUse;
-        PhotonView dp = PhotonView.Find(disablePlayer);
-        dp.transform.SetParent(this.transform);
-        dp.gameObject.SetActive(false);
+        Debug.Log("Player hidden");
+        inUse = true;
+        playerInBush = PhotonView.Find(player);
+        playerInBush.transform.SetParent(this.transform);
+        playerInBush.gameObject.SetActive(false);
     }
 }

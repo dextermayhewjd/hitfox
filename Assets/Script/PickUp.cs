@@ -13,35 +13,32 @@ public class PickUp : Interact
         {
             if (pickedUp && playerView.IsMine)
             {
-                // this.photonView.RPC("Drop", RpcTarget.All, playerView.ViewID);
-                Debug.Log("Object dropped");
-        pickedUp = !pickedUp;
-        PhotonView p = PhotonView.Find(playerView.ViewID);
-        this.transform.SetParent(null);
-                playerView = null;
+                this.photonView.RPC("RPC_Drop", RpcTarget.AllBuffered);
             }
 
             else if (!pickedUp) 
             {
-                playerView = colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>();
-                // this.photonView.RPC("RPC_PickUp", RpcTarget.All, playerView.ViewID);
-                Debug.Log("Picked up");
-        pickedUp = !pickedUp;
-        PhotonView p = PhotonView.Find(playerView.ViewID);
-        this.transform.SetParent(p.transform);
+                base.photonView.RequestOwnership();
+                this.photonView.RPC("RPC_PickUp", RpcTarget.AllBuffered, colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>().ViewID);
             }
         }
     }
 
     [PunRPC]
-    void RPC_Drop(int player)
+    void RPC_Drop()
     {
-        
+        Debug.Log("Object dropped");
+        this.transform.SetParent(null);
+        playerView = null;
+        pickedUp = false;
     }
 
     [PunRPC]
     void RPC_PickUp(int player)
     {
-        
+        Debug.Log("Picked up");
+        pickedUp = true;
+        playerView = PhotonView.Find(player);
+        this.transform.SetParent(playerView.transform.GetChild(0).gameObject.transform); 
     }
 }
