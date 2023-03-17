@@ -39,29 +39,34 @@ public class NewCarUserControl : Interact
 
     private void Update()
     {
-        if (colliders.Count != 0 && Input.GetButtonDown("Interact"))
+        if (Input.GetButtonDown("Interact"))
         {
-            if (driving && acceleratePlayerView.IsMine)
+            if (driving)
             {
-                CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
-                cam.LookAt = acceleratePlayerView.transform;
-                cam.Follow = acceleratePlayerView.transform;
-                this.photonView.RPC("RPC_ExitAccPlayer", RpcTarget.All);
-                
-            }
-
-            else if (!driving) 
-            {
-                base.photonView.RequestOwnership();
-                this.photonView.RPC("RPC_EnterAccPlayer", RpcTarget.All, colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>().ViewID);
-                if (acceleratePlayerView.IsMine) 
+                if (acceleratePlayerView.IsMine)
                 {
                     CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
-                    cam.LookAt = transform;
-                    cam.Follow = transform;
+                    cam.LookAt = acceleratePlayerView.transform;
+                    cam.Follow = acceleratePlayerView.transform;
+                    this.photonView.RPC("RPC_ExitAccPlayer", RpcTarget.AllBuffered);
+                    
                 }
             }
-        }
+            else
+            {
+                if (colliders.Count != 0) 
+                {
+                    // if (acceleratePlayerView.IsMine)
+                    // {
+                        CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
+                        cam.LookAt = transform;
+                        cam.Follow = transform;
+                    // }
+                    base.photonView.RequestOwnership();
+                    this.photonView.RPC("RPC_EnterAccPlayer", RpcTarget.AllBuffered, colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>().ViewID);
+                }
+            }
+        }   
     }
 
     [PunRPC]
@@ -69,7 +74,10 @@ public class NewCarUserControl : Interact
     {
         Debug.Log("Player left vehicle");
         acceleratePlayerView.transform.SetParent(null);
-        acceleratePlayerView.gameObject.SetActive(true);
+        acceleratePlayerView.GetComponent<CharacterController>().enabled = true;
+        acceleratePlayerView.GetComponent<PlayerInteraction>().enabled = true;
+        acceleratePlayerView.GetComponent<PlayerMovement>().enabled = true;
+        // acceleratePlayerView.gameObject.SetActive(true);
         acceleratePlayerView = null;
         driving = false;
     }
@@ -81,7 +89,12 @@ public class NewCarUserControl : Interact
         driving = true;
         acceleratePlayerView = PhotonView.Find(player);
         acceleratePlayerView.transform.SetParent(this.transform.GetChild(0).gameObject.transform);
-        acceleratePlayerView.gameObject.SetActive(false);
+        // acceleratePlayerView.gameObject.SetActive(false);
+        acceleratePlayerView.transform.localPosition = Vector3.zero;
+        acceleratePlayerView.transform.localRotation = Quaternion.identity;
+        acceleratePlayerView.GetComponent<CharacterController>().enabled = false;
+        acceleratePlayerView.GetComponent<PlayerInteraction>().enabled = false;
+        acceleratePlayerView.GetComponent<PlayerMovement>().enabled = false;
     }
 }
 

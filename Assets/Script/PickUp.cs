@@ -7,19 +7,34 @@ public class PickUp : Interact
 {
     public bool pickedUp = false;
     public PhotonView playerView = null;
+
+    private Rigidbody rigidbody = null;
+    private PhotonRigidbodyView rigidbodyView = null;
+
+    void Start()
+    {
+        rigidbody = GetComponent<Rigidbody>();
+        rigidbodyView = GetComponent<PhotonRigidbodyView>();
+    }
+
     void Update()
     {
-        if (colliders.Count != 0 && Input.GetButtonDown("PickUp"))
+        if (Input.GetButtonDown("Interact")) 
         {
-            if (pickedUp && playerView.IsMine)
+            if (pickedUp) 
             {
-                this.photonView.RPC("RPC_Drop", RpcTarget.AllBuffered);
-            }
-
-            else if (!pickedUp) 
+                if (playerView.IsMine)
+                {
+                    this.photonView.RPC("RPC_Drop", RpcTarget.AllBuffered);
+                }
+            } 
+            else 
             {
-                base.photonView.RequestOwnership();
-                this.photonView.RPC("RPC_PickUp", RpcTarget.AllBuffered, colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>().ViewID);
+                if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null)
+                {
+                    // base.photonView.RequestOwnership();
+                    this.photonView.RPC("RPC_PickUp", RpcTarget.AllBuffered, colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>().ViewID);
+                }
             }
         }
     }
@@ -28,9 +43,14 @@ public class PickUp : Interact
     void RPC_Drop()
     {
         Debug.Log("Object dropped");
-        this.transform.SetParent(null);
-        playerView = null;
         pickedUp = false;
+        this.transform.SetParent(null);
+        this.transform.position = playerView.transform.GetChild(0).gameObject.transform.position;
+        this.transform.rotation = playerView.transform.GetChild(0).gameObject.transform.rotation;
+        rigidbody.isKinematic = false;
+        rigidbody.detectCollisions = true;
+        rigidbodyView.enabled = true;
+        playerView = null;
     }
 
     [PunRPC]
@@ -39,6 +59,11 @@ public class PickUp : Interact
         Debug.Log("Picked up");
         pickedUp = true;
         playerView = PhotonView.Find(player);
-        this.transform.SetParent(playerView.transform.GetChild(0).gameObject.transform); 
+        this.transform.SetParent(playerView.transform.GetChild(0).gameObject.transform);
+        this.transform.localPosition = Vector3.zero;
+        this.transform.localRotation = Quaternion.identity;
+        rigidbody.isKinematic = true;
+        rigidbody.detectCollisions = false;
+        rigidbodyView.enabled = false;
     }
 }
