@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
 {
@@ -15,6 +16,7 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
     public Transform transformToFollow;
     //NavMesh Agent variable
     UnityEngine.AI.NavMeshAgent agent;
+    PhotonView view;
 
 
     // Start is called before the first frame update
@@ -27,6 +29,7 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
         this.state = State.IDLE;
 
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        PhotonView view = new PhotonView();
         view = GetComponent<PhotonView>();
         Debug.Log("itemholder NPC started");
     }
@@ -34,6 +37,7 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
     // Update is called once per frame
     void Update()
     {
+        view = GetComponent<PhotonView>();
         if(view.IsMine) {    
             if(this.state == State.CHASE) {
                 agent.destination = transformToFollow.position;
@@ -42,16 +46,19 @@ public class NPC_ItemHolder : MonoBehaviour, IInteractable, IStealable
         }
     }
 
-    public void Interact() {
+    public void Interact(SC_CharacterController interactor) {
         Debug.Log("Interacted");
         this.state = State.CHASE;
         Debug.Log("Interacted; chasing!");
-        this.state = State.CHASE;
+        StartCoroutine(npc.GetComponent<NPC_ItemHolder>().CalmDown(5));
+        // transformToFollow = interactor.transform;
+        // Debug.Log("aggro'd onto:");
+        // Debug.Log(interactor);
 
-        foreach(GameObject npc in GameObject.FindGameObjectsWithTag("BlueNPC")) {
-            npc.GetComponent<NPC_ItemHolder>().state = State.CHASE;
-            StartCoroutine(npc.GetComponent<NPC_ItemHolder>().CalmDown(5));
-        }
+        // foreach(GameObject npc in GameObject.FindGameObjectsWithTag("BlueNPC")) {
+        //     npc.GetComponent<NPC_ItemHolder>().state = State.CHASE;
+        //     StartCoroutine(npc.GetComponent<NPC_ItemHolder>().CalmDown(5));
+        // }
     }
 
     public void StealFrom(SC_CharacterController characterController, Item item) {

@@ -14,6 +14,8 @@ public class PlayerInteraction : MonoBehaviour, IInteractable {
  
     private void Start() {
         characterController = GetComponent<SC_CharacterController>();
+        Debug.Log("CharacterController (in Start)");
+        Debug.Log(characterController);
     }
 
     private void Update() 
@@ -21,7 +23,7 @@ public class PlayerInteraction : MonoBehaviour, IInteractable {
         InteractionRay();
     }
 
-    public void Interact() 
+    public void Interact(SC_CharacterController characterController) 
     {    
         PlayerMovement PM = GetComponent<PlayerMovement>();
         Debug.Log(PM.gameObject.name);
@@ -55,7 +57,9 @@ public class PlayerInteraction : MonoBehaviour, IInteractable {
  
             if (interactable != null) { 
                 if (Input.GetButtonDown("Interact")) {
-                    interactable.Interact();
+                    Debug.Log("characterController (in PI.cs):");
+                    Debug.Log(characterController);
+                    interactable.Interact(characterController);
                     Debug.Log("Interacting with:");
                     Debug.Log(interactable);
                 }

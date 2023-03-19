@@ -15,7 +15,7 @@ public class ColourChanger : MonoBehaviourPun, IInteractable {
         
     }
  
-    public void Interact() {
+    public void Interact(SC_CharacterController cc) {
         float r = Random.Range(0f, 1f);
         float g = Random.Range(0f, 1f);
         float b = Random.Range(0f, 1f);
