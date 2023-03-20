@@ -6,10 +6,9 @@ using Photon.Pun;
 public class NPC_WoodCutter : MonoBehaviour {
     // Start is called before the first frame update
     public float speed = 3;
-    public float stopDist = 2;
-    //Distance from player that it will run towards player
-
+    public float chaseDistance = 20; // distance at which it will chase a fox
     public float fov = 120;
+
 
     public WoodcutterState state = WoodcutterState.SEEKINGTREE;
 
@@ -23,6 +22,7 @@ public class NPC_WoodCutter : MonoBehaviour {
     public enum WoodcutterState { 
         SEEKINGTREE,
         CUTTING,
+        CURIOUS,
         CHASE
     }
     void Start(){
@@ -60,7 +60,8 @@ public class NPC_WoodCutter : MonoBehaviour {
 
                 case WoodcutterState.CHASE:
                     // TODO: sound and animation
-                    
+                    GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
                     
             }
         }
@@ -75,8 +76,9 @@ public class NPC_WoodCutter : MonoBehaviour {
 
     bool CanSee(GameObject o,float distance) { 
         float angle = Vector3.Angle(Vector3.Normalize(o.transform.position - transform.position), transform.forward);
+        float distance = Vector3.Distance(o.transform.position, transform.position);
        
-        if (Mathf.Abs(angle) < fov) {
+        if (Mathf.Abs(angle) < fov && distance < chaseDistance) {
             RaycastHit hit;
             if (Physics.Raycast(transform.position, Vector3.Normalize(o.transform.position - transform.position), out hit, distance)) {
                 if (hit.collider.transform.parent != null) {
