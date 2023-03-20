@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 
-public class SC_CharacterController : MonoBehaviour, ICatchable
+public class SC_CharacterController : MonoBehaviour, ICatchable, IInteractable
 {
     public float speed = 7.5f;
     public float jumpSpeed = 8.0f;
@@ -24,6 +24,7 @@ public class SC_CharacterController : MonoBehaviour, ICatchable
 
     void Start()
     {
+        caught = false;
         characterController = GetComponent<CharacterController>();
         rotation.y = transform.eulerAngles.y;
         this.inventory = GetComponent<Inventory>();
@@ -33,9 +34,13 @@ public class SC_CharacterController : MonoBehaviour, ICatchable
         caught = true;
     }
 
+    public void Interact() {
+        caught = false;
+    }
+
     void Update()
     {
-        if (characterController.isGrounded)
+        if (!caught && characterController.isGrounded)
         {
             // We are grounded, so recalculate move direction based on axes
             Vector3 forward = transform.TransformDirection(Vector3.forward);
