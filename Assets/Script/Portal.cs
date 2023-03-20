@@ -1,38 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class Portal : MonoBehaviour
+public class Portal : OnTrigger
 {
     [SerializeField] Transform destination;
-    [SerializeField] private bool triggerActive = false;
-    private Collider collider = null;
-
-    public void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player") && other.TryGetComponent<PlayerMovement>(out var player))
-        {
-            triggerActive = true;
-            collider = other;
-        }
-    }
- 
-    public void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player") && other.TryGetComponent<PlayerMovement>(out var player))
-        {
-            triggerActive = false;
-            collider = null;
-        }
-    }
  
     private void Update()
     {
-        if (triggerActive && Input.GetButton("Interact"))
+        if (Input.GetButton("Interact"))
         {
-            if (collider.TryGetComponent<PlayerMovement>(out var player))
+            var player = colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>();
+            if (player != null)
             {
-                player.Teleport(destination.position + new Vector3(0, 0, 3), destination.rotation);
+                player.Teleport(destination.position, destination.rotation);
             }
         }
     }

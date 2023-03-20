@@ -49,7 +49,6 @@ public class PlayerMovement : MonoBehaviour
         Physics.SyncTransforms();
         transform.rotation = rotation;
         cameraTransform.rotation = rotation;
-        //velocity = Vector3.zero;
     }
 
     void Movement()

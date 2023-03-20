@@ -4,7 +4,7 @@ using UnityEngine;
 using Cinemachine;
 using Photon.Pun;
 
-public class BushScript : Interact
+public class BushScript : OnTrigger
 {
     public bool inUse = false;
     public PhotonView playerInBush = null;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class Interact : MonoBehaviourPun
+public class OnTrigger : MonoBehaviourPun
 {
     public List<Collider> colliders;
 
