@@ -61,7 +61,25 @@ public class NPC_WoodCutter : MonoBehaviour {
                 case WoodcutterState.CHASE:
                     // TODO: sound and animation
                     GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                    
+                    foreach (GameObject player in players) {
+                        float distance = Vector3.Distance(player.transform.position, transform.position);
+                        if(distance < chaseDistance && CanSee(player, distance)) {
 
+                        }
+                    }
+                
+                case WoodcutterState.CURIOUS: // for 5 secs after loses sight of player, can still go into chase mode if they catch sight of them
+                    StartCoroutine(CalmDown(5));
+
+                    GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                    
+                    foreach (GameObject player in players) {
+                        float distance = Vector3.Distance(player.transform.position, transform.position);
+                        if(distance < chaseDistance && CanSee(player, distance)) {
+                            state = WoodcutterState.CHASE;
+                        }
+                    }
                     
             }
         }
@@ -74,16 +92,22 @@ public class NPC_WoodCutter : MonoBehaviour {
         Debug.Log("cut a tree");
     }
 
-    bool CanSee(GameObject o,float distance) { 
-        float angle = Vector3.Angle(Vector3.Normalize(o.transform.position - transform.position), transform.forward);
-        float distance = Vector3.Distance(o.transform.position, transform.position);
+    private IEnumerator CalmDown(int secs) {
+        yield return new WaitForSeconds(secs);
+        state = WoodcutterState.SEEKINGTREE;
+        Debug.Log("Lost him!");
+        // TODO: points
+    }
+
+    bool CanSee(GameObject obj, float distance) { 
+        float angle = Vector3.Angle(Vector3.Normalize(obj.transform.position - transform.position), transform.forward);
        
-        if (Mathf.Abs(angle) < fov && distance < chaseDistance) {
+        if (Mathf.Abs(angle) < fov) {
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, Vector3.Normalize(o.transform.position - transform.position), out hit, distance)) {
+            if (Physics.Raycast(transform.position, Vector3.Normalize(obj.transform.position - transform.position), out hit, distance)) {
                 if (hit.collider.transform.parent != null) {
                     
-                    return hit.collider.transform.parent.gameObject.GetInstanceID() == o.GetInstanceID();
+                    return hit.collider.transform.parent.gameObject.GetInstanceID() == obj.GetInstanceID();
                 }
                 
                 return false;
