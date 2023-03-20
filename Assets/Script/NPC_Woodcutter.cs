@@ -14,23 +14,33 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     }
 
     // Start is called before the first frame update
-    public float speed = 3;
-    public float chaseDistance = 20; // distance at which it will chase a fox
+    public float speed;
+    public float chaseDistance; // distance at which it will chase a fox
     public float fov = 120;
 
-    public int calmTime = 5; // for calmTime secs after loses sight of player, can still go into chase mode if they catch sight of a player
+    public int calmTime; // for calmTime secs after loses sight of player, can still go into chase mode if they catch sight of a player
 
     public WoodcutterState state = WoodcutterState.SEEKINGTREE;
 
-    public float cutDistance = 0.5f;
+    public float cutDistance;
     
     public GameObject treeToCut;
     PhotonView view;
 
     UnityEngine.AI.NavMeshAgent agent;
 
+    public float distanceToTree;
+
+    public bool isCutting;
+
 
     void Start(){
+        isCutting = false;
+        chaseDistance = 20;
+        speed = 4;
+        calmTime = 5;
+        cutDistance = 3f;
+
         if (treeToCut == null) {
             treeToCut = GameObject.FindGameObjectWithTag("Tree");
         }
@@ -38,6 +48,9 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         Debug.Log(agent);
         view = GetComponent<PhotonView>();
+
+        agent.speed = speed;
+
     }
 
     public void Interact() {
@@ -48,26 +61,29 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     void Update(){
         if (view.IsMine) {
             GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-            float distanceToTree;
+            GameObject[] trees = GameObject.FindGameObjectsWithTag("Tree");
 
             if (treeToCut != null) {
                 distanceToTree = Vector3.Distance(treeToCut.transform.position, transform.position);
             } else {
-                treeToCut = GameObject.FindGameObjectWithTag("Tree");
+                treeToCut = trees[Random.Range(0, trees.Length)];
                 distanceToTree = Vector3.Distance(treeToCut.transform.position, transform.position);
             }
 
             switch (state) {
                 case WoodcutterState.SEEKINGTREE:
                     agent.destination = treeToCut.transform.position;
-                    if(distanceToTree < cutDistance) {
+
+                    if (distanceToTree < cutDistance) {
+                        Debug.Log("should be cutting!");
                         state = WoodcutterState.CUTTING;
                     }
                     break;
                 
                 case WoodcutterState.CUTTING:
                     // TODO: cutting sound and animation
-                    StartCoroutine(CutTree(20, treeToCut)); // 20 secs to cut a tree
+                    if(!isCutting) StartCoroutine(CutTree(3, treeToCut)); // secs to cut a tree
+                    isCutting = true;
                     break;
 
                 case WoodcutterState.CHASE:
@@ -110,8 +126,13 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     private IEnumerator CutTree(int secs, GameObject tree) {
         yield return new WaitForSeconds(secs);
         tree.tag = "CutTree";
-        if (state == WoodcutterState.CUTTING) state = WoodcutterState.SEEKINGTREE;
+        // Destroy(tree);
+        tree.transform.Rotate(90.0f, 0.0f, 0.0f, Space.Self);
+        treeToCut = null;
         Debug.Log("cut a tree");
+        state = WoodcutterState.SEEKINGTREE;
+        isCutting = false;
+
     }
 
     private IEnumerator CalmDown(int secs) {
