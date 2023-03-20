@@ -5,8 +5,8 @@ using Photon.Pun;
 
 public class DoggoBehaviour : MonoBehaviour {
     // Start is called before the first frame update
-    public float speed = 3;
-    public float walkSpeed = 1.5f;
+    public float speed = 10;
+    public float walkSpeed = 5f;
     public float stopDist = 2;
     //Distance from player that it will run towards player
     public float reactivity;
@@ -18,6 +18,8 @@ public class DoggoBehaviour : MonoBehaviour {
     public float aggression;
     //Dog's field of view
     public float fov = 120;
+
+    public float wanderRadius = 10;
 
     private float timer = 0;
 
@@ -64,6 +66,7 @@ public class DoggoBehaviour : MonoBehaviour {
             switch (state) {
 
                 case DoggoState.WALK:
+                    timer-=Time.deltaTime;
                     agent.speed = walkSpeed;
                     foreach (GameObject dog in dogs) {
                         if (CanSee(dog, reactivity)) {
@@ -79,11 +82,19 @@ public class DoggoBehaviour : MonoBehaviour {
                             state = DoggoState.RUNTOWARD;
                         }
                     }
-                    transform.RotateAround(transform.position, transform.up, Random.Range(-100f, 100f)/40f * agent.angularSpeed*Time.deltaTime);
-                    agent.SetDestination(transform.forward + transform.position);
-                    
+
+                    if (timer <= 0) {
+                        Vector3 newPos = Random.onUnitSphere;
+                        newPos.y = 0;
+                        newPos = Vector3.RotateTowards(newPos, transform.forward, Mathf.Deg2Rad * 0.5f * Vector3.Angle(newPos, transform.forward), 0);
+                        newPos = Vector3.Normalize(newPos) * wanderRadius;
+                        agent.SetDestination(transform.position + newPos);
+                        timer = 1;
+                        //Debug.Log("Changing direction: "+ newPos + ", " + transform.position);
+                    }
                     
 
+                    Debug.DrawRay(transform.position, agent.destination-transform.position, Color.black, 0, false);
                     break;
                 case DoggoState.RUNTOWARD:
                     agent.speed = speed;
@@ -93,6 +104,7 @@ public class DoggoBehaviour : MonoBehaviour {
                         else if (interactingWith.tag == "Player") {
                             state = DoggoState.BARK;
                             agent.destination = transform.position;
+                            timer = 0;
                         } else if (interactingWith.tag == "Dog") {
                             state = DoggoState.PLAY;
                         }
