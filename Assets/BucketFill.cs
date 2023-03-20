@@ -11,8 +11,10 @@ public class BucketFill : MonoBehaviour
     public float fillSpeed = 0.1f;
     private bool isFilling = false;
     private bool isPouring = false;
-
     private float fillAmount = 0f;
+
+    // for the fire it encounter 
+    private FireInteraction currentFireInteraction;
 
     void Update()
     {
@@ -40,6 +42,12 @@ public class BucketFill : MonoBehaviour
             fillAmount -= fillSpeed * Time.deltaTime;
             progressBar.value = Mathf.Clamp(fillAmount, 0f, 1f);
 
+            if(currentFireInteraction!=null)
+            {
+                currentFireInteraction.health -=0.2f * Time.deltaTime;
+                currentFireInteraction.health = Mathf.Clamp(currentFireInteraction.health, 0f, 1f);
+                currentFireInteraction.progressBar.value = Mathf.Clamp(currentFireInteraction.health, 0f, 1f);
+            }
             
         }
     }
@@ -56,6 +64,9 @@ public class BucketFill : MonoBehaviour
         {
             Debug.Log("bump into fire");
             isPouring = true;
+            
+            // Get the FireInteraction component of the current fire
+            currentFireInteraction = collision.gameObject.GetComponent<FireInteraction>();
         }
     }
 
@@ -68,6 +79,8 @@ public class BucketFill : MonoBehaviour
         if (collision.gameObject.CompareTag("Fire"))
         {
             isPouring = false;
+            // Reset the current fire reference when the bucket exits the fire's collider
+            currentFireInteraction = null;
         }
     }
 }
