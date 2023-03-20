@@ -22,6 +22,7 @@ public class DoggoBehaviour : MonoBehaviour {
     public float wanderRadius = 10;
 
     private float timer = 0;
+    private float timer2 = 0;
 
     public DoggoState state = DoggoState.WALK;
     public GameObject interactingWith;
@@ -40,6 +41,12 @@ public class DoggoBehaviour : MonoBehaviour {
         PLAY
 
     }
+
+    struct ChaseParams {
+        public GameObject dog;
+        public float time;
+    }
+
     void Start() {
         /*if (interactingWith == null) {
             interactingWith = GameObject.FindGameObjectWithTag("Player");
@@ -144,10 +151,41 @@ public class DoggoBehaviour : MonoBehaviour {
                     break;
                 case DoggoState.RUNAWAY:
                     if (distance > reactivity) state = DoggoState.WALK;
+                    if (interactingWith.tag == "Dog") {
+                        timer -= Time.deltaTime;
+                        timer2 -= Time.deltaTime;
+                        if (timer <= 0) {
+                            Vector3 newPos = Random.onUnitSphere;
+                            newPos.y = 0;
+                            //newPos = Vector3.RotateTowards(newPos, transform.forward, Mathf.Deg2Rad * 0.5f * Vector3.Angle(newPos, transform.forward), 0);
+                            newPos = Vector3.Normalize(newPos) * wanderRadius;
+                            agent.SetDestination(transform.position + newPos);
+                            timer = 1;
+                            //Debug.Log("Chosen new position");
+                        }
+                        if (timer2 <= 0) {
+                            ChaseParams param = new ChaseParams();
+                            param.dog = gameObject;
+                            param.time = Random.Range(5, 10);
+                            interactingWith.BroadcastMessage("becomeChased", param);
+                            state = DoggoState.RUNTOWARD;
+                        }
+                        Debug.DrawRay(transform.position, agent.destination - transform.position, Color.black, 0, false);
+
+
+
+                    }
                     break;
                 case DoggoState.PLAY:
                     agent.speed = speed;
                     agent.destination = interactingWith.transform.GetChild(2).position;
+                    if (Vector3.Distance(transform.position, interactingWith.transform.position) < 2) {
+                        ChaseParams param = new ChaseParams();
+                        param.dog = gameObject;
+                        param.time = Random.Range(10, 20);
+                        interactingWith.BroadcastMessage("becomeChased", param);
+                        state = DoggoState.RUNTOWARD;
+                    }
                     foreach (GameObject player in players) {
                         if (CanSee(player, reactivity)) {
                             interactingWith = player;
@@ -177,5 +215,14 @@ public class DoggoBehaviour : MonoBehaviour {
             }
         }
         return false;
+    }
+
+
+    void becomeChased(ChaseParams param) {
+        if (interactingWith.tag != "Player" && (state == DoggoState.PLAY || state == DoggoState.RUNTOWARD)) {
+            interactingWith = param.dog;
+            state = DoggoState.RUNAWAY;
+            timer2 = param.time;
+        }
     }
 }
