@@ -11,6 +11,8 @@ public class SC_CharacterController : MonoBehaviour
     public float lookSpeed = 2.0f;
     public float lookXLimit = 45.0f;
 
+    public bool caught = false;
+
     public Inventory inventory = new Inventory();
 
     CharacterController characterController;
