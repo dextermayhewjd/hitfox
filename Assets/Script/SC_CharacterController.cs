@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 
-public class SC_CharacterController : MonoBehaviour
+public class SC_CharacterController : MonoBehaviour, ICatchable
 {
     public float speed = 7.5f;
     public float jumpSpeed = 8.0f;
@@ -11,9 +11,9 @@ public class SC_CharacterController : MonoBehaviour
     public float lookSpeed = 2.0f;
     public float lookXLimit = 45.0f;
 
-    public bool caught = false;
-
     public Inventory inventory = new Inventory();
+
+    public bool caught;
 
     CharacterController characterController;
     Vector3 moveDirection = Vector3.zero;
@@ -27,6 +27,10 @@ public class SC_CharacterController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         rotation.y = transform.eulerAngles.y;
         this.inventory = GetComponent<Inventory>();
+    }
+
+    public void Catch() {
+        caught = true;
     }
 
     void Update()
