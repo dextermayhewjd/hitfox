@@ -4839,9 +4839,10 @@ GameObject:
   - component: {fileID: 3031503343641055033}
   - component: {fileID: 5268122545894622387}
   - component: {fileID: 5148533570193409327}
+  - component: {fileID: 5789719785035812558}
   m_Layer: 0
   m_Name: Fire
-  m_TagString: Untagged
+  m_TagString: Fire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9787,6 +9788,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colliders: []
+  points: 0
+--- !u!65 &5789719785035812558
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3031503343641055030}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6, y: 6, z: 6}
+  m_Center: {x: 0, y: 2, z: -0.125}
 --- !u!1 &4516931031933916413
 GameObject:
   m_ObjectHideFlags: 0
@@ -14477,8 +14492,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.99607843, g: 0.6039216, b: 0.3764706, a: 1}
-  m_Intensity: 3.1270084
-  m_Range: 8.60418
+  m_Intensity: 3.302071
+  m_Range: 8.57887
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
