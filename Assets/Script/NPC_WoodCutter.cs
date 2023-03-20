@@ -9,6 +9,7 @@ public class NPC_WoodCutter : MonoBehaviour {
     public float chaseDistance = 20; // distance at which it will chase a fox
     public float fov = 120;
 
+    public float calmTime = 5; // for calmTime secs after loses sight of player, can still go into chase mode if they catch sight of a player
 
     public WoodcutterState state = WoodcutterState.SEEKINGTREE;
 
@@ -61,16 +62,26 @@ public class NPC_WoodCutter : MonoBehaviour {
                 case WoodcutterState.CHASE:
                     // TODO: sound and animation
                     GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                    GameObject chasedPlayer;
                     
                     foreach (GameObject player in players) {
                         float distance = Vector3.Distance(player.transform.position, transform.position);
                         if(distance < chaseDistance && CanSee(player, distance)) {
-
+                            agent.destination = player.transform.position;
+                            chasedPlayer = player;
+                            break;
                         }
                     }
+
+                    float distanceToChase = Vector3.Distance(agent.destination, transform.position);
+                    if (distanceToChase < 0.4) { // TODO: fine-tune the catch threshold
+                        chasedPlayer.caught = true;
+                    }
+
                 
-                case WoodcutterState.CURIOUS: // for 5 secs after loses sight of player, can still go into chase mode if they catch sight of them
-                    StartCoroutine(CalmDown(5));
+                case WoodcutterState.CURIOUS:
+                    // for calmTime secs after loses sight of player, can still go into chase mode if they catch sight of a player
+                    StartCoroutine(CalmDown(calmTime));
 
                     GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
                     
@@ -80,7 +91,7 @@ public class NPC_WoodCutter : MonoBehaviour {
                             state = WoodcutterState.CHASE;
                         }
                     }
-                    
+                
             }
         }
     }
