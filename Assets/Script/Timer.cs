@@ -28,6 +28,10 @@ public class Timer : MonoBehaviour
         {
             string minutes = ((int)rem / 60).ToString();
             string seconds = (rem % 60).ToString("f0");
+            if(rem%60 < 9.5)
+            {
+                seconds = "0" + seconds;
+            }
 
             timerText.text = minutes + ":" + seconds;
         }
