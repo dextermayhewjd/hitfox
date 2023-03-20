@@ -24,6 +24,7 @@ public class SC_CharacterController : MonoBehaviour, ICatchable, IInteractable
 
     void Start()
     {
+        Debug.Log("INSTANTIATED SC_CHARACTERCONTROLLER");
         caught = false;
         characterController = GetComponent<CharacterController>();
         rotation.y = transform.eulerAngles.y;

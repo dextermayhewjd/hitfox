@@ -33,13 +33,16 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
     public bool isCutting;
 
+    public float catchDistance; // range of catch
+
 
     void Start(){
         isCutting = false;
         chaseDistance = 20;
         speed = 4;
         calmTime = 5;
-        cutDistance = 3f;
+        cutDistance = 3.0f;
+        catchDistance = 1.0f;
 
         if (treeToCut == null) {
             treeToCut = GameObject.FindGameObjectWithTag("Tree");
@@ -54,6 +57,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     }
 
     public void Interact() {
+        Debug.Log("Interacted");
         state = WoodcutterState.CHASE;
     }
 
@@ -88,23 +92,30 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
                 case WoodcutterState.CHASE:
                     // TODO: sound and animation
-                    if (players.Length == 0) state = WoodcutterState.SEEKINGTREE;
-
-                    GameObject chasedPlayer = null;
+                    Debug.Log("chasing 1");
                     
                     foreach (GameObject player in players) {
                         float distance = Vector3.Distance(player.transform.position, transform.position);
-                        if(distance < chaseDistance && CanSee(player, distance)) {
+                        PlayerMovement pm = player.GetComponent<PlayerMovement>();
+
+                        if(distance < chaseDistance && !pm.caught && CanSee(player, distance)) {
                             agent.destination = player.transform.position;
-                            chasedPlayer = player;
+
+                            Debug.Log(pm);
+
+                            if(distance < catchDistance) {
+                                pm.Catch();
+                            }
+
                             break;
+                        }
+
+                        if(distance < chaseDistance && !pm.caught && !CanSee(player, distance)) {
+                            state = WoodcutterState.CURIOUS;
+                            goto case WoodcutterState.CURIOUS;
                         }
                     }
 
-                    float distanceToChase = Vector3.Distance(agent.destination, transform.position);
-                    if (distanceToChase < 0.4) { // TODO: fine-tune the catch threshold
-                        // TODO: catch player
-                    }
                     break;
                 
                 case WoodcutterState.CURIOUS:
