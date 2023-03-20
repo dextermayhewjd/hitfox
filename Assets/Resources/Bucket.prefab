@@ -393,6 +393,7 @@ GameObject:
   - component: {fileID: 8832136190533875666}
   - component: {fileID: 2134271180156242613}
   - component: {fileID: 8143490686729309217}
+  - component: {fileID: 1792147444348374794}
   m_Layer: 0
   m_Name: Bucket
   m_TagString: Untagged
@@ -536,6 +537,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1792147444348374794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4993735558651106425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf05fdc600cfcb8489044bd2f5489e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  progressBar: {fileID: 4841281929834598408}
+  fillSpeed: 0.1
 --- !u!1 &4993775609881798783
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,6 +835,7 @@ GameObject:
   - component: {fileID: 1546191677769787565}
   - component: {fileID: 8337111824455044244}
   - component: {fileID: 8212925426880747003}
+  - component: {fileID: 2317513618147088686}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -910,6 +926,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2317513618147088686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8028812342949151209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a125c04ce01e834f9240286b64cb622, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8062569293840800648
 GameObject:
   m_ObjectHideFlags: 0
