@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571343, b: 0.30692208, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -609,8 +609,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 377657337}
-  m_LocalRotation: {x: 0.30418035, y: 0.0000000327821, z: -0.000000010467686, w: 0.95261455}
-  m_LocalPosition: {x: 0, y: 3.3000002, z: -2.9151301}
+  m_LocalRotation: {x: 0.30418035, y: -0, z: -0, w: 0.95261455}
+  m_LocalPosition: {x: 0, y: 2.5, z: -2.9999995}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -811,7 +811,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 521081494}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.224447, y: 3.63, z: -10.794085}
+  m_LocalPosition: {x: 8.224447, y: 2.83, z: -10.878954}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1149,7 +1149,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1063198450}
-  m_LocalRotation: {x: 0.34042525, y: -0.00000002288009, z: 0.000000008283735, w: 0.9402716}
+  m_LocalRotation: {x: 0.34042528, y: 1.0330207e-28, z: -4.6207796e-29, w: 0.9402716}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1362,7 +1362,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1244662049}
-  m_LocalRotation: {x: 0.3041803, y: 0.000000016391052, z: -0.0000000052338436, w: 0.9526145}
+  m_LocalRotation: {x: 0.30418032, y: -0, z: -0, w: 0.9526145}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1534,7 +1534,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1655164036}
-  m_LocalRotation: {x: 0.26791713, y: -0.00000001657735, z: 0.000000004609885, w: 0.96344197}
+  m_LocalRotation: {x: 0.26791716, y: -0.000000016577353, z: 0.0000000046098854, w: 0.96344197}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2178,6 +2178,10 @@ PrefabInstance:
     - target: {fileID: 3515457186800820809, guid: a0163af8b42e69e8aa566190e76d68a1, type: 3}
       propertyPath: m_Name
       value: Bush
+      objectReference: {fileID: 0}
+    - target: {fileID: 9197301200144804677, guid: a0163af8b42e69e8aa566190e76d68a1, type: 3}
+      propertyPath: sceneViewId
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3174319382577281014, guid: a0163af8b42e69e8aa566190e76d68a1, type: 3}
