@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 
-public class SC_CharacterController : MonoBehaviour
+public class SC_CharacterController : MonoBehaviour, ICatchable, IInteractable
 {
     public float speed = 7.5f;
     public float jumpSpeed = 8.0f;
@@ -13,6 +13,8 @@ public class SC_CharacterController : MonoBehaviour
 
     public Inventory inventory = new Inventory();
 
+    public bool caught;
+
     CharacterController characterController;
     Vector3 moveDirection = Vector3.zero;
     Vector2 rotation = Vector2.zero;
@@ -22,14 +24,24 @@ public class SC_CharacterController : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("INSTANTIATED SC_CHARACTERCONTROLLER");
+        caught = false;
         characterController = GetComponent<CharacterController>();
         rotation.y = transform.eulerAngles.y;
         this.inventory = GetComponent<Inventory>();
     }
 
+    public void Catch() {
+        caught = true;
+    }
+
+    public void Interact() {
+        caught = false;
+    }
+
     void Update()
     {
-        if (characterController.isGrounded)
+        if (!caught && characterController.isGrounded)
         {
             // We are grounded, so recalculate move direction based on axes
             Vector3 forward = transform.TransformDirection(Vector3.forward);
