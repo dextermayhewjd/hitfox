@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.AI;
+using System;
+using System.Linq;
 
 public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
@@ -16,6 +18,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     // Start is called before the first frame update
     public float speed;
     public float chaseDistance; // distance at which it will chase a fox
+    public float curiousDistance;
     public float fov = 120;
 
     public int calmTime; // for calmTime secs after loses sight of player, can still go into chase mode if they catch sight of a player
@@ -35,14 +38,28 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
     public float catchDistance; // range of catch
 
+    public GameObject chasedPlayer;
+
+    public Vector3 dest;
+
+
+    GameObject FindClosestTarget(string trgt) {
+        GameObject closestGameObject = GameObject.FindGameObjectsWithTag(trgt)
+                        .OrderBy(go => Vector3.Distance(go.transform.position, transform.position))
+                        .FirstOrDefault();
+            return closestGameObject;
+    }
+
 
     void Start(){
         isCutting = false;
         chaseDistance = 20;
-        speed = 4;
+        curiousDistance = 50;
+        speed = 3;
         calmTime = 5;
         cutDistance = 3.0f;
-        catchDistance = 1.0f;
+        catchDistance = 3.0f;
+
 
         if (treeToCut == null) {
             treeToCut = GameObject.FindGameObjectWithTag("Tree");
@@ -58,11 +75,13 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
     public void Interact() {
         Debug.Log("Interacted");
+        chasedPlayer = FindClosestTarget("Player");
         state = WoodcutterState.CHASE;
     }
 
     // Update is called once per frame
     void Update(){
+        dest = agent.destination;
         if (view.IsMine) {
             GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
             GameObject[] trees = GameObject.FindGameObjectsWithTag("Tree");
@@ -70,7 +89,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
             if (treeToCut != null) {
                 distanceToTree = Vector3.Distance(treeToCut.transform.position, transform.position);
             } else {
-                treeToCut = trees[Random.Range(0, trees.Length)];
+                treeToCut = trees[UnityEngine.Random.Range(0, trees.Length)];
                 distanceToTree = Vector3.Distance(treeToCut.transform.position, transform.position);
             }
 
@@ -92,29 +111,26 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
                 case WoodcutterState.CHASE:
                     // TODO: sound and animation
-                    Debug.Log("chasing 1");
-                    
-                    foreach (GameObject player in players) {
-                        float distance = Vector3.Distance(player.transform.position, transform.position);
-                        PlayerMovement pm = player.GetComponent<PlayerMovement>();
+                    // Debug.Log("chasing 1");
 
-                        if(distance < chaseDistance && !pm.caught && CanSee(player, distance)) {
-                            agent.destination = player.transform.position;
-
-                            Debug.Log(pm);
-
-                            if(distance < catchDistance) {
-                                pm.Catch();
-                            }
-
-                            break;
-                        }
-
-                        if(distance < chaseDistance && !pm.caught && !CanSee(player, distance)) {
-                            state = WoodcutterState.CURIOUS;
-                            goto case WoodcutterState.CURIOUS;
-                        }
+                    if(chasedPlayer == null) {
+                        chasedPlayer = FindClosestTarget("Player");
                     }
+
+                    agent.destination = chasedPlayer.transform.position;
+                    
+                    float distance = Vector3.Distance(chasedPlayer.transform.position, transform.position);
+                    PlayerMovement pm = chasedPlayer.GetComponent<PlayerMovement>();
+
+                    if(distance < catchDistance && CanSee(chasedPlayer, distance)) {
+                        pm.Catch();
+                    }
+
+                    if(distance < curiousDistance && distance > chaseDistance && !pm.caught) {
+                        state = WoodcutterState.CURIOUS;
+                        goto case WoodcutterState.CURIOUS;
+                    }
+                
 
                     break;
                 
@@ -123,8 +139,8 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
                     StartCoroutine(CalmDown(calmTime));
                     
                     foreach (GameObject player in players) {
-                        float distance = Vector3.Distance(player.transform.position, transform.position);
-                        if(distance < chaseDistance && CanSee(player, distance)) {
+                        float pdistance = Vector3.Distance(player.transform.position, transform.position);
+                        if(pdistance < chaseDistance && CanSee(player, pdistance)) {
                             state = WoodcutterState.CHASE;
                         }
                     }
@@ -160,10 +176,8 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
             RaycastHit hit;
             if (Physics.Raycast(transform.position, Vector3.Normalize(obj.transform.position - transform.position), out hit, distance)) {
                 if (hit.collider.transform.parent != null) {
-                    
                     return hit.collider.transform.parent.gameObject.GetInstanceID() == obj.GetInstanceID();
                 }
-                
                 return false;
             }
         }
