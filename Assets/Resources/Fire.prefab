@@ -10030,8 +10030,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 6, y: 6, z: 6}
-  m_Center: {x: 0, y: 2, z: -0.125}
+  m_Size: {x: 3, y: 3, z: 3}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &52636507412389161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10047,7 +10047,6 @@ MonoBehaviour:
   progressBar: {fileID: 5623150326858938802}
   health: 1
   recoverSpeed: 0.05
-  putOut: 0
 --- !u!1 &4516931031933916413
 GameObject:
   m_ObjectHideFlags: 0

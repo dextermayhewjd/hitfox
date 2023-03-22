@@ -6,7 +6,7 @@ using Cinemachine;
 using Photon.Pun;
 
 [RequireComponent(typeof (NewCarController))]
-public class NewCarUserControl : Interact
+public class NewCarUserControl : OnTrigger
 {
     private NewCarController m_Car; // the car controller we want to use
     bool driving = false;

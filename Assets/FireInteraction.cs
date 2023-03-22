@@ -8,27 +8,21 @@ public class FireInteraction : MonoBehaviour
 {
     public Slider progressBar;
     public float health = 1f;
-    public float recoverSpeed = 0.025f;
-    public bool putOut = false;
-    
-
+    public float recoverSpeed = 0.025f;    
 
     void Update(){
         if(health <= 0)
         {
             Destroy(this.gameObject);
         }
-
+        else
+        {
             if(health >=1f)
             {
                 health = 1f;
-            }else
-            {
-                health += recoverSpeed*Time.deltaTime;
             }
-        progressBar.value = Mathf.Clamp(health,0f,1f);
-        
-
-        
+            health += recoverSpeed*Time.deltaTime;
+        }
+        progressBar.value = Mathf.Clamp(health,0f,1f);        
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class PickUp : Interact
+public class PickUp : OnTrigger
 {
     public bool pickedUp = false;
     public PhotonView playerView = null;
