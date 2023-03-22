@@ -54,7 +54,6 @@ public class PlayerMovement : MonoBehaviour, ICatchable
         Physics.SyncTransforms();
         transform.rotation = rotation;
         cameraTransform.rotation = rotation;
-        //velocity = Vector3.zero;
     }
 
     void Movement()
