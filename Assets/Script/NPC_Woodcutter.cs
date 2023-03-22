@@ -74,7 +74,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     }
 
     public void Interact() {
-        Debug.Log("Interacted");
+        Debug.Log("Interacted with NPC");
         chasedPlayer = FindClosestTarget("Player");
         state = WoodcutterState.CHASE;
     }
@@ -126,7 +126,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
                         pm.Catch();
                     }
 
-                    if(distance < curiousDistance && distance > chaseDistance && !pm.caught) {
+                    if(distance < curiousDistance && distance > chaseDistance && !pm.captured) {
                         state = WoodcutterState.CURIOUS;
                         goto case WoodcutterState.CURIOUS;
                     }
