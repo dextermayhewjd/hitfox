@@ -9,12 +9,11 @@ public class Portal : OnTrigger
  
     private void Update()
     {
-        if (Input.GetButton("Interact"))
-        {
-            var player = colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>();
-            if (player != null)
+        if (Input.GetButtonDown("Interact"))
+        { 
+            if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>() != null)
             {
-                player.Teleport(destination.position, destination.rotation);
+                colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>().Teleport(destination.position, destination.rotation);
             }
         }
     }

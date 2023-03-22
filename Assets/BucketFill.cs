@@ -8,47 +8,78 @@ using Photon.Pun;
 public class BucketFill : MonoBehaviour
 {
     public Slider progressBar;
-    public float fillSpeed = 0.1f;
+    public float fillSpeed = 0.2f;
     private bool isFilling = false;
     private bool isPouring = false;
     private float fillAmount = 0f;
+    public Transform water;
+    public float waterLevelHeightTop;
+    public float waterLevelHeightBottom = 0.1f;
+    public float waterLevelHeightCurrent;
+    public float waterLevelRiseAmount;
 
     // for the fire it encounter 
     private FireInteraction currentFireInteraction;
+
+    void Start()
+    {
+        water = this.transform.GetChild(1);
+        water.gameObject.SetActive(false);
+        waterLevelHeightTop = water.transform.localPosition.y;
+        waterLevelRiseAmount = (waterLevelHeightTop - waterLevelHeightBottom) / (1f / fillSpeed);
+        water.gameObject.transform.localPosition = new Vector3(0f, waterLevelHeightBottom, 0f);
+        waterLevelHeightCurrent = waterLevelHeightBottom;
+    }
 
     void Update()
     {
         if (isFilling)
         {   
-            if (fillAmount >= 1f)
+            water.gameObject.SetActive(true);
+
+            if (fillAmount >= 1)
             {
                 Debug.Log("bucket is  filled");
+                fillAmount = 1;
                 isFilling = false;
+                // water.transform.localPosition = new Vector3(0f, waterLevelHeightTop, 0f);
             }
-            Debug.Log("bucket is being filled");
-            fillAmount += fillSpeed * Time.deltaTime;
-            progressBar.value = Mathf.Clamp(fillAmount, 0f, 1f);
+            else
+            {
+                Debug.Log("bucket is being filled");
+                fillAmount += fillSpeed * Time.deltaTime;
+                waterLevelHeightCurrent += waterLevelRiseAmount * Time.deltaTime;
+                progressBar.value = Mathf.Clamp(fillAmount, 0f, 1f);
+                water.transform.localPosition = new Vector3(0f, Mathf.Clamp(waterLevelHeightCurrent, waterLevelHeightBottom, waterLevelHeightCurrent), 0f);
 
-            
+            }
         }
+
         if (isPouring)
         {   
             if (fillAmount <= 0f)
             {
                 Debug.Log("bucket is  empty");
                 isPouring = false;
+                fillAmount = 0;
+                water.gameObject.SetActive(false);
+                // water.transform.localPosition = new Vector3(0f, waterLevelHeightBottom, 0f);
             }
-            Debug.Log("bucket is pouring water");
-            fillAmount -= fillSpeed * Time.deltaTime;
-            progressBar.value = Mathf.Clamp(fillAmount, 0f, 1f);
-
-            if(currentFireInteraction!=null)
+            else
             {
-                currentFireInteraction.health -=0.2f * Time.deltaTime;
+                Debug.Log("bucket is pouring water");
+                fillAmount -= fillSpeed * Time.deltaTime;
+                waterLevelHeightCurrent -= waterLevelRiseAmount * Time.deltaTime;
+                progressBar.value = Mathf.Clamp(fillAmount, 0f, 1f);
+                water.transform.localPosition = new Vector3(0f, Mathf.Clamp(waterLevelHeightCurrent, waterLevelHeightBottom, waterLevelHeightCurrent), 0f);
+            }
+
+            if (currentFireInteraction != null)
+            {
+                currentFireInteraction.health -= 0.2f * Time.deltaTime;
                 currentFireInteraction.health = Mathf.Clamp(currentFireInteraction.health, 0f, 1f);
                 currentFireInteraction.progressBar.value = Mathf.Clamp(currentFireInteraction.health, 0f, 1f);
             }
-            
         }
     }
 
@@ -75,10 +106,12 @@ public class BucketFill : MonoBehaviour
         if (collision.gameObject.CompareTag("Water"))
         {
             isFilling = false;
+            Debug.Log("Left water");
         }
         if (collision.gameObject.CompareTag("Fire"))
         {
             isPouring = false;
+            Debug.Log("Left fire");
             // Reset the current fire reference when the bucket exits the fire's collider
             currentFireInteraction = null;
         }
