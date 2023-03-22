@@ -165,6 +165,9 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
             Debug.Log("Animator detected!");
             treeAnimator.enabled = true;
             treeAnimator.Play("TreeFalling");
+            yield return new WaitForSeconds(1);
+            treeAnimator.enabled = false;
+
         }
 
         // Destroy(tree);
