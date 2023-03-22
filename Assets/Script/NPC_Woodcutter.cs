@@ -112,7 +112,8 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
                 case WoodcutterState.CHASE:
                     // TODO: sound and animation
                     // Debug.Log("chasing 1");
-
+                    treeToCut = null;
+                    
                     if(chasedPlayer == null) {
                         chasedPlayer = FindClosestTarget("Player");
                     }
@@ -159,7 +160,6 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
         Debug.Log("cut a tree");
         state = WoodcutterState.SEEKINGTREE;
         isCutting = false;
-
     }
 
     private IEnumerator CalmDown(int secs) {
