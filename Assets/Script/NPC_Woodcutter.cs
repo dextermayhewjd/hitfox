@@ -29,6 +29,8 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     public float cutDistance;
     
     public GameObject treeToCut;
+    public Animator treeAnimator;
+
     PhotonView view;
 
     UnityEngine.AI.NavMeshAgent agent;
@@ -41,6 +43,8 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     public GameObject chasedPlayer;
 
     public Vector3 dest;
+    private Animator anim;
+
 
 
     GameObject FindClosestTarget(string trgt) {
@@ -153,8 +157,16 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
     private IEnumerator CutTree(int secs, GameObject tree) {
         yield return new WaitForSeconds(secs);
-        TreeOn.isMoving = true;
         tree.tag = "CutTree";
+        //tree.GetComponent<Animator>().enabled = true;
+        treeAnimator = tree.GetComponent<Animator>();
+        if (treeAnimator != null)
+        {
+            Debug.Log("Animator detected!");
+            treeAnimator.enabled = true;
+            treeAnimator.Play("TreeFalling");
+        }
+
         // Destroy(tree);
         //tree.transform.Rotate(90.0f, 0.0f, 0.0f, Space.Self);
         treeToCut = null;
