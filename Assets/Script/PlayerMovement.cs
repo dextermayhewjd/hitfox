@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, ICatchable
 {
     // define the speed of an object
     public float walkSpeed;
@@ -25,6 +25,11 @@ public class PlayerMovement : MonoBehaviour
     public static bool onground = false;
     public bool driving = false;
     public GameObject footstep;
+
+
+    public void Catch() {
+        captured = true;
+    }
 
     void Start()
     {
@@ -63,7 +68,10 @@ public class PlayerMovement : MonoBehaviour
             inputMagnitude *= sprintMultiplier;
         }
 
-        float speed = inputMagnitude * walkSpeed;
+        float speed;
+        speed = inputMagnitude * walkSpeed;
+
+
         movementDirection = Quaternion.AngleAxis(cameraTransform.rotation.eulerAngles.y, Vector3.up) * movementDirection;
         movementDirection.Normalize();
 
