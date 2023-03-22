@@ -5,6 +5,7 @@ using Photon.Pun;
 using UnityEngine.AI;
 using System;
 using System.Linq;
+using static TeeFallAnim;
 
 public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
@@ -35,7 +36,6 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     public float distanceToTree;
 
     public bool isCutting;
-
     public float catchDistance; // range of catch
 
     public GameObject chasedPlayer;
@@ -53,6 +53,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
     void Start(){
         isCutting = false;
+
         chaseDistance = 20;
         curiousDistance = 50;
         speed = 3;
@@ -152,9 +153,10 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
     private IEnumerator CutTree(int secs, GameObject tree) {
         yield return new WaitForSeconds(secs);
+        TreeOn.isMoving = true;
         tree.tag = "CutTree";
         // Destroy(tree);
-        tree.transform.Rotate(90.0f, 0.0f, 0.0f, Space.Self);
+        //tree.transform.Rotate(90.0f, 0.0f, 0.0f, Space.Self);
         treeToCut = null;
         Debug.Log("cut a tree");
         state = WoodcutterState.SEEKINGTREE;
