@@ -150,7 +150,7 @@ public class DoggoBehaviour : MonoBehaviour {
                     state = DoggoState.RUNTOWARD;
                     break;
                 case DoggoState.RUNAWAY:
-                    if (distance > reactivity) state = DoggoState.WALK;
+
                     if (interactingWith.tag == "Dog") {
                         timer -= Time.deltaTime;
                         timer2 -= Time.deltaTime;
@@ -174,6 +174,8 @@ public class DoggoBehaviour : MonoBehaviour {
 
 
 
+                    } else {
+                        if (distance > reactivity) state = DoggoState.WALK;
                     }
                     break;
                 case DoggoState.PLAY:
