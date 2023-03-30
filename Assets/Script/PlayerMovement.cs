@@ -24,8 +24,9 @@ public class PlayerMovement : MonoBehaviour, ICatchable
     public PhotonView view;
     public static bool onground = false;
     public bool driving = false;
+    public GameObject cage;
     public GameObject footstep;
-
+    
 
     public void Catch() {
         captured = true;
@@ -129,6 +130,8 @@ public class PlayerMovement : MonoBehaviour, ICatchable
             if (Input.GetKeyDown(KeyCode.R))
             {
                 captured = true;
+                // spawn a cage around fox
+                Instantiate(cage, transform.position, Quaternion.Identity);
             }
 
             // temporary cursor unlock 
