@@ -148,6 +148,10 @@ public class PlayerMovement : MonoBehaviour, ICatchable
                 Movement();
             }
         }
+        // fox captured
+        if (captured){
+            //
+        }
         //added for footsteps
         if (Input.GetKey("w") && onground)
         {
