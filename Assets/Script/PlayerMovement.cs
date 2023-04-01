@@ -30,6 +30,10 @@ public class PlayerMovement : MonoBehaviour, ICatchable
 
     public void Catch() {
         captured = true;
+        // Vector3 temp = new Vector3()
+        Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 3.0f, transform.position.z);
+        // Debug.Log(cagePosition);
+        Instantiate(cage, cagePosition, Quaternion.identity);
     }
 
     void Start()
@@ -129,9 +133,17 @@ public class PlayerMovement : MonoBehaviour, ICatchable
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                captured = true;
-                // spawn a cage around fox
-                Instantiate(cage, transform.position, Quaternion.Identity);
+                if (!captured)
+                {
+                    captured = true;
+                    // spawn a cage around fox
+                    Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
+                    // Debug.Log(cagePosition);
+                    Instantiate(cage, cagePosition, Quaternion.identity);
+                } else if (captured)
+                {
+                    captured = false;
+                }   
             }
 
             // temporary cursor unlock 
