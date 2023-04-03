@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 7784807479955482050}
   - component: {fileID: 8356974390221283919}
   m_Layer: 0
-  m_Name: Bucket1
+  m_Name: Bucket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
