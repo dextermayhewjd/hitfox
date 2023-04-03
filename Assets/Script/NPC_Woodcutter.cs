@@ -42,6 +42,8 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
     public Vector3 dest;
 
+    public bool calming;
+
 
     GameObject FindClosestTarget(string trgt) {
         GameObject closestGameObject = GameObject.FindGameObjectsWithTag(trgt)
@@ -59,6 +61,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
         calmTime = 5;
         cutDistance = 3.0f;
         catchDistance = 3.0f;
+        calming = false;
 
 
         if (treeToCut == null) {
@@ -137,7 +140,11 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
                 
                 case WoodcutterState.CURIOUS:
                     // for calmTime secs after loses sight of player, they can still go into chase mode if they catch sight of a player
-                    StartCoroutine(CalmDown(calmTime));
+
+                    if(!calming) {
+                        StartCoroutine(CalmDown(calmTime));
+                        calming = true;
+                    }
                     
                     foreach (GameObject player in players) {
                         float pdistance = Vector3.Distance(player.transform.position, transform.position);
@@ -166,6 +173,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
         yield return new WaitForSeconds(secs);
         state = WoodcutterState.SEEKINGTREE;
         Debug.Log("Lost him!");
+        calming = false;
         // TODO: points
     }
 
