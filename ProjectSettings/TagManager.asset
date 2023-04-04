@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Navigation Static
+  - Vehicle
+  - Dog
+  - DogChase
   layers:
   - Default
   - TransparentFX
@@ -13,7 +16,7 @@ TagManager:
   - Water
   - UI
   - Player
-  - 
+  - Path
   - 
   - 
   - 

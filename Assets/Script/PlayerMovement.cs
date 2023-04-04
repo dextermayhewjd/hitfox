@@ -7,36 +7,60 @@ using Cinemachine;
 public class PlayerMovement : MonoBehaviour, ICatchable
 {
     // define the speed of an object
-    public float walkSpeed;
-    public float rotationSpeed;
-    public float jumpSpeed;
-    private float jumpGracePeriod;
-    public float sprintMultiplier;
+    private CharacterController controller;
+    private Animator animator;
+
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float sprintMultiplier;
+    [SerializeField] private float rotationSpeed;
+
+    // Jumping / Falling
+    // To account for charging up the jump animiation.
+    [SerializeField] private float jumpDelay;
+    [SerializeField] private float jumpSpeed;
+    [SerializeField] private float jumpGracePeriod;
+    private float? lastGroundedTime;
+    private float? jumpedTime;
+    private float ySpeed;
+    private float stepOffset;
+    private bool isJumping;
+    private bool isFalling;
+    private bool isGrounded;
+
+    private Vector3 moveDirection;
+    private Vector3 velocity;
+
     public bool captured = false;
     public CinemachineFreeLook cam;
     public Transform cameraTransform;
-    private float verticalSpeed;
-    private float stepOffset;
-    private float? lastGroundedTime;
-    private float? jumpedTime;
-    private CharacterController characterController;
     [SerializeField] AudioSource jumpSFX;
     public PhotonView view;
     public static bool onground = false;
     public bool driving = false;
+    public GameObject cage;
     public GameObject footstep;
-
+    
 
     public void Catch() {
         captured = true;
+        // Vector3 temp = new Vector3()
+        Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 3.0f, transform.position.z);
+        // Debug.Log(cagePosition);
+        Instantiate(cage, cagePosition, Quaternion.identity);
     }
 
     void Start()
     {
+        // Character Controller.
+        controller = GetComponent<CharacterController>();
+
+        // Fox Animator Controller.
+        animator = GetComponentInChildren<Animator>();
+
         footstep.SetActive(false);
         captured = false;
-        characterController = GetComponent<CharacterController>();
-        stepOffset = characterController.stepOffset;
+        stepOffset = controller.stepOffset;
         Cursor.lockState = CursorLockMode.Locked;
         view = GetComponent<PhotonView>();
         if (view.IsMine)
@@ -56,69 +80,6 @@ public class PlayerMovement : MonoBehaviour, ICatchable
         cameraTransform.rotation = rotation;
     }
 
-    void Movement()
-    {
-        float horizontalInput = Input.GetAxisRaw("Horizontal") * walkSpeed * Time.deltaTime;
-        float verticalInput = Input.GetAxisRaw("Vertical") * walkSpeed * Time.deltaTime;
-
-        Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput);
-        float inputMagnitude = Mathf.Clamp01(movementDirection.magnitude);
-
-        if (Input.GetButton("Sprint")) {
-            inputMagnitude *= sprintMultiplier;
-        }
-
-        float speed;
-        speed = inputMagnitude * walkSpeed;
-
-
-        movementDirection = Quaternion.AngleAxis(cameraTransform.rotation.eulerAngles.y, Vector3.up) * movementDirection;
-        movementDirection.Normalize();
-
-        verticalSpeed += Physics.gravity.y * Time.deltaTime;
-
-        //so footsteps SFX don't play when in air (share with Footsteps.cs)
-        if (characterController.isGrounded) {
-            onground = true;
-            lastGroundedTime = Time.time;
-        } else {
-            onground = false;
-        }
-
-        if (Input.GetButtonDown("Jump"))
-        {
-            jumpedTime = Time.time;
-            jumpSFX.Play();
-        }
-
-        if (Time.time - lastGroundedTime <= jumpGracePeriod) {
-            characterController.stepOffset = stepOffset;
-            verticalSpeed = -0.5f;
-
-            if (Time.time - jumpedTime <= jumpGracePeriod) {
-                verticalSpeed = jumpSpeed;
-                jumpedTime = null;
-                lastGroundedTime = null;
-            }
-        } else {
-            characterController.stepOffset = 0.0f;
-        }
-
-        transform.Translate(movementDirection * walkSpeed * speed * Time.deltaTime, Space.World);
-
-        Vector3 velocity = movementDirection * speed;
-        velocity.y = verticalSpeed;
-        characterController.Move(velocity * Time.deltaTime);
-
-        // if player is moving, rotate towards the direction of the movement
-        if (movementDirection != Vector3.zero) {
-
-            Quaternion rotation = Quaternion.LookRotation(movementDirection, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
-
-        }
-    }
-    
     private bool locked = true;
 
     // Update is called once per frame
@@ -128,7 +89,17 @@ public class PlayerMovement : MonoBehaviour, ICatchable
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                captured = true;
+                if (!captured)
+                {
+                    captured = true;
+                    // spawn a cage around fox
+                    Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
+                    // Debug.Log(cagePosition);
+                    Instantiate(cage, cagePosition, Quaternion.identity);
+                } else if (captured)
+                {
+                    captured = false;
+                }   
             }
 
             // temporary cursor unlock 
@@ -148,54 +119,145 @@ public class PlayerMovement : MonoBehaviour, ICatchable
                 Movement();
             }
         }
+        // fox captured
+        if (captured){
+            //
+        }
         //added for footsteps
-        if (Input.GetKey("w") && onground)
-        {
-            footsteps();
+    }
+
+    void Movement()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        moveDirection = new Vector3(horizontalInput, 0, verticalInput);
+
+        // Stop moving when in the air.
+        // At the same time need to allow for momemntum when in the air.
+        // Need to fix collider first and improve how grounding works.
+        // if (controller.isGrounded)
+        // {
+            if (moveDirection != Vector3.zero)
+            {
+                animator.SetBool("isMoving", true);
+
+                if (Input.GetButton("Sprint"))
+                {
+                    Run();
+                }
+                else
+                {
+
+                    Walk();
+                }
+            }
+            else
+            {
+                Idle();
+            }
+        // }
+
+        moveDirection = Quaternion.AngleAxis(cameraTransform.rotation.eulerAngles.y, Vector3.up) * moveDirection;
+        moveDirection.Normalize();
+
+        // Jumping and Falling
+        // Gravity being slow. Need to do some playing around with values or change how things are done.
+        ySpeed += Physics.gravity.y * Time.deltaTime;
+
+        //so footsteps SFX don't play when in air (share with Footsteps.cs)
+        if (controller.isGrounded) {
+            onground = true;
+            lastGroundedTime = Time.time;
+        } else {
+            onground = false;
         }
 
-        if (Input.GetKeyDown("s") && onground)
+        if (Input.GetButtonDown("Jump"))
         {
-            footsteps();
+            jumpedTime = Time.time;
+            jumpSFX.Play();
         }
 
-        if (Input.GetKeyDown("a") && onground)
+        if (Time.time - lastGroundedTime <= jumpGracePeriod) {
+            controller.stepOffset = stepOffset;
+            ySpeed = -0.5f;
+
+            animator.SetBool("isGrounded", true);
+            isGrounded = true;
+            animator.SetBool("isJumping", false);
+            isJumping = false;
+            animator.SetBool("isFalling", false);
+
+            if (Time.time - jumpedTime <= jumpGracePeriod)
+            {
+                // Delay before jumping.
+                if (Time.time - jumpedTime >= jumpDelay)
+                {
+                    ySpeed = jumpSpeed;
+                    jumpedTime = null;
+                    lastGroundedTime = null;
+                }
+                animator.SetBool("isJumping", true);
+                isJumping = true;
+            }
+        } else
         {
-            footsteps();
+            controller.stepOffset = 0.0f;
+            animator.SetBool("isGrounded", false);
+            isGrounded = false;
+
+            if ((isJumping && ySpeed < 0) || ySpeed < -2)
+            {
+                animator.SetBool("isFalling", true);
+            }
         }
 
-        if (Input.GetKeyDown("d") && onground)
-        {
-            footsteps();
-        }
+        // Need to consider rotating with respect to a slope.
+        // Which might fix gravity keeping up with the movement speed.
+        transform.Translate(moveDirection * moveSpeed * Time.deltaTime, Space.World);
 
-        if (Input.GetKeyUp("w"))
-        {
-            StopFootsteps();
-        }
+        velocity = moveDirection * moveSpeed;
+        velocity.y = ySpeed;
+        controller.Move(velocity * Time.deltaTime);
 
-        if (Input.GetKeyUp("s"))
+        // if player is moving, rotate towards the direction of the movement
+        if (moveDirection != Vector3.zero)
         {
-            StopFootsteps();
-        }
-
-        if (Input.GetKeyUp("a"))
-        {
-            StopFootsteps();
-        }
-
-        if (Input.GetKeyUp("d"))
-        {
-            StopFootsteps();
+            Quaternion rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
         }
     }
 
-    void footsteps()
+    private void Idle()
+    {
+        animator.SetFloat("Speed", 0, 0.1f, Time.deltaTime);
+        animator.SetBool("isMoving", false);
+        StopFootsteps();
+    } 
+
+    private void Walk()
+    {
+        moveSpeed = walkSpeed;
+        animator.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);
+        // Need to sync with animation and move speed. Or replace how this is played.
+        Footsteps();
+    }
+
+    private void Run()
+    {
+        moveSpeed = walkSpeed * sprintMultiplier;
+        animator.SetFloat("Speed", 1, 0.1f, Time.deltaTime);
+        // Need to speed up to sync with animation and move speed. Or replace how this is played.
+        Footsteps();
+    }
+
+    private void Footsteps()
     {
         footstep.SetActive(true);
     }
 
-    void StopFootsteps()
+    private void StopFootsteps()
     {
         footstep.SetActive(false);
     }
