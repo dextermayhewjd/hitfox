@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 using UnityEngine.UI;
 
 public class CommunicationsWheelController : MonoBehaviour
 {
+    // Todo.
+    // Get username and add it to marker.
+    // Lock camera when opening wheel.
+
     // Change in the future to use Unity's project input manager.
     [SerializeField] private KeyCode wheelKey = KeyCode.Tab;
 
@@ -21,9 +26,23 @@ public class CommunicationsWheelController : MonoBehaviour
     private float wheelDiameter;
     private float wheelRadius;
 
-    private static int pingIndex;
+    // Layers;
+    private int layerGround;
+    private int layerObject;
+    private int currLayer;
 
-    // Angle works like how a standard circle would represent it except its counter-clockwise.
+    // Rays.
+    private bool castRays = false;
+    private Ray ray;
+    private RaycastHit hit;
+
+    // Settings.
+    // If the ping is set to the ground. It will offset it by this much.
+    [SerializeField] private float groundYOffset;
+
+    // Player Object.
+    // [SerializeField] private GameObject player;
+
     public class CommunicationPing
     {
         public float sectorStart;
@@ -45,6 +64,7 @@ public class CommunicationsWheelController : MonoBehaviour
     {
         UpdateScreenVars();
         UpdateWheelVars();
+        UpdateLayers();
         CreateWheel();
         CloseWheel();
     }
@@ -66,6 +86,11 @@ public class CommunicationsWheelController : MonoBehaviour
             }
             CloseWheel();
         }
+
+        if (castRays)
+        {
+            CastRaysFromCrossHair();
+        }
     }
 
     private void UpdateScreenVars()
@@ -78,20 +103,29 @@ public class CommunicationsWheelController : MonoBehaviour
     private void UpdateWheelVars()
     {
         wheelCentre = screenCentre;
-        wheelDiameter = (screenWidth > screenHeight) ? screenWidth : screenHeight;
+        wheelDiameter = (screenWidth > screenHeight) ? screenHeight : screenWidth;
         wheelRadius = wheelDiameter / 2;
+    }
+
+    private void UpdateLayers()
+    {
+        layerGround = LayerMask.NameToLayer("Ground");
+        layerObject = LayerMask.NameToLayer("Object");
     }
 
     private void OpenWheel()
     {
         if (wheelParent != null)
         {
+            // Lock camera rotation.
+            // Unlock cursor.
             wheelParent.SetActive(true);
+            castRays = true;
         }
         else
         {
             Debug.Log("Missing Object Parent");
-            return
+            return;
         }
 
         // Add animations here to see part of the wheel is hovered.
@@ -102,6 +136,19 @@ public class CommunicationsWheelController : MonoBehaviour
         if (wheelParent != null)
         {
             wheelParent.SetActive(false);
+            castRays = false;
+            // Unlock camera rotation.
+            // Lock cursor.
+        }
+    }
+
+    private void CastRaysFromCrossHair()
+    {
+        ray = Camera.main.ScreenPointToRay(screenCentre);
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            currLayer = hit.transform.gameObject.layer;
         }
     }
 
@@ -117,22 +164,47 @@ public class CommunicationsWheelController : MonoBehaviour
 
         return null;
     } 
+
     private void StartPing(CommunicationPing ping) {
-        Debug.Log(ping.message);
+        WaypointMarkerController pingController = GetComponent<WaypointMarkerController>();
+
+        Vector3 pingPos = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+
+        // player = GameObject.FindWithTag("Player");
+
+        // string userName = player.GetComponent<PhotonView>().Owner.NickName;
+        string userName = "Player";
+
+        // Ground Layer.
+        if (currLayer == layerGround)
+        {
+            pingPos.y += groundYOffset;
+            pingController.PlaceGroundMarker(pingPos, userName, ping.message);
+        }
+        else if (currLayer == layerObject)
+        {
+
+        }
+        else
+        {
+            pingPos = GameObject.FindWithTag("Player").transform.position;
+            pingController.PlaceGroundMarker(pingPos, userName, ping.message);
+        }
     }
 
     private void CreateWheel()
     {
+        // Code the messages ping.
         communicationPings = new List<CommunicationPing>();
-        communicationPings.Add(new CommunicationPing(0, 90, "1"));
-        communicationPings.Add(new CommunicationPing(90, 180, "2"));
-        communicationPings.Add(new CommunicationPing(180, -90, "3"));
-        communicationPings.Add(new CommunicationPing(-90, 0, "4"));
+        communicationPings.Add(new CommunicationPing(45, 135, "Wants to Attack"));
+        communicationPings.Add(new CommunicationPing(135, 225, "Needs Assistance"));
+        communicationPings.Add(new CommunicationPing(225, 315, "Wants to be Freed"));
+        communicationPings.Add(new CommunicationPing(315, 45, "Is feeling lucky"));
     }
 
     // Check if the point lies within the sector of the circle.
     // @param sectorStart {float} The starting angle of the sector in degrees.
-    // @param sectorEnd {float} The end angle of the sector in degrees.
+    // @param sectorEnd {float} The end angle of the sector in degrees, counter-clockwise from the sectorStart.
     // @param point {Vector2} The point in question.
     // @return {bool} Returns true if the point is within the sector, false otherwise.
     private bool WithinSector(float sectorStart, float sectorEnd, Vector2 point)
@@ -148,9 +220,14 @@ public class CommunicationsWheelController : MonoBehaviour
 
         return !PointClockwiseToVector(sectorStartVector, relativePoint)
             && PointClockwiseToVector(sectorEndVector, relativePoint)
-            && PointWithinRadius(wheelRadius, relativePoint);
+            && PointOutsideCentre(0.1f * wheelRadius, relativePoint);
+            // && PointWithinRadius(wheelRadius, relativePoint);
     }
 
+    private bool PointOutsideCentre(float threshold, Vector2 point)
+    {
+        return point.x * point.x + point.y * point.y > threshold * threshold;
+    }
     private bool PointClockwiseToVector(Vector2 vector, Vector2 point)
     {
         return -vector.x * point.y + vector.y * point.x > 0;
