@@ -396,7 +396,7 @@ GameObject:
   - component: {fileID: 1792147444348374794}
   m_Layer: 0
   m_Name: Bucket
-  m_TagString: Untagged
+  m_TagString: Bucket
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -551,6 +551,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   progressBar: {fileID: 4841281929834598408}
   fillSpeed: 0.1
+  water: {fileID: 0}
+  waterLevelHeightTop: 0
+  waterLevelHeightBottom: 0.1
+  waterLevelHeightCurrent: 0
+  waterLevelRiseAmount: 0
 --- !u!1 &4993775609881798783
 GameObject:
   m_ObjectHideFlags: 0
