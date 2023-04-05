@@ -7,11 +7,12 @@ using TMPro;
 public class UsernameDisPlay : MonoBehaviour
 {
     [SerializeField] PhotonView playerPV;
-    [SerializeField] TMP_Text text;
+    public TMP_Text text;
 
     void Start()
     {
-        text.text = playerPV.Owner.NickName;
-
+        playerPV = GetComponent<PhotonView>();
+        text = GetComponent<TMP_Text>();
+        text.text = "fluck" ;//playerPV.Owner.NickName;
     }
 }
