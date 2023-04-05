@@ -53,16 +53,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9cb510eb4fb4d3369b964b5379bf04b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 0
   walkSpeed: 5
-  rotationSpeed: 500
-  jumpSpeed: 5
   sprintMultiplier: 2.5
+  rotationSpeed: 500
+  jumpDelay: 0
+  jumpSpeed: 5
+  jumpGracePeriod: 0
   captured: 0
   cam: {fileID: 0}
   cameraTransform: {fileID: 0}
   jumpSFX: {fileID: -4719139342963270801}
   view: {fileID: 0}
   driving: 0
+  cage: {fileID: 0}
   footstep: {fileID: 8057309156042801675}
 --- !u!143 &5849248995649383711
 CharacterController:
