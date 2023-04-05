@@ -104,7 +104,7 @@ public class PlayerMovement : MonoBehaviour, ICatchable
             // temporary cursor unlock 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                locked = locked;
+                locked = !locked;
                 
             } 
             if (locked) {
