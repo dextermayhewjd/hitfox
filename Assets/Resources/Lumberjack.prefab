@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lumberjack
       objectReference: {fileID: 0}
+    - target: {fileID: 3843547290273367784, guid: 33a05fdb5878116b2a057d6a185ec016, type: 3}
+      propertyPath: m_TagString
+      value: Lumberjack
+      objectReference: {fileID: 0}
     - target: {fileID: 3843547290273367788, guid: 33a05fdb5878116b2a057d6a185ec016, type: 3}
       propertyPath: m_RootOrder
       value: 0

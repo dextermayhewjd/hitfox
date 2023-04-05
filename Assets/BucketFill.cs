@@ -11,7 +11,7 @@ public class BucketFill : MonoBehaviour
     public float fillSpeed = 0.2f;
     public bool isFilling = false;
     public bool isPouring = false;
-    private float fillAmount = 0f;
+    public float fillAmount = 0f;
     public Transform water;
     public float waterLevelHeightTop;
     public float waterLevelHeightBottom = 0.1f;
@@ -20,6 +20,7 @@ public class BucketFill : MonoBehaviour
 
     // for the fire it encounter 
     private FireInteraction currentFireInteraction;
+    private NPC_Woodcutter currentNPC_Woodcutter;
 
     void Start()
     {
@@ -61,7 +62,7 @@ public class BucketFill : MonoBehaviour
             {
                 Debug.Log("bucket is  empty");
                 isPouring = false;
-                fillAmount = 0;
+                fillAmount = 0f;
                 water.gameObject.SetActive(false);
                 // water.transform.localPosition = new Vector3(0f, waterLevelHeightBottom, 0f);
             }
@@ -98,6 +99,18 @@ public class BucketFill : MonoBehaviour
             
             // Get the FireInteraction component of the current fire
             currentFireInteraction = collision.gameObject.GetComponent<FireInteraction>();
+        }
+        if (collision.gameObject.CompareTag("Lumberjack"))
+        {
+            currentNPC_Woodcutter = collision.gameObject.GetComponent<NPC_Woodcutter>();  
+            float timeForLumberjackToStop = fillAmount * 4;
+            Debug.Log("Lumberjack need to stop for" + timeForLumberjackToStop +"secs");
+            // Get the FireInteraction component of the current fire
+      
+            currentNPC_Woodcutter.pauseTime = timeForLumberjackToStop;
+            fillAmount = 0f;    
+            Debug.Log("WaterEmpty");
+
         }
     }
 
