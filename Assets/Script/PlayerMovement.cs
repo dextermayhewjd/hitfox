@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour, ICatchable
         // spawn a cage around fox
         Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
         // Debug.Log(cagePosition);
-        Instantiate(cage, cagePosition, Quaternion.identity);
+        PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
         // FoxPlayer.GetComponent<PhotonView>().Owner.NickName();
         // playerCage.tag = "MyCage";
     }
@@ -118,11 +118,6 @@ public class PlayerMovement : MonoBehaviour, ICatchable
                 Movement();
             }
         }
-        // fox captured
-        if (captured){
-            //
-        }
-        //added for footsteps
     }
 
     void Movement()
