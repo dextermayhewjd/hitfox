@@ -9,8 +9,8 @@ public class BucketFill : MonoBehaviour
 {
     public Slider progressBar;
     public float fillSpeed = 0.2f;
-    private bool isFilling = false;
-    private bool isPouring = false;
+    public bool isFilling = false;
+    public bool isPouring = false;
     private float fillAmount = 0f;
     public Transform water;
     public float waterLevelHeightTop;
