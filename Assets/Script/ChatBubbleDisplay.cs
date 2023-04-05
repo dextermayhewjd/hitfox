@@ -6,18 +6,15 @@ using TMPro;
 
 public class ChatBubbleDisplay : MonoBehaviour
 {
-    [SerializeField] TMP_Text text;
-
-    public string textus;
+    public TMP_Text text;
 
     void Start() {
         text = GetComponent<TMP_Text>();
-        textus = "";
-        text.text = textus;
+        text.text = "bubble";
     }
 
     void Update() {
-        // text.text = textus;
+
     }
 
     public IEnumerator ChangeTextForSeconds(string newtext, int secs) {
