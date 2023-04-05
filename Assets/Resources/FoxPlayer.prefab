@@ -66,6 +66,7 @@ MonoBehaviour:
   jumpSFX: {fileID: -4719139342963270801}
   view: {fileID: 0}
   driving: 0
+  cage: {fileID: 0}
   footstep: {fileID: 8057309156042801675}
 --- !u!143 &5849248995649383711
 CharacterController:
