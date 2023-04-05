@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Photon.Pun;
- 
+using UnityEngine.UI;
+
+
 public class PlayerInteraction : MonoBehaviour, IInteractable {
  
     public Transform player;
@@ -11,9 +13,11 @@ public class PlayerInteraction : MonoBehaviour, IInteractable {
     bool active = false;
 
     SC_CharacterController characterController;
- 
+
+
     private void Start() {
         characterController = GetComponent<SC_CharacterController>();
+
     }
 
     private void Update() 
@@ -68,4 +72,5 @@ public class PlayerInteraction : MonoBehaviour, IInteractable {
             }
         }
     }
+
 }

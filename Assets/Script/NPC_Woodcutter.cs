@@ -5,6 +5,7 @@ using Photon.Pun;
 using UnityEngine.AI;
 using System;
 using System.Linq;
+using static TeeFallAnim;
 
 public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
@@ -28,6 +29,8 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     public float cutDistance;
     
     public GameObject treeToCut;
+    public Animator treeAnimator;
+
     PhotonView view;
 
     UnityEngine.AI.NavMeshAgent agent;
@@ -35,12 +38,13 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     public float distanceToTree;
 
     public bool isCutting;
-
     public float catchDistance; // range of catch
 
     public GameObject chasedPlayer;
 
     public Vector3 dest;
+    private Animator anim;
+
 
 
     GameObject FindClosestTarget(string trgt) {
@@ -53,6 +57,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
     void Start(){
         isCutting = false;
+
         chaseDistance = 20;
         curiousDistance = 50;
         speed = 3;
@@ -153,8 +158,20 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     private IEnumerator CutTree(int secs, GameObject tree) {
         yield return new WaitForSeconds(secs);
         tree.tag = "CutTree";
+        //tree.GetComponent<Animator>().enabled = true;
+        treeAnimator = tree.GetComponent<Animator>();
+        if (treeAnimator != null)
+        {
+            Debug.Log("Animator detected!");
+            treeAnimator.enabled = true;
+            treeAnimator.Play("TreeFalling");
+            yield return new WaitForSeconds(1);
+            treeAnimator.enabled = false;
+
+        }
+
         // Destroy(tree);
-        tree.transform.Rotate(90.0f, 0.0f, 0.0f, Space.Self);
+        //tree.transform.Rotate(90.0f, 0.0f, 0.0f, Space.Self);
         treeToCut = null;
         Debug.Log("cut a tree");
         state = WoodcutterState.SEEKINGTREE;
