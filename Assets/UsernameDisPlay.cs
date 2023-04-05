@@ -12,7 +12,8 @@ public class UsernameDisPlay : MonoBehaviour
     void Start()
     {
         playerPV = GetComponent<PhotonView>();
-        text = GetComponent<TMP_Text>();
-        text.text = "fluck" ;//playerPV.Owner.NickName;
+        text = GetComponentsInChildren<TMP_Text>()[0];
+        Debug.Log(text);
+        text.text = "username";
     }
 }

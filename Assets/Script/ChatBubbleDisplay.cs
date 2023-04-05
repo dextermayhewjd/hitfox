@@ -8,22 +8,17 @@ public class ChatBubbleDisplay : MonoBehaviour
 {
     [SerializeField] TMP_Text text;
 
-    public string textus;
 
     void Start() {
-        text = GetComponent<TMP_Text>();
-        textus = "";
-        text.text = textus;
     }
 
     void Update() {
-        // text.text = textus;
     }
 
     public IEnumerator ChangeTextForSeconds(string newtext, int secs) {
-        this.textus = newtext;
+        text.text = newtext;
         yield return new WaitForSeconds(secs);
-        this.textus = "";
+        text.text = "";
     }
 
 }
