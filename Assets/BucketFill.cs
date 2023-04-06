@@ -34,6 +34,7 @@ public class BucketFill : MonoBehaviour
 
     void Update()
     {
+        progressBar.value = Mathf.Clamp(fillAmount, 0f, 1f);  
         if (isFilling)
         {   
             water.gameObject.SetActive(true);
@@ -108,7 +109,7 @@ public class BucketFill : MonoBehaviour
             // Get the FireInteraction component of the current fire
       
             currentNPC_Woodcutter.pauseTime = timeForLumberjackToStop;
-            fillAmount = 0f;    
+            fillAmount = 0f;  
             Debug.Log("WaterEmpty");
 
         }
