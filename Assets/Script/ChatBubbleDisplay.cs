@@ -6,11 +6,14 @@ using TMPro;
 
 public class ChatBubbleDisplay : MonoBehaviour
 {
-    public TMP_Text text;
+    [SerializeField] PhotonView playerPV;
+    [SerializeField] private TMP_Text text;
+
 
     void Start() {
-        text = GetComponent<TMP_Text>();
-        text.text = "bubble";
+        text = GetComponentsInChildren<TMP_Text>()[0]; // IF YOU REMOVE THE USELESS UsName AND ChatBubble GAMEOBJECTS FROM FOXPLAYER THEN CHANGE THIS
+        playerPV = GetComponent<PhotonView>();
+        text.text = "chat";
     }
 
     void Update() {
@@ -18,9 +21,13 @@ public class ChatBubbleDisplay : MonoBehaviour
     }
 
     public IEnumerator ChangeTextForSeconds(string newtext, int secs) {
-        this.textus = newtext;
+        Debug.Log("ctfs");
+        Debug.Log(newtext);
+        Debug.Log("^newtext");
+        TMP_Text oldtext = text;
+        text.text = newtext;
         yield return new WaitForSeconds(secs);
-        this.textus = "";
+        text = oldtext;
     }
 
 }
