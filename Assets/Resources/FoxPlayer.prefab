@@ -392,8 +392,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20daeffd62644f185af82f0e9222f179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPV: {fileID: 0}
-  text: {fileID: 0}
+  playerPV: {fileID: -5272664059315143892}
+  text: {fileID: 8842949420388200749}
 --- !u!1 &3406651585373861169
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,8 +852,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20daeffd62644f185af82f0e9222f179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPV: {fileID: 0}
-  text: {fileID: 0}
+  playerPV: {fileID: -5272664059315143892}
+  text: {fileID: 4311485511343389779}
 --- !u!1 &8057309156042801675
 GameObject:
   m_ObjectHideFlags: 0
