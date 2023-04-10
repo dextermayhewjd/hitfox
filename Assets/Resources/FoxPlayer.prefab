@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 331201891316662758}
   - component: {fileID: -278814002958314904}
   - component: {fileID: -4719139342963270801}
+  - component: {fileID: 5213445082146415500}
   m_Layer: 0
   m_Name: FoxPlayer
   m_TagString: Player
@@ -264,6 +265,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5213445082146415500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 199324029112467782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b74407000557e5672aae30c84ae554c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chatbubble: {fileID: 0}
 --- !u!1 &528119872371454193
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,7 +291,7 @@ GameObject:
   - component: {fileID: 6336268242790567124}
   - component: {fileID: 8378503201561499925}
   - component: {fileID: 1418544309836753204}
-  - component: {fileID: 7305790036191960146}
+  - component: {fileID: 8925828727793465155}
   m_Layer: 0
   m_Name: UsName
   m_TagString: Untagged
@@ -380,7 +394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a125c04ce01e834f9240286b64cb622, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7305790036191960146
+--- !u!114 &8925828727793465155
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -389,7 +403,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 528119872371454193}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20daeffd62644f185af82f0e9222f179, type: 3}
+  m_Script: {fileID: 11500000, guid: 3be56f6e9df28cc4dabd6822ccdfab8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerPV: {fileID: -5272664059315143892}
