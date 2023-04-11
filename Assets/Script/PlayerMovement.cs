@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
 
-public class PlayerMovement : MonoBehaviour, ICatchable
+public class PlayerMovement : MonoBehaviourPun, ICatchable
 {
     // define the speed of an object
     private CharacterController controller;
@@ -42,14 +42,16 @@ public class PlayerMovement : MonoBehaviour, ICatchable
     public GameObject footstep;
     
 
-    public void Catch() {
-        captured = true;
-        // spawn a cage around fox
-        Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
-        // Debug.Log(cagePosition);
-        PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
-        // FoxPlayer.GetComponent<PhotonView>().Owner.NickName();
-        // playerCage.tag = "MyCage";
+    public void Catch()
+    {
+        this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID);
+    }
+
+    [PunRPC]
+    void RPC_Catch(int playerID, int cageID) 
+    {
+        PhotonView.Find(playerID).GetComponent<PlayerMovement>().captured = true;
+        PhotonView.Find(cageID).GetComponent<CageScript>().ownerId = playerID;
     }
 
     void Start()
@@ -89,11 +91,19 @@ public class PlayerMovement : MonoBehaviour, ICatchable
     {
         if (view.IsMine)
         {
+            // if (Input.GetKeyDown(KeyCode.L))
+            // {
+            //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
+            // }
             if (Input.GetKeyDown(KeyCode.R))
             {
                 if (!captured)
                 {
-                    Catch();
+                    // spawn a cage around fox
+                    Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
+                    GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
+
+                    this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
                 } 
                 else if (captured)
                 {
@@ -113,7 +123,7 @@ public class PlayerMovement : MonoBehaviour, ICatchable
                 Cursor.lockState = CursorLockMode.None;
             }
 
-            if (!captured && !driving)
+            if (!driving)
             {
                 Movement();
             }
