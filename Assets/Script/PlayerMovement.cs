@@ -97,30 +97,27 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             // Must be a different way to achieve locking the character controls or changing something
             // in the sounds or animation.
             if(!uiController.CharacterControlsLocked())
-            
-            // if (Input.GetKeyDown(KeyCode.L))
-            // {
-            //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
-            // }
-            if (Input.GetKeyDown(KeyCode.R))
             {
-                if (!captured)
+                // if (Input.GetKeyDown(KeyCode.L))
+                // {
+                //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
+                // }
+                if (Input.GetKeyDown(KeyCode.R))
                 {
-                    // spawn a cage around fox
-                    Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
-                    GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
+                    if (!captured)
+                    {
+                        // spawn a cage around fox
+                        Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
+                        GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
 
-                    this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
-                } 
-                else if (captured)
-                {
-                    captured = false;
-                }   
-            }
+                        this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
+                    } 
+                    else if (captured)
+                    {
+                        captured = false;
+                    }   
+                }
 
-            // temporary cursor unlock 
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
                 if (Input.GetKeyDown(KeyCode.R))
                 {
                     captured = true;
