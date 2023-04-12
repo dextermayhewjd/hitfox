@@ -6,7 +6,7 @@ using UnityEngine.AI;
 using System;
 using System.Linq;
 
-public class Fire : MonoBehaviour {
+public class FireCollision : MonoBehaviour {
     void Start() {}
     void Update() {}
 
