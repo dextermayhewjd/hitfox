@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// How long the ping timer will last for until it gets destroyed.
 public class PingTimer : MonoBehaviour
 {
-    [SerializeField] private float timer;
+    public float timer;
 
     // Start is called before the first frame update
     void Start()
