@@ -67,7 +67,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
         speed = 3;
         calmTime = 5;
         cutDistance = 3.0f;
-        catchDistance = 3.0f;
+        catchDistance = 5.0f;
         calming = false;
 
 
@@ -125,7 +125,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
                     treeToCut = null;
                     
                     if(chasedPlayer == null) {
-                        chasedPlayer = FindClosestTarget("Player"); // TODO: closest NON-CAGED player
+                        chasedPlayer = FindClosestTarget("Player"); // TODO: closest NON-CAGED player   
                     }
 
                     agent.destination = chasedPlayer.transform.position;

@@ -47,7 +47,6 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
         GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
         this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
-        this.captured = true;
     }
 
     [PunRPC]
