@@ -22,7 +22,10 @@ public class GameMenuController : MonoBehaviour
         uiControllerObj = transform.parent.gameObject;
         uiController = uiControllerObj.GetComponent<UIController>();
 
-        Close(); 
+        if (gameMenuParent != null)
+        {
+            gameMenuParent.SetActive(false);
+        }
     }
 
     // Update is called once per frame
