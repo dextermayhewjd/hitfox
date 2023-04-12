@@ -40,7 +40,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     public bool driving = false;
     public GameObject cage;
     public GameObject footstep;
-    
+    private UIController uiController;
 
     public void Catch()
     {
@@ -62,10 +62,14 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         // Fox Animator Controller.
         animator = GetComponentInChildren<Animator>();
 
+        // UI Controller
+        uiController = FindObjectOfType<UIController>();
+
         footstep.SetActive(false);
         captured = false;
         stepOffset = controller.stepOffset;
-        Cursor.lockState = CursorLockMode.Locked;
+
+        // Assign Cinemachine Free Look to fox.
         view = GetComponent<PhotonView>();
         if (view.IsMine)
         {
@@ -84,13 +88,16 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         cameraTransform.rotation = rotation;
     }
 
-    private bool locked = true;
-
     // Update is called once per frame
     void Update()
     {
         if (view.IsMine)
         {
+            // Issue with animation and sound still playing whilst moving and changing this to false.
+            // Must be a different way to achieve locking the character controls or changing something
+            // in the sounds or animation.
+            if(!uiController.CharacterControlsLocked())
+            
             // if (Input.GetKeyDown(KeyCode.L))
             // {
             //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
@@ -114,18 +121,15 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             // temporary cursor unlock 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                locked = locked ? false : true;
-                
-            } 
-            if (locked) {
-                Cursor.lockState = CursorLockMode.Locked;
-            } else {
-                Cursor.lockState = CursorLockMode.None;
-            }
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    captured = true;
+                }
 
-            if (!driving)
-            {
-                Movement();
+                if (!driving)
+                {
+                    Movement();
+                }
             }
         }
     }
