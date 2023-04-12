@@ -229,9 +229,15 @@ public class CommunicationsWheelController : MonoBehaviour
 
         Vector3 pingPos = new Vector3(hit.point.x, hit.point.y, hit.point.z);
 
-        // GameObject player = GameObject.FindWithTag("Player");
-        // string userName = player.GetComponent<PhotonView>().Owner.NickName;
-        string userName = "Player";
+        string userName = "Me";
+
+        try
+        {
+            userName = GameObject.Find("FoxPlayer").GetComponent<PhotonView>().Owner.NickName;
+        } catch
+        {
+            // Blank
+        }
 
         // Ground Layer.
         if (currLayer == layerGround)
