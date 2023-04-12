@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
 
-public class PlayerMovement : MonoBehaviour, ICatchable
+public class PlayerMovement : MonoBehaviourPun, ICatchable
 {
     // define the speed of an object
     private CharacterController controller;
@@ -38,12 +38,20 @@ public class PlayerMovement : MonoBehaviour, ICatchable
     public PhotonView view;
     public static bool onground = false;
     public bool driving = false;
+    public GameObject cage;
     public GameObject footstep;
-
     private UIController uiController;
 
-    public void Catch() {
-        captured = true;
+    public void Catch()
+    {
+        this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID);
+    }
+
+    [PunRPC]
+    void RPC_Catch(int playerID, int cageID) 
+    {
+        PhotonView.Find(playerID).GetComponent<PlayerMovement>().captured = true;
+        PhotonView.Find(cageID).GetComponent<CageScript>().ownerId = playerID;
     }
 
     void Start()
@@ -89,13 +97,36 @@ public class PlayerMovement : MonoBehaviour, ICatchable
             // Must be a different way to achieve locking the character controls or changing something
             // in the sounds or animation.
             if(!uiController.CharacterControlsLocked())
+            
+            // if (Input.GetKeyDown(KeyCode.L))
+            // {
+            //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
+            // }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                if (!captured)
+                {
+                    // spawn a cage around fox
+                    Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
+                    GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
+
+                    this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
+                } 
+                else if (captured)
+                {
+                    captured = false;
+                }   
+            }
+
+            // temporary cursor unlock 
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
                 if (Input.GetKeyDown(KeyCode.R))
                 {
                     captured = true;
                 }
 
-                if (!captured && !driving)
+                if (!driving)
                 {
                     Movement();
                 }

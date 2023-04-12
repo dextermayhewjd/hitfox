@@ -5,6 +5,7 @@ using Photon.Pun;
 using UnityEngine.AI;
 using System;
 using System.Linq;
+using static TeeFallAnim;
 
 public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
@@ -28,6 +29,8 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     public float cutDistance;
     
     public GameObject treeToCut;
+    public Animator treeAnimator;
+
     PhotonView view;
 
     UnityEngine.AI.NavMeshAgent agent;
@@ -35,12 +38,15 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     public float distanceToTree;
 
     public bool isCutting;
-
     public float catchDistance; // range of catch
 
     public GameObject chasedPlayer;
 
     public Vector3 dest;
+    private Animator anim;
+
+
+    public bool calming;
 
 
     GameObject FindClosestTarget(string trgt) {
@@ -53,12 +59,14 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
     void Start(){
         isCutting = false;
+
         chaseDistance = 20;
         curiousDistance = 50;
         speed = 3;
         calmTime = 5;
         cutDistance = 3.0f;
         catchDistance = 3.0f;
+        calming = false;
 
 
         if (treeToCut == null) {
@@ -112,7 +120,8 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
                 case WoodcutterState.CHASE:
                     // TODO: sound and animation
                     // Debug.Log("chasing 1");
-
+                    treeToCut = null;
+                    
                     if(chasedPlayer == null) {
                         chasedPlayer = FindClosestTarget("Player");
                     }
@@ -136,7 +145,11 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
                 
                 case WoodcutterState.CURIOUS:
                     // for calmTime secs after loses sight of player, they can still go into chase mode if they catch sight of a player
-                    StartCoroutine(CalmDown(calmTime));
+
+                    if(!calming) {
+                        StartCoroutine(CalmDown(calmTime));
+                        calming = true;
+                    }
                     
                     foreach (GameObject player in players) {
                         float pdistance = Vector3.Distance(player.transform.position, transform.position);
@@ -153,19 +166,31 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     private IEnumerator CutTree(int secs, GameObject tree) {
         yield return new WaitForSeconds(secs);
         tree.tag = "CutTree";
+        //tree.GetComponent<Animator>().enabled = true;
+        treeAnimator = tree.GetComponent<Animator>();
+        if (treeAnimator != null)
+        {
+            Debug.Log("Animator detected!");
+            treeAnimator.enabled = true;
+            treeAnimator.Play("TreeFalling");
+            yield return new WaitForSeconds(1);
+            treeAnimator.enabled = false;
+
+        }
+
         // Destroy(tree);
-        tree.transform.Rotate(90.0f, 0.0f, 0.0f, Space.Self);
+        //tree.transform.Rotate(90.0f, 0.0f, 0.0f, Space.Self);
         treeToCut = null;
         Debug.Log("cut a tree");
         state = WoodcutterState.SEEKINGTREE;
         isCutting = false;
-
     }
 
     private IEnumerator CalmDown(int secs) {
         yield return new WaitForSeconds(secs);
         state = WoodcutterState.SEEKINGTREE;
         Debug.Log("Lost him!");
+        calming = false;
         // TODO: points
     }
 

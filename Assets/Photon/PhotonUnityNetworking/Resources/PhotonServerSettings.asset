@@ -53,6 +53,8 @@ MonoBehaviour:
   - RPC_ExitAccPlayer
   - GrabRPC
   - ReleaseRPC
+  - RPC_Catch
+  - RPC_Rescue
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
