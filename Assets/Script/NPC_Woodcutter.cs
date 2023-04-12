@@ -6,6 +6,7 @@ using UnityEngine.AI;
 using System;
 using System.Linq;
 using static TeeFallAnim;
+using static TreeFallAnim;
 
 public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
@@ -58,7 +59,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
 
     void Start(){
-        GetComponent<Rigidbody>().isKinematic = true;
+        GetComponent<Rigidbody>().isKinematic = true; // otherwise he slides down the hill
 
         isCutting = false;
 
