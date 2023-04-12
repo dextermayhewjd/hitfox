@@ -388,12 +388,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4992175400461171215}
   - component: {fileID: 3342122606116011764}
+  - component: {fileID: 1792147444348374794}
   - component: {fileID: 1736635566750056013}
   - component: {fileID: 1968513363748421882}
   - component: {fileID: 8832136190533875666}
   - component: {fileID: 2134271180156242613}
   - component: {fileID: 8143490686729309217}
-  - component: {fileID: 1792147444348374794}
   m_Layer: 0
   m_Name: Bucket
   m_TagString: Bucket
@@ -435,6 +435,28 @@ MonoBehaviour:
   colliders: []
   pickedUp: 0
   playerView: {fileID: 0}
+--- !u!114 &1792147444348374794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4993735558651106425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf05fdc600cfcb8489044bd2f5489e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  progressBar: {fileID: 4841281929834598408}
+  fillSpeed: 0.3
+  pourSpeed: 0.1
+  isFilling: 0
+  isPouring: 0
+  water: {fileID: 0}
+  waterLevelHeightTop: 0
+  waterLevelHeightBottom: 0.1
+  waterLevelHeightCurrent: 0
+  waterLevelRiseAmount: 0
 --- !u!114 &1736635566750056013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -537,25 +559,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1792147444348374794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4993735558651106425}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf05fdc600cfcb8489044bd2f5489e81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  progressBar: {fileID: 4841281929834598408}
-  fillSpeed: 0.1
-  water: {fileID: 0}
-  waterLevelHeightTop: 0
-  waterLevelHeightBottom: 0.1
-  waterLevelHeightCurrent: 0
-  waterLevelRiseAmount: 0
 --- !u!1 &4993775609881798783
 GameObject:
   m_ObjectHideFlags: 0

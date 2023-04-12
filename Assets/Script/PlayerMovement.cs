@@ -83,9 +83,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     public void Teleport(Vector3 position, Quaternion rotation)
     {
         transform.position = position;
-        Physics.SyncTransforms();
         transform.rotation = rotation;
-        cameraTransform.rotation = rotation;
+        Physics.SyncTransforms();
     }
 
     // Update is called once per frame

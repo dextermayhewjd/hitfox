@@ -23,11 +23,15 @@ public class CageScript : OnTrigger
             if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null &&
             !colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>().captured)
             {
-                Debug.Log("destroy");
-                base.photonView.RequestOwnership();
-                this.photonView.RPC("RPC_Rescue", RpcTarget.AllBuffered, ownerId);
                 PhotonNetwork.Destroy(gameObject);
             }
         }
+    }
+
+    void OnDestroy() 
+    {
+        Debug.Log("destroy");
+        base.photonView.RequestOwnership();
+        this.photonView.RPC("RPC_Rescue", RpcTarget.AllBuffered, ownerId);
     }
 }
