@@ -6,7 +6,6 @@ using UnityEngine.AI;
 using System;
 using System.Linq;
 using static TeeFallAnim;
-using static TreeFallAnim;
 
 public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
