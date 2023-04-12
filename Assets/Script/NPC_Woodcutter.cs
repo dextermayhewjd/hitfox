@@ -58,6 +58,8 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
 
     void Start(){
+        GetComponent<Rigidbody>().isKinematic = true;
+
         isCutting = false;
 
         chaseDistance = 20;
@@ -123,7 +125,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
                     treeToCut = null;
                     
                     if(chasedPlayer == null) {
-                        chasedPlayer = FindClosestTarget("Player");
+                        chasedPlayer = FindClosestTarget("Player"); // TODO: closest NON-CAGED player
                     }
 
                     agent.destination = chasedPlayer.transform.position;
@@ -131,8 +133,10 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
                     float distance = Vector3.Distance(chasedPlayer.transform.position, transform.position);
                     PlayerMovement pm = chasedPlayer.GetComponent<PlayerMovement>();
 
-                    if(distance < catchDistance && CanSee(chasedPlayer, distance)) {
+                    if(distance < catchDistance && CanSee(chasedPlayer, distance) && !pm.captured) {
                         pm.Catch();
+                    } else if(pm.captured) {
+                        state = WoodcutterState.SEEKINGTREE;
                     }
 
                     if(distance < curiousDistance && distance > chaseDistance && !pm.captured) {
