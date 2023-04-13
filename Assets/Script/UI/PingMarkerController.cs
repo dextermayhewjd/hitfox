@@ -37,10 +37,13 @@ public class PingMarkerController : MonoBehaviour
     public void PlaceGroundMarker(Vector3 pos, float timer, string userName, string message)
     {
         Ping pingComponent = pingMarkerGround.GetComponent<Ping>();
+
         pingComponent.timer = timer;
+
         pingComponent.userName = userName;
         pingComponent.message = message;
-        pingComponent.player = GameObject.Find("FoxPlayer");
+
+        pingComponent.origin = GameObject.Find("FoxPlayer");
         pingComponent.target = pingMarkerGround;
 
         // Switch to work with photon.
@@ -52,10 +55,13 @@ public class PingMarkerController : MonoBehaviour
     public void PlaceObjectMarker(GameObject targetObj, float timer, string userName, string message)
     {
         Ping pingComponent = pingMarkerObject.GetComponent<Ping>();
+
         pingComponent.timer = timer;
+
         pingComponent.userName = userName;
         pingComponent.message = message;
-        pingComponent.player = GameObject.Find("FoxPlayer");
+
+        pingComponent.origin = GameObject.Find("FoxPlayer");
         pingComponent.target = targetObj;
 
         // Switch to work with photon.

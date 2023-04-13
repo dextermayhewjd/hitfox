@@ -9,11 +9,18 @@ public class Ping : MonoBehaviour
 {
     private TMP_Text[] markerTextFields;
 
+    // How long the ping marker will last for. 0 for Infinite.
     public float timer;
-    public GameObject player;
+
+    // Where the ping was casted from. i.e. the player.
+    public GameObject origin;
+    // The object if any that the ping will attatch to.
     public GameObject target;
 
+    // For the username text field.
     public string userName;
+
+    // For the message text field.
     public string message;
 
     // Start is called before the first frame update
@@ -27,11 +34,17 @@ public class Ping : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        markerTextFields[2].text = Distance(player.transform.position, target.transform.position).ToString() + "m";
+        markerTextFields[2].text = Distance(origin.transform.position, target.transform.position).ToString() + "m";
 
         if (target != null)
         {
             this.transform.position = target.transform.position;
+            // To use if the object has been interacted with such as if it was picked up for example.
+            // Need to set a property in the object for this.
+            // if (target.property)
+            // {
+            //     StopPing;
+            // }
         }
 
         if (timer > 0)
@@ -45,7 +58,7 @@ public class Ping : MonoBehaviour
         }
     }
         
-    public void StopPing()
+    private void StopPing()
     {
         Destroy(this.gameObject);
     }

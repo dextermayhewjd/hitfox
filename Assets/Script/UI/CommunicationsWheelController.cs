@@ -8,7 +8,7 @@ using TMPro;
 public class CommunicationsWheelController : MonoBehaviour
 {
     // Todo
-    // - Expand to add more communications depending on what the player is looking at.
+    // - Expand to suit needs.
 
     // Main UI Controller.
     private GameObject uiControllerObj;
@@ -38,6 +38,7 @@ public class CommunicationsWheelController : MonoBehaviour
     // Layers;
     private int layerGround;
     private int layerObject;
+    private int layerPickableObjects;
     private int currLayer;
 
     // Rays.
@@ -154,6 +155,7 @@ public class CommunicationsWheelController : MonoBehaviour
     {
         layerGround = LayerMask.NameToLayer("Ground");
         layerObject = LayerMask.NameToLayer("Object");
+        layerPickableObjects = LayerMask.NameToLayer("PickableObjects");
     }
 
     private void OpenWheel()
@@ -206,16 +208,10 @@ public class CommunicationsWheelController : MonoBehaviour
             }
             else if (currLayer == layerObject)
             {
-                switch(hit.transform.gameObject.name)
-                {
-                    case "Bucket":
-                        currWheel = Wheel.PICKABLE;
-                        break;
-                    default:
-                        // Change or remove in future.
-                        currWheel = Wheel.PICKABLE;
-                        break;
-                }
+            }
+            else if (currLayer == layerPickableObjects)
+            {
+                currWheel = Wheel.PICKABLE;
             }
             else
             {
@@ -259,14 +255,13 @@ public class CommunicationsWheelController : MonoBehaviour
             pingController.PlaceGroundMarker(pingPos, 5, userName, ping.message);
         }
         // Object Layer.
-        else if (currLayer == layerObject)
+        else if (currLayer == layerObject || currLayer == layerPickableObjects)
         {
             pingController.PlaceObjectMarker(hit.transform.gameObject, 5, userName, ping.message);
         }
         // Place the ping on top of the player if a ground or object is not being looked at.
         else
         {
-            // Dunno how this will work with photon but need to get the player object that the ping was called from.
             pingPos = GameObject.FindWithTag("Player").transform.position;
             pingController.PlaceGroundMarker(pingPos, 5, userName, ping.message);
         }
