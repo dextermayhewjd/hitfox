@@ -96,7 +96,14 @@ public class CommunicationsWheelController : MonoBehaviour
         UpdateScreenVars();
         UpdateWheelVars();
         UpdateLayers();
-        CloseWheel();
+        if (wheelParent != null)
+        {
+            wheelParent.SetActive(false);
+            foreach (GameObject wheelParent in wheelParents)
+            {
+                wheelParent.SetActive(false);
+            }
+        }
     }
 
     // Update is called once per frame
