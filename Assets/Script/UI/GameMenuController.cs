@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameMenuController : MonoBehaviour
 {
     // Todo
+    // - Improve code logic.
     // - Add functions for the different menu buttons.
     // - Animations?
 
@@ -39,6 +40,18 @@ public class GameMenuController : MonoBehaviour
         {
             gameMenuParent.SetActive(false);
         }
+
+        if (developerMenuParent != null)
+        {
+            developerMenuParent.SetActive(false);
+        }
+
+        if (settingsMenuParent != null)
+        {
+            settingsMenuParent.SetActive(false);
+        }
+
+
     }
 
     // Update is called once per frame
@@ -90,21 +103,38 @@ public class GameMenuController : MonoBehaviour
             gameMenuParent.SetActive(false);
         }
 
+        if (developerMenuParent != null)
+        {
+            developerMenuParent.SetActive(false);
+        }
+
+        if (settingsMenuParent != null)
+        {
+            settingsMenuParent.SetActive(false);
+        }
+
         uiController.LockCursor();
         uiController.UnlockCharacterControls();
     }
 
-    private void OpenDeveloperMenu()
+    public void OpenDeveloperMenu()
     {
+        if (developerMenuParent != null)
+        {
+            developerMenuParent.SetActive(true);
+        }
 
     }
 
-    private void OpenSettingsMenu()
+    public void OpenSettingsMenu()
     {
-
+        if (settingsMenuParent != null)
+        {
+            settingsMenuParent.SetActive(true);
+        }
     }
 
-    private void ButtonQuit()
+    public void ButtonQuit()
     {
 
     }
