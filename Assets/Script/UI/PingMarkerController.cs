@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
-using TMPro;
 
 // Controls putting markers in the world space.
 public class PingMarkerController : MonoBehaviour
@@ -13,8 +12,7 @@ public class PingMarkerController : MonoBehaviour
     //   it is always perpendicular to the horizontal axis.
     // - Add audio.
     // - Add animations.
-    // - Dynamically calculate distance between a player and the ping so distance is different from other players
-    //   viewpoints.
+    // - Test to see if GameObject.Find("FoxPlayer") only returns local fox player.
 
     // Ping prefabs.
     [SerializeField] private GameObject pingMarkerGround;
@@ -38,14 +36,12 @@ public class PingMarkerController : MonoBehaviour
     // Ground markers get placed relative to the ground.
     public void PlaceGroundMarker(Vector3 pos, float timer, string userName, string message)
     {
-        pingMarkerGround.GetComponent<PingTimer>().timer = timer;
-
-        TMP_Text[] markerTextFields;
-        markerTextFields = pingMarkerGround.GetComponentsInChildren<TMP_Text>();
-
-        markerTextFields[0].text = userName;
-        markerTextFields[1].text = message;
-        markerTextFields[2].text = "20m";
+        Ping pingComponent = pingMarkerGround.GetComponent<Ping>();
+        pingComponent.timer = timer;
+        pingComponent.userName = userName;
+        pingComponent.message = message;
+        pingComponent.player = GameObject.Find("FoxPlayer");
+        pingComponent.target = pingMarkerGround;
 
         // Switch to work with photon.
         Instantiate(pingMarkerGround, pos, Quaternion.identity);
@@ -53,8 +49,17 @@ public class PingMarkerController : MonoBehaviour
     }
 
     // Object markers attatches itself to the object.
-    public void PlaceObjectMarker()
+    public void PlaceObjectMarker(GameObject targetObj, float timer, string userName, string message)
     {
+        Ping pingComponent = pingMarkerObject.GetComponent<Ping>();
+        pingComponent.timer = timer;
+        pingComponent.userName = userName;
+        pingComponent.message = message;
+        pingComponent.player = GameObject.Find("FoxPlayer");
+        pingComponent.target = targetObj;
 
+        // Switch to work with photon.
+        Instantiate(pingMarkerObject, targetObj.transform.position, Quaternion.identity);
+        // PhotonNetwork.Instantiate(pingMarkerGround, pos, Quaternion.identity);
     }
 }

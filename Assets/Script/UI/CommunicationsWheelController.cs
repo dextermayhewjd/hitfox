@@ -208,10 +208,11 @@ public class CommunicationsWheelController : MonoBehaviour
             {
                 switch(hit.transform.gameObject.name)
                 {
-                    case "":
+                    case "Bucket":
                         currWheel = Wheel.PICKABLE;
                         break;
                     default:
+                        // Change or remove in future.
                         currWheel = Wheel.PICKABLE;
                         break;
                 }
@@ -260,7 +261,7 @@ public class CommunicationsWheelController : MonoBehaviour
         // Object Layer.
         else if (currLayer == layerObject)
         {
-
+            pingController.PlaceObjectMarker(hit.transform.gameObject, 5, userName, ping.message);
         }
         // Place the ping on top of the player if a ground or object is not being looked at.
         else
