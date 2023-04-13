@@ -96,19 +96,26 @@ public class CommunicationsWheelController : MonoBehaviour
         UpdateScreenVars();
         UpdateWheelVars();
         UpdateLayers();
+
         if (wheelParent != null)
         {
             wheelParent.SetActive(false);
-            foreach (GameObject wheelParent in wheelParents)
-            {
-                wheelParent.SetActive(false);
-            }
         }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (uiController.CharacterControlsLocked())
+        {
+            if (wheelParent != null)
+            {
+                wheelParent.SetActive(false);
+                castRays = false;
+            }
+            return;
+        }
+
         if (Input.GetKeyDown(wheelKey))
         //if (Input.GetButtonDown(wheelKey))
         {
@@ -188,10 +195,6 @@ public class CommunicationsWheelController : MonoBehaviour
         if (wheelParent != null)
         {
             wheelParent.SetActive(false);
-            foreach (GameObject wheelParent in wheelParents)
-            {
-                wheelParent.SetActive(false);
-            }
             castRays = false;
             uiController.UnlockFreeLook();
             uiController.LockCursor();

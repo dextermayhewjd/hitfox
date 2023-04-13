@@ -16,11 +16,24 @@ public class GameMenuController : MonoBehaviour
 
     [SerializeField] private KeyCode gameMenuKey = KeyCode.Escape;
 
+    [SerializeField] private bool developerMode;
+
+    [SerializeField] private GameObject developerMenuButton;
+    [SerializeField] private GameObject settingsMenuButton;
+    [SerializeField] private GameObject quitButton;
+
+    [SerializeField] private GameObject developerMenuParent;
+    [SerializeField] private GameObject settingsMenuParent;
+
+    private bool menuOpen;
+
     // Start is called before the first frame update
     void Start()
     {
         uiControllerObj = transform.parent.gameObject;
         uiController = uiControllerObj.GetComponent<UIController>();
+
+        menuOpen = false;
 
         if (gameMenuParent != null)
         {
@@ -33,12 +46,18 @@ public class GameMenuController : MonoBehaviour
     {
         if (Input.GetKeyDown(gameMenuKey))
         {
-            Open();
+            menuOpen = !menuOpen;
+            if (menuOpen)
+            {
+                Open();
+            }
+            else
+            {
+                Close();
+            }
         }
-        else if (Input.GetKeyUp(gameMenuKey))
-        {
-            Close();
-        }
+
+        // Need to add an escape stack if we want to close UI elements in order.
     }
 
     private void Open()
@@ -46,6 +65,18 @@ public class GameMenuController : MonoBehaviour
         if (gameMenuParent != null)
         {
             gameMenuParent.SetActive(true);
+
+            if (developerMenuButton != null)
+            {
+                if (developerMode)
+                {
+                    developerMenuButton.SetActive(true);
+                }
+                else
+                {
+                    developerMenuButton.SetActive(false);
+                }
+            }
         }
 
         uiController.LockCharacterControls();
@@ -61,5 +92,20 @@ public class GameMenuController : MonoBehaviour
 
         uiController.LockCursor();
         uiController.UnlockCharacterControls();
+    }
+
+    private void OpenDeveloperMenu()
+    {
+
+    }
+
+    private void OpenSettingsMenu()
+    {
+
+    }
+
+    private void ButtonQuit()
+    {
+
     }
 }

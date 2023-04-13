@@ -7,6 +7,9 @@ using TMPro;
 // How long the ping timer will last for until it gets destroyed.
 public class Ping : MonoBehaviour
 {
+    // TODO
+    // - Add photon view component.
+
     private TMP_Text[] markerTextFields;
 
     // How long the ping marker will last for. 0 for Infinite.

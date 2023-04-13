@@ -68,21 +68,25 @@ public class UIController : MonoBehaviour
     public void LockFreeLook()
     {
         freeLookController.Lock();
+        Debug.Log("FreeLook Locked");
     }
 
     public void UnlockFreeLook()
     {
         freeLookController.Unlock();
+        Debug.Log("FreeLook Unlocked");
     }
 
     public void LockCursor()
     {
         cursorController.Lock();
+        Debug.Log("Cursor Locked");
     }
 
     public void UnlockCursor()
     {
         cursorController.Unlock();
+        Debug.Log("Cursor Unlocked");
     }
 
     public bool CharacterControlsLocked()
