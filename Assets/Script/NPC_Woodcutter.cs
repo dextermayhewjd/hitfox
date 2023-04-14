@@ -18,6 +18,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
     // Start is called before the first frame update
     public float speed;
+    public float pauseTime = 0f; // the time lumberjack is stuck
     public float chaseDistance; // distance at which it will chase a fox
     public float curiousDistance;
     public float fov = 120;
@@ -89,6 +90,17 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
     // Update is called once per frame
     void Update(){
+        if(pauseTime > 0f)
+        {
+            pauseTime -= Time.deltaTime;
+            agent.speed = 0f;
+            Debug.Log("woodcutter stoped");
+            if (pauseTime <= 0f)
+            {
+                pauseTime = 0f;
+                agent.speed = 3f;
+            }
+        }else{
         dest = agent.destination;
         if (view.IsMine) {
             GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
@@ -158,7 +170,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
                         }
                     }
                   break;
-                
+                }                
             }
         }
     }

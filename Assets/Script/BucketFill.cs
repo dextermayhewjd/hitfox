@@ -21,6 +21,7 @@ public class BucketFill : MonoBehaviour
 
     // for the fire it encounter 
     private FireInteraction currentFireInteraction;
+    private NPC_Woodcutter currentNPC_Woodcutter;
 
     void Start()
     {
@@ -99,6 +100,18 @@ public class BucketFill : MonoBehaviour
             
             // Get the FireInteraction component of the current fire
             currentFireInteraction = collision.gameObject.GetComponent<FireInteraction>();
+        }
+         if (collision.gameObject.CompareTag("Lumberjack"))
+        {
+            currentNPC_Woodcutter = collision.gameObject.GetComponent<NPC_Woodcutter>();  
+            float timeForLumberjackToStop = fillAmount * 4;
+            Debug.Log("Lumberjack need to stop for" + timeForLumberjackToStop +"secs");
+            // Get the FireInteraction component of the current fire
+
+            currentNPC_Woodcutter.pauseTime = timeForLumberjackToStop;
+            fillAmount = 0f;    
+            Debug.Log("WaterEmpty");
+
         }
     }
 
