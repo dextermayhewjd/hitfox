@@ -11,9 +11,9 @@ public class Portal : OnTrigger
     {
         if (Input.GetButtonDown("Interact"))
         { 
-            if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>() != null)
+            if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null)
             {
-                colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>().Teleport(destination.position, destination.rotation);
+                colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>().Teleport(destination.position, Quaternion.identity);
             }
         }
     }

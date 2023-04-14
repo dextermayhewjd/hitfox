@@ -16,7 +16,6 @@ public class FireInteraction : MonoBehaviour
     void Update(){
         if(health <= 0)
         {
-            BucketFillInteraction.isPouring = false;
             Destroy(this.gameObject);
         }
         else
@@ -28,6 +27,13 @@ public class FireInteraction : MonoBehaviour
             health += recoverSpeed*Time.deltaTime;
         }
         progressBar.value = Mathf.Clamp(health,0f,1f);        
+    }
+
+    void OnDestroy()
+    {
+        BucketFillInteraction.isPouring = false;
+        GameObject objectives = GameObject.Find("ObjectivesTracker");
+        objectives.GetComponent<ObjectivesScript>().currentPoints += 10;
     }
 
     void OnTriggerEnter(Collider collision)

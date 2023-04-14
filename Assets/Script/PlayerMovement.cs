@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
 
-public class PlayerMovement : MonoBehaviour, ICatchable
+public class PlayerMovement : MonoBehaviourPun, ICatchable
 {
     // define the speed of an object
     private CharacterController controller;
@@ -40,16 +40,18 @@ public class PlayerMovement : MonoBehaviour, ICatchable
     public bool driving = false;
     public GameObject cage;
     public GameObject footstep;
-    
+    private UIController uiController;
 
-    public void Catch() {
-        captured = true;
-        // spawn a cage around fox
-        Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
-        // Debug.Log(cagePosition);
-        PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
-        // FoxPlayer.GetComponent<PhotonView>().Owner.NickName();
-        // playerCage.tag = "MyCage";
+    public void Catch()
+    {
+        this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID);
+    }
+
+    [PunRPC]
+    void RPC_Catch(int playerID, int cageID) 
+    {
+        PhotonView.Find(playerID).GetComponent<PlayerMovement>().captured = true;
+        PhotonView.Find(cageID).GetComponent<CageScript>().ownerId = playerID;
     }
 
     void Start()
@@ -60,10 +62,14 @@ public class PlayerMovement : MonoBehaviour, ICatchable
         // Fox Animator Controller.
         animator = GetComponentInChildren<Animator>();
 
+        // UI Controller
+        uiController = FindObjectOfType<UIController>();
+
         footstep.SetActive(false);
         captured = false;
         stepOffset = controller.stepOffset;
-        Cursor.lockState = CursorLockMode.Locked;
+
+        // Assign Cinemachine Free Look to fox.
         view = GetComponent<PhotonView>();
         if (view.IsMine)
         {
@@ -77,23 +83,34 @@ public class PlayerMovement : MonoBehaviour, ICatchable
     public void Teleport(Vector3 position, Quaternion rotation)
     {
         transform.position = position;
-        Physics.SyncTransforms();
         transform.rotation = rotation;
-        cameraTransform.rotation = rotation;
+        Physics.SyncTransforms();
     }
-
-    private bool locked = true;
 
     // Update is called once per frame
     void Update()
     {
         if (view.IsMine)
         {
+            if(uiController.CharacterControlsLocked())
+            {
+                StopFootsteps();
+                Idle();
+                return;
+            }
+            // if (Input.GetKeyDown(KeyCode.L))
+            // {
+            //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
+            // }
             if (Input.GetKeyDown(KeyCode.R))
             {
                 if (!captured)
                 {
-                    Catch();
+                    // spawn a cage around fox
+                    Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
+                    GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
+
+                    this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
                 } 
                 else if (captured)
                 {
@@ -101,19 +118,12 @@ public class PlayerMovement : MonoBehaviour, ICatchable
                 }   
             }
 
-            // temporary cursor unlock 
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.R))
             {
-                locked = locked ? false : true;
-                
-            } 
-            if (locked) {
-                Cursor.lockState = CursorLockMode.Locked;
-            } else {
-                Cursor.lockState = CursorLockMode.None;
+                captured = true;
             }
 
-            if (!captured && !driving)
+            if (!driving)
             {
                 Movement();
             }
