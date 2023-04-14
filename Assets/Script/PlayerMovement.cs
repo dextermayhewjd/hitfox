@@ -92,40 +92,40 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     {
         if (view.IsMine)
         {
-            // Issue with animation and sound still playing whilst moving and changing this to false.
-            // Must be a different way to achieve locking the character controls or changing something
-            // in the sounds or animation.
-            if(!uiController.CharacterControlsLocked())
+            if(uiController.CharacterControlsLocked())
             {
-                // if (Input.GetKeyDown(KeyCode.L))
-                // {
-                //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
-                // }
-                if (Input.GetKeyDown(KeyCode.R))
+                StopFootsteps();
+                Idle();
+                return;
+            }
+            // if (Input.GetKeyDown(KeyCode.L))
+            // {
+            //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
+            // }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                if (!captured)
                 {
-                    if (!captured)
-                    {
-                        // spawn a cage around fox
-                        Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
-                        GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
+                    // spawn a cage around fox
+                    Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
+                    GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
 
-                        this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
-                    } 
-                    else if (captured)
-                    {
-                        captured = false;
-                    }   
-                }
-
-                if (Input.GetKeyDown(KeyCode.R))
+                    this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
+                } 
+                else if (captured)
                 {
-                    captured = true;
-                }
+                    captured = false;
+                }   
+            }
 
-                if (!driving)
-                {
-                    Movement();
-                }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                captured = true;
+            }
+
+            if (!driving)
+            {
+                Movement();
             }
         }
     }

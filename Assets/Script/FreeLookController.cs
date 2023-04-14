@@ -7,8 +7,8 @@ public class FreeLookController : MonoBehaviour
 {
     private CinemachineFreeLook freeLook;
 
-    private float maxSpeedY;
-    private float maxSpeedX;
+    [SerializeField] private float maxSpeedY;
+    [SerializeField] private float maxSpeedX;
 
     private bool rotationLocked;
 
@@ -17,8 +17,6 @@ public class FreeLookController : MonoBehaviour
     {
         freeLook = GetComponent<CinemachineFreeLook>();
         freeLook.enabled = true;
-        maxSpeedY = freeLook.m_YAxis.m_MaxSpeed;
-        maxSpeedX = freeLook.m_XAxis.m_MaxSpeed;
         Unlock();
     }
 

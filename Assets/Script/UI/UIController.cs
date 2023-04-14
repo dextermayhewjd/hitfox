@@ -6,6 +6,9 @@ using Cinemachine;
 // Main UI controller to easily communicate with other UI components.
 public class UIController : MonoBehaviour
 {
+    private Canvas canvas;
+    [SerializeField] private float planeDistance;
+
     // The communications wheel and ping system.
     private GameObject commsWheelControllerObj;
     private CommunicationsWheelController commsWheelController;
@@ -26,6 +29,10 @@ public class UIController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        canvas = GetComponent<Canvas>();
+        canvas.worldCamera = Camera.main;
+        canvas.planeDistance = planeDistance;
+
         gameMenuControllerObj = transform.GetChild(0).gameObject;
         commsWheelControllerObj = transform.GetChild(1).gameObject;
 
@@ -61,21 +68,25 @@ public class UIController : MonoBehaviour
     public void LockFreeLook()
     {
         freeLookController.Lock();
+        Debug.Log("FreeLook Locked");
     }
 
     public void UnlockFreeLook()
     {
         freeLookController.Unlock();
+        Debug.Log("FreeLook Unlocked");
     }
 
     public void LockCursor()
     {
         cursorController.Lock();
+        Debug.Log("Cursor Locked");
     }
 
     public void UnlockCursor()
     {
         cursorController.Unlock();
+        Debug.Log("Cursor Unlocked");
     }
 
     public bool CharacterControlsLocked()
