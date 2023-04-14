@@ -44,7 +44,9 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
 
     public void Catch()
     {
-        this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID);
+        Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
+        GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
+        this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
     }
 
     [PunRPC]
@@ -79,8 +81,9 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     public void Teleport(Vector3 position, Quaternion rotation)
     {
         transform.position = position;
-        transform.rotation = rotation;
         Physics.SyncTransforms();
+        transform.rotation = rotation;
+        cameraTransform.rotation = rotation;
     }
 
     private bool locked = true;
