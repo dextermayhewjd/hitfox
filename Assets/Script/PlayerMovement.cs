@@ -40,11 +40,13 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     public bool driving = false;
     public GameObject cage;
     public GameObject footstep;
-    private UIController uiController;
+    
 
     public void Catch()
     {
-        this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID);
+        Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
+        GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
+        this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
     }
 
     [PunRPC]
@@ -62,14 +64,10 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         // Fox Animator Controller.
         animator = GetComponentInChildren<Animator>();
 
-        // UI Controller
-        uiController = FindObjectOfType<UIController>();
-
         footstep.SetActive(false);
         captured = false;
         stepOffset = controller.stepOffset;
-
-        // Assign Cinemachine Free Look to fox.
+        Cursor.lockState = CursorLockMode.Locked;
         view = GetComponent<PhotonView>();
         if (view.IsMine)
         {
@@ -83,21 +81,18 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     public void Teleport(Vector3 position, Quaternion rotation)
     {
         transform.position = position;
-        transform.rotation = rotation;
         Physics.SyncTransforms();
+        transform.rotation = rotation;
+        cameraTransform.rotation = rotation;
     }
+
+    private bool locked = true;
 
     // Update is called once per frame
     void Update()
     {
         if (view.IsMine)
         {
-            if(uiController.CharacterControlsLocked())
-            {
-                StopFootsteps();
-                Idle();
-                return;
-            }
             // if (Input.GetKeyDown(KeyCode.L))
             // {
             //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
@@ -118,9 +113,16 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
                 }   
             }
 
-            if (Input.GetKeyDown(KeyCode.R))
+            // temporary cursor unlock 
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                captured = true;
+                locked = locked ? false : true;
+                
+            } 
+            if (locked) {
+                Cursor.lockState = CursorLockMode.Locked;
+            } else {
+                Cursor.lockState = CursorLockMode.None;
             }
 
             if (!driving)
