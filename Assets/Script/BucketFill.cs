@@ -32,7 +32,12 @@ public class BucketFill : MonoBehaviour
         water.gameObject.transform.localPosition = new Vector3(0f, waterLevelHeightBottom, 0f);
         waterLevelHeightCurrent = waterLevelHeightBottom;
     }
-
+    void WaterIsallGone()
+    {
+        fillAmount = 0f;
+        progressBar.value = Mathf.Clamp(fillAmount, 0f, 1f);
+        
+    }
     void Update()
     {
         if (isFilling)
@@ -109,7 +114,7 @@ public class BucketFill : MonoBehaviour
             // Get the FireInteraction component of the current fire
 
             currentNPC_Woodcutter.pauseTime = timeForLumberjackToStop;
-            fillAmount = 0f;    
+            WaterIsallGone();    
             Debug.Log("WaterEmpty");
 
         }
