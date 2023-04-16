@@ -8,22 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/QuickStartDemo.unity
     guid: b9506a29fff474f5ca4dd60c867da5f4
-  - enabled: 0
-    path: Assets/Scenes/basic.unity
-    guid: 6d15a7e702aab4a36a3ea51fd008656b
-  - enabled: 0
-    path: Assets/infoGamerPhoton/Scene/MultiplayerScene.unity
-    guid: cc3cbe8d13d7b6e43a73262f756cc227
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: Assets/Scenes/multi_camera.unity
-    guid: a3d594e9d8e448fa3a7245554264cdf7
-  - enabled: 0
-    path: Assets/Scenes/Prototype2.unity
-    guid: 4cb69416f1e5827dd86b41650da66f84
   - enabled: 1
-    path: Assets/Scenes/SquashNPC.unity
-    guid: 370e8bce3329c1be58e9a341d9ef8d66
+    path: Assets/Scenes/StealAxe.unity
+    guid: 8338c1944a283ddc78610352f952445f
   m_configObjects: {}

@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using static TeeFallAnim;
 
-public class NPC_Woodcutter : MonoBehaviour, IInteractable {
+public class NPC_Woodcutter : OnTrigger {
 
     public enum WoodcutterState { 
         SEEKINGTREE,
@@ -34,7 +34,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
     PhotonView view;
 
-    UnityEngine.AI.NavMeshAgent agent;
+    public UnityEngine.AI.NavMeshAgent agent;
 
     public float distanceToTree;
 
@@ -83,13 +83,22 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
     }
 
     public void Interact() {
-        Debug.Log("Interacted with NPC");
-        chasedPlayer = FindClosestTarget("Player");
-        state = WoodcutterState.CHASE;
+        if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null)
+        {
+            Debug.Log("Interacted with NPC");
+            chasedPlayer = FindClosestTarget("Player");
+            state = WoodcutterState.CHASE;
+        }
     }
 
     // Update is called once per frame
     void Update(){
+
+        if (Input.GetButtonDown("Interact")) 
+        {
+            Interact();
+        }
+
         if(pauseTime > 0f)
         {
             pauseTime -= Time.deltaTime;
@@ -145,6 +154,7 @@ public class NPC_Woodcutter : MonoBehaviour, IInteractable {
 
                     if(distance < catchDistance && CanSee(chasedPlayer, distance)) {
                         pm.Catch();
+                        state = WoodcutterState.SEEKINGTREE;
                     }
 
                     if(distance < curiousDistance && distance > chaseDistance && !pm.captured) {

@@ -32,6 +32,7 @@ public class PickUp : OnTrigger
             {
                 if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null)
                 {
+                    Debug.Log(colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>().ViewID);
                     // base.photonView.RequestOwnership();
                     this.photonView.RPC("RPC_PickUp", RpcTarget.AllBuffered, colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>().ViewID);
                 }

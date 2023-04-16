@@ -9,8 +9,9 @@ using Photon.Pun;
 public class NewCarUserControl : OnTrigger
 {
     private NewCarController m_Car; // the car controller we want to use
-    bool driving = false;
+    public bool driving = false;
     public PhotonView acceleratePlayerView = null;
+    public float h = 0f, v = 0f, handbrake = 1;
     private void Awake()
     {
         // get the car controller
@@ -20,21 +21,21 @@ public class NewCarUserControl : OnTrigger
 
     private void FixedUpdate()
     {
-        float h = 0, v = 0;
-
         // pass the input to the car!
         if (driving) {
             h = Input.GetAxis("Horizontal");
             v = Input.GetAxis("Vertical");
-        }
 
-        #if !MOBILE_INPUT
-        float handbrake = Input.GetAxis("Jump");
+            handbrake = Input.GetAxis("Jump");
+            
+        } else {
+            if (handbrake >= 1f) {
+                handbrake = 1f;
+            } else {
+                handbrake += 0.001f;
+            }
+        }
         m_Car.Move(h, v, v, handbrake);
-        
-        #else
-        m_Car.Move(h, v, v, 0f);
-        #endif
     }
 
     private void Update()
@@ -54,7 +55,7 @@ public class NewCarUserControl : OnTrigger
             }
             else
             {
-                if (colliders.Count != 0) 
+                if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null) 
                 {
                     // if (acceleratePlayerView.IsMine)
                     // {

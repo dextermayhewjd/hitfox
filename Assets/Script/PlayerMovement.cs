@@ -93,10 +93,6 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     {
         if (view.IsMine)
         {
-            // if (Input.GetKeyDown(KeyCode.L))
-            // {
-            //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
-            // }
             if (Input.GetKeyDown(KeyCode.R))
             {
                 if (!captured)
@@ -224,7 +220,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         transform.Translate(moveDirection * moveSpeed * Time.deltaTime, Space.World);
 
         velocity = moveDirection * moveSpeed;
-        velocity.y = ySpeed;
+        velocity = AdjustVelocityToSlope(velocity);
+        velocity.y += ySpeed;
         controller.Move(velocity * Time.deltaTime);
 
         // if player is moving, rotate towards the direction of the movement
@@ -233,6 +230,24 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             Quaternion rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
         }
+    }
+
+    private Vector3 AdjustVelocityToSlope(Vector3 velocity)
+    {
+        var ray = new Ray(transform.position, Vector3.down);
+
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 0.2f))
+        {
+            var slopeRotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+            var adjustedVelocity = slopeRotation * velocity;
+
+            if (adjustedVelocity.y < 0)
+            {
+                return adjustedVelocity;
+            }
+        }
+
+        return velocity;
     }
 
     private void Idle()
@@ -253,7 +268,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     private void Run()
     {
         moveSpeed = walkSpeed * sprintMultiplier;
-        animator.SetFloat("Speed", 1, 0.1f, Time.deltaTime);
+        // animator.SetFloat("Speed", 1, 0.1f, Time.deltaTime);
         // Need to speed up to sync with animation and move speed. Or replace how this is played.
         Footsteps();
     }
