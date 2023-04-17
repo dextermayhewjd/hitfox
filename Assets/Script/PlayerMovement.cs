@@ -36,7 +36,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     private Vector3 moveDirection;
     private Vector3 velocity;
 
-    public bool captured = false;
+    public bool captured;
+    public bool hidden;
     public CinemachineFreeLook cam;
     public Transform cameraTransform;
     [SerializeField] AudioSource jumpSFX;
@@ -78,6 +79,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
 
         footstep.SetActive(false);
         captured = false;
+        hidden = false;
         stepOffset = controller.stepOffset;
         Cursor.lockState = CursorLockMode.Locked;
         view = GetComponent<PhotonView>();
@@ -105,19 +107,11 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     {
         if (view.IsMine)
         {
-            // if (Input.GetKeyDown(KeyCode.L))
-            // {
-            //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
-            // }
             if (Input.GetKeyDown(KeyCode.R))
             {
                 if (!captured)
                 {
-                    // spawn a cage around fox
-                    Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
-                    GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
-
-                    this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
+                    Catch();
                 } 
                 else if (captured)
                 {
@@ -138,6 +132,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         float verticalInput = inputController.GetInputAxis("Vertical");
 
         moveDirection = new Vector3(horizontalInput, 0, verticalInput);
+        // float magnitude = Mathf.Clamp01(moveDirection.magnitude) * moveSpeed;
+        // moveDirection.Normalize();
 
         // Stop moving when in the air.
         // At the same time need to allow for momemntum when in the air.
@@ -222,7 +218,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         // transform.Translate(moveDirection * moveSpeed * Time.deltaTime, Space.World);
 
         velocity = moveDirection * moveSpeed;
-        velocity.y = ySpeed;
+        velocity = AdjustVelocityToSlope(velocity);
+        velocity.y += ySpeed;
         controller.Move(velocity * Time.deltaTime);
 
         // if player is moving, rotate towards the direction of the movement
@@ -231,6 +228,24 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             Quaternion rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
         }
+    }
+
+    private Vector3 AdjustVelocityToSlope(Vector3 velocity)
+    {
+        var ray = new Ray(transform.position, Vector3.down);
+
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 0.2f))
+        {
+            var slopeRotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+            var adjustedVelocity = slopeRotation * velocity;
+
+            if (adjustedVelocity.y < 0)
+            {
+                return adjustedVelocity;
+            }
+        }
+
+        return velocity;
     }
 
     private void Idle()

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 331201891316662758}
   - component: {fileID: -4719139342963270801}
   m_Layer: 0
-  m_Name: FoxPlayer
+  m_Name: FoxPlayer_REMOTE_234759
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,7 +34,6 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 529532549924415218}
   - {fileID: 9193703026634059946}
   - {fileID: 6861243612704410682}
   - {fileID: 5375686571771201050}
@@ -454,12 +453,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1006357827621814374}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.3, z: 1.1}
+  m_LocalRotation: {x: 0.0010418444, y: 0.70710605, z: 0.0010418444, w: 0.70710605}
+  m_LocalPosition: {x: 0, y: -0.75542736, z: 0.27873006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1180456146910659787}
+  m_Father: {fileID: 5642341498106567007}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &2457613783817300238
@@ -876,8 +875,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9100000, guid: 1e63cca5b2263b84ca9c5b0256b3c9d1, type: 2}
     m_RemovedComponents: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3914119551547067934, guid: db797dd40f378ef4db2f76bd576af27e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 529532549924415218}
   m_SourcePrefab: {fileID: 100100000, guid: db797dd40f378ef4db2f76bd576af27e, type: 3}
+--- !u!4 &5642341498106567007 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3914119551547067934, guid: db797dd40f378ef4db2f76bd576af27e, type: 3}
+  m_PrefabInstance: {fileID: 8654829195245492033}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8420966721061693968 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: db797dd40f378ef4db2f76bd576af27e, type: 3}
