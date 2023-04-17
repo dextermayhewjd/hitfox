@@ -46,14 +46,14 @@ public class BucketFill : MonoBehaviour
 
             if (fillAmount >= 1)
             {
-                Debug.Log("bucket is filled");
+                // Debug.Log("bucket is filled");
                 fillAmount = 1;
                 isFilling = false;
                 // water.transform.localPosition = new Vector3(0f, waterLevelHeightTop, 0f);
             }
             else
             {
-                Debug.Log("bucket is being filled");
+                // Debug.Log("bucket is being filled");
                 fillAmount += fillSpeed * Time.deltaTime;
                 waterLevelHeightCurrent += waterLevelRiseAmount * Time.deltaTime;
                 progressBar.value = Mathf.Clamp(fillAmount, 0f, 1f);
@@ -66,7 +66,7 @@ public class BucketFill : MonoBehaviour
         {   
             if (fillAmount <= 0f)
             {
-                Debug.Log("bucket is empty");
+                // Debug.Log("bucket is empty");
                 isPouring = false;
                 fillAmount = 0;
                 water.gameObject.SetActive(false);
@@ -74,7 +74,7 @@ public class BucketFill : MonoBehaviour
             }
             else
             {
-                Debug.Log("bucket is pouring water");
+                // Debug.Log("bucket is pouring water");
                 fillAmount -= pourSpeed * Time.deltaTime;
                 waterLevelHeightCurrent -= waterLevelRiseAmount * Time.deltaTime;
                 progressBar.value = Mathf.Clamp(fillAmount, 0f, 1f);
@@ -95,12 +95,12 @@ public class BucketFill : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Water"))
         {
-            Debug.Log("bump into water");
+            // Debug.Log("bump into water");
             isFilling = true;
         }
         if (collision.gameObject.CompareTag("Fire"))
         {
-            Debug.Log("bump into fire");
+            // Debug.Log("bump into fire");
             isPouring = true;
             
             // Get the FireInteraction component of the current fire
@@ -115,7 +115,7 @@ public class BucketFill : MonoBehaviour
 
             currentNPC_Woodcutter.pauseTime = timeForLumberjackToStop;
             WaterIsallGone();    
-            Debug.Log("WaterEmpty");
+            // Debug.Log("WaterEmpty");
 
         }
     }
@@ -125,12 +125,12 @@ public class BucketFill : MonoBehaviour
         if (collision.gameObject.CompareTag("Water"))
         {
             isFilling = false;
-            Debug.Log("Left water");
+            // Debug.Log("Left water");
         }
         if (collision.gameObject.CompareTag("Fire"))
         {
             isPouring = false;
-            Debug.Log("Left fire");
+            // Debug.Log("Left fire");
             // Reset the current fire reference when the bucket exits the fire's collider
             currentFireInteraction = null;
         }
