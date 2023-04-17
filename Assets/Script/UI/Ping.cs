@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 using TMPro;
 
 // How long the ping timer will last for until it gets destroyed.
@@ -13,6 +14,7 @@ public class Ping : MonoBehaviour
     private TMP_Text[] markerTextFields;
 
     // How long the ping marker will last for. 0 for Infinite.
+    public bool useTimer;
     public float timer;
 
     // Where the ping was casted from. i.e. the player.
@@ -50,7 +52,7 @@ public class Ping : MonoBehaviour
             // }
         }
 
-        if (timer > 0)
+        if (useTimer)
         {
             timer -= Time.deltaTime;
 
@@ -63,6 +65,7 @@ public class Ping : MonoBehaviour
         
     private void StopPing()
     {
+        // PhotonNetwork.Destroy(this.gameObject);
         Destroy(this.gameObject);
     }
 

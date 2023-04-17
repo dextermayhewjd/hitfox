@@ -14,6 +14,8 @@ public class CommunicationsWheelController : MonoBehaviour
     private GameObject uiControllerObj;
     private UIController uiController;
 
+    private InputController inputController;
+
     [SerializeField] private KeyCode wheelKey = KeyCode.Tab;
 
     // The parent object of the wheel.
@@ -90,8 +92,10 @@ public class CommunicationsWheelController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        uiControllerObj = transform.parent.gameObject;
+        uiControllerObj = GameObject.Find("UIController");
         uiController = uiControllerObj.GetComponent<UIController>();
+
+        inputController = GameObject.Find("InputController").GetComponent<InputController>();
 
         UpdateScreenVars();
         UpdateWheelVars();
@@ -106,23 +110,11 @@ public class CommunicationsWheelController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (uiController.CharacterControlsLocked())
-        {
-            if (wheelParent != null)
-            {
-                wheelParent.SetActive(false);
-                castRays = false;
-            }
-            return;
-        }
-
-        if (Input.GetKeyDown(wheelKey))
-        //if (Input.GetButtonDown(wheelKey))
+        if (inputController.GetInputDown(wheelKey))
         {
             OpenWheel();
         }
-        else if (Input.GetKeyUp(wheelKey))
-        //if (Input.GetButtonUp(wheelKey))
+        else if (inputController.GetInputUp(wheelKey))
         {
             CommunicationPing selectedPing = GetSelectedPing(currWheelList);
             if (selectedPing != null) {
@@ -252,7 +244,11 @@ public class CommunicationsWheelController : MonoBehaviour
 
         try
         {
-            userName = GameObject.Find("FoxPlayer").GetComponent<PhotonView>().Owner.NickName;
+            foreach (GameObject fox in GameObject.FindGameObjectsWithTag("Player")) {
+                if(fox.GetComponent<PhotonView>().IsMine) {
+                    userName = fox.GetComponent<PhotonView>().Owner.NickName;
+                }
+            }
         } catch
         {
             // Blank
@@ -272,7 +268,18 @@ public class CommunicationsWheelController : MonoBehaviour
         // Place the ping on top of the player if a ground or object is not being looked at.
         else
         {
-            pingPos = GameObject.FindWithTag("Player").transform.position;
+            // pingPos = player.transform.position;
+            try
+            {
+                foreach (GameObject fox in GameObject.FindGameObjectsWithTag("Player")) {
+                    if(fox.GetComponent<PhotonView>().IsMine) {
+                        pingPos = fox.transform.position;
+                    }
+                }
+            } catch
+            {
+                // Blank
+            }
             pingController.PlaceGroundMarker(pingPos, 5, userName, ping.message);
         }
     }

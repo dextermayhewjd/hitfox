@@ -13,51 +13,47 @@ public class GameMenuController : MonoBehaviour
     private GameObject uiControllerObj;
     private UIController uiController;
 
-    [SerializeField] private GameObject gameMenuParent;
+    private InputController inputController;
 
-    [SerializeField] private KeyCode gameMenuKey = KeyCode.Escape;
+    [SerializeField] private GameObject gameMenuParent;
 
     [SerializeField] private bool developerMode;
 
     [SerializeField] private GameObject developerMenuButton;
-    [SerializeField] private GameObject settingsMenuButton;
-    [SerializeField] private GameObject quitButton;
 
-    [SerializeField] private GameObject developerMenuParent;
-    [SerializeField] private GameObject settingsMenuParent;
+    private GameObject developerMenuParent;
+    private GameObject settingsMenuParent;
 
     private bool menuOpen;
+    private bool developerModeActive;
 
     // Start is called before the first frame update
     void Start()
     {
-        uiControllerObj = transform.parent.gameObject;
+        uiControllerObj = GameObject.Find("UIController");
         uiController = uiControllerObj.GetComponent<UIController>();
 
+        inputController = GameObject.Find("InputController").GetComponent<InputController>();
+
+        developerMenuParent = GameObject.Find("DeveloperModeMenu");
+        settingsMenuParent = GameObject.Find("SettingsMenu");
+
         menuOpen = false;
+        developerModeActive = false;
 
         if (gameMenuParent != null)
         {
             gameMenuParent.SetActive(false);
         }
 
-        if (developerMenuParent != null)
-        {
-            developerMenuParent.SetActive(false);
-        }
-
-        if (settingsMenuParent != null)
-        {
-            settingsMenuParent.SetActive(false);
-        }
-
-
+        CloseSettingsMenu();
+        CloseDeveloperModeMenu();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(gameMenuKey))
+        if (inputController.GetInputDown(KeyCode.Escape))
         {
             menuOpen = !menuOpen;
             if (menuOpen)
@@ -69,8 +65,6 @@ public class GameMenuController : MonoBehaviour
                 Close();
             }
         }
-
-        // Need to add an escape stack if we want to close UI elements in order.
     }
 
     private void Open()
@@ -90,6 +84,11 @@ public class GameMenuController : MonoBehaviour
                     developerMenuButton.SetActive(false);
                 }
             }
+
+            if (developerModeActive)
+            {
+                OpenDeveloperModeMenu();
+            }
         }
 
         uiController.LockCharacterControls();
@@ -103,27 +102,45 @@ public class GameMenuController : MonoBehaviour
             gameMenuParent.SetActive(false);
         }
 
-        if (developerMenuParent != null)
+        if (developerModeActive)
         {
-            developerMenuParent.SetActive(false);
+            CloseDeveloperModeMenu();
         }
 
-        if (settingsMenuParent != null)
-        {
-            settingsMenuParent.SetActive(false);
-        }
+        CloseSettingsMenu();
 
         uiController.LockCursor();
         uiController.UnlockCharacterControls();
     }
 
-    public void OpenDeveloperMenu()
+    public void ToggleDeveloperMode()
+    {
+        if (developerModeActive)
+        {
+            CloseDeveloperModeMenu();
+            developerModeActive = false;
+        }
+        else
+        {
+            OpenDeveloperModeMenu();
+            developerModeActive = true;
+        }
+    }
+
+    private void OpenDeveloperModeMenu()
     {
         if (developerMenuParent != null)
         {
             developerMenuParent.SetActive(true);
         }
+    }
 
+    private void CloseDeveloperModeMenu()
+    {
+        if (developerMenuParent != null)
+        {
+            developerMenuParent.SetActive(false);
+        }
     }
 
     public void OpenSettingsMenu()
@@ -134,8 +151,16 @@ public class GameMenuController : MonoBehaviour
         }
     }
 
-    public void ButtonQuit()
+    private void CloseSettingsMenu()
     {
+        if (settingsMenuParent != null)
+        {
+            settingsMenuParent.SetActive(false);
+        }
+    }
 
+    public void QuitToHomeMenu()
+    {
+        Debug.Log("Quit");
     }
 }

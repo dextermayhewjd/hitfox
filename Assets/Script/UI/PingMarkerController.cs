@@ -38,6 +38,7 @@ public class PingMarkerController : MonoBehaviour
     {
         Ping pingComponent = pingMarkerGround.GetComponent<Ping>();
 
+        pingComponent.useTimer = true;
         pingComponent.timer = timer;
 
         pingComponent.userName = userName;
@@ -46,9 +47,8 @@ public class PingMarkerController : MonoBehaviour
         pingComponent.origin = GameObject.Find("FoxPlayer");
         pingComponent.target = pingMarkerGround;
 
-        // Switch to work with photon.
         Instantiate(pingMarkerGround, pos, Quaternion.identity);
-        // PhotonNetwork.Instantiate(pingMarkerGround, pos, Quaternion.identity);
+        // PhotonNetwork.Instantiate(pingMarkerObject.name, pos, Quaternion.identity);
     }
 
     // Object markers attatches itself to the object.
@@ -56,6 +56,7 @@ public class PingMarkerController : MonoBehaviour
     {
         Ping pingComponent = pingMarkerObject.GetComponent<Ping>();
 
+        pingComponent.useTimer = true;
         pingComponent.timer = timer;
 
         pingComponent.userName = userName;
@@ -64,8 +65,7 @@ public class PingMarkerController : MonoBehaviour
         pingComponent.origin = GameObject.Find("FoxPlayer");
         pingComponent.target = targetObj;
 
-        // Switch to work with photon.
         Instantiate(pingMarkerObject, targetObj.transform.position, Quaternion.identity);
-        // PhotonNetwork.Instantiate(pingMarkerGround, pos, Quaternion.identity);
+        // PhotonNetwork.Instantiate(pingMarkerObject.name, targetObj.transform.position, Quaternion.identity);
     }
 }

@@ -124,7 +124,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2275003983873444841}
         m_TargetAssemblyTypeName: GameMenuController, Assembly-CSharp
-        m_MethodName: OpenDeveloperMenu
+        m_MethodName: ToggleDeveloperMode
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -774,10 +774,6 @@ MonoBehaviour:
   gameMenuKey: 27
   developerMode: 1
   developerMenuButton: {fileID: 237235220483659891}
-  settingsMenuButton: {fileID: 6530846691473552848}
-  quitButton: {fileID: 8967678332839007162}
-  developerMenuParent: {fileID: 8925567176780122362, guid: dadd1e688eaf5f84a8b6b843bfa7f7d4, type: 3}
-  settingsMenuParent: {fileID: 8679278274607444913, guid: 0a7e2742768d9a9469b5a35f8598a171, type: 3}
 --- !u!1 &8967678332839007162
 GameObject:
   m_ObjectHideFlags: 0
@@ -902,7 +898,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2275003983873444841}
         m_TargetAssemblyTypeName: GameMenuController, Assembly-CSharp
-        m_MethodName: ButtonQuit
+        m_MethodName: QuitToHomeMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
