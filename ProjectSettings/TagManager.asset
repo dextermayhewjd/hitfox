@@ -12,6 +12,12 @@ TagManager:
   - BlueNPC
   - Canvas
   - Bucket
+  - Tree
+  - Water
+  - Lumberjack
+  - Forklift
+  - Bin
+  - Trash
   layers:
   - Default
   - TransparentFX
@@ -24,8 +30,8 @@ TagManager:
   - Ground
   - Object
   - PickableObjects
-  - 
-  - 
+  - Vehicle
+  - Bush
   - 
   - 
   - 

@@ -14,9 +14,9 @@ public class ForkController : MonoBehaviour {
     private bool mastMoveTrue = false; //Activate or deactivate the movement of the mast
 
     // Update is called once per frame
-    void FixedUpdate () {
+    void FixedUpdate() {
 
-        // Debug.Log(mastMoveTrue);
+        //Debug.Log(mastMoveTrue);
         if(fork.transform.localPosition.y >= maxYmast.y && fork.transform.localPosition.y < maxY.y)
         {
             mastMoveTrue = true;

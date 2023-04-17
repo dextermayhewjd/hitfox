@@ -1,0 +1,11 @@
+Model Information:
+* title:	Low poly set of 4 bottles
+* source:	https://sketchfab.com/3d-models/low-poly-set-of-4-bottles-e8493e6912e64fb2a14cac8245c6eed7
+* author:	pandico (https://sketchfab.com/pandico)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Low poly set of 4 bottles" (https://sketchfab.com/3d-models/low-poly-set-of-4-bottles-e8493e6912e64fb2a14cac8245c6eed7) by pandico (https://sketchfab.com/pandico) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

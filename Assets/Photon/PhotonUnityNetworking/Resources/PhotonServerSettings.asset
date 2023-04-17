@@ -55,7 +55,14 @@ MonoBehaviour:
   - ReleaseRPC
   - RPC_Catch
   - RPC_Rescue
-  - ThrowBucket
+  - RPC_HideSign
+  - RPC_ShowSign
+  - RPC_UpdateScore
+  - RPC_UpdateBucket
+  - RPC_HideAngrySign
+  - RPC_ShowAngrySign
+  - RPC_PlaySound
+  - RPC_DropAxe
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
