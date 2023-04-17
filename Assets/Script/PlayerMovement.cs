@@ -40,11 +40,13 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     public bool driving = false;
     public GameObject cage;
     public GameObject footstep;
-    private UIController uiController;
+    
 
     public void Catch()
     {
-        this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID);
+        Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
+        GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
+        this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
     }
 
     [PunRPC]
@@ -62,14 +64,10 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         // Fox Animator Controller.
         animator = GetComponentInChildren<Animator>();
 
-        // UI Controller
-        uiController = FindObjectOfType<UIController>();
-
         footstep.SetActive(false);
         captured = false;
         stepOffset = controller.stepOffset;
-
-        // Assign Cinemachine Free Look to fox.
+        Cursor.lockState = CursorLockMode.Locked;
         view = GetComponent<PhotonView>();
         if (view.IsMine)
         {
@@ -83,49 +81,53 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     public void Teleport(Vector3 position, Quaternion rotation)
     {
         transform.position = position;
-        transform.rotation = rotation;
         Physics.SyncTransforms();
+        transform.rotation = rotation;
+        cameraTransform.rotation = rotation;
     }
+
+    private bool locked = true;
 
     // Update is called once per frame
     void Update()
     {
         if (view.IsMine)
         {
-            // Issue with animation and sound still playing whilst moving and changing this to false.
-            // Must be a different way to achieve locking the character controls or changing something
-            // in the sounds or animation.
-            if(!uiController.CharacterControlsLocked())
+            // if (Input.GetKeyDown(KeyCode.L))
+            // {
+            //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
+            // }
+            if (Input.GetKeyDown(KeyCode.R))
             {
-                // if (Input.GetKeyDown(KeyCode.L))
-                // {
-                //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
-                // }
-                if (Input.GetKeyDown(KeyCode.R))
+                if (!captured)
                 {
-                    if (!captured)
-                    {
-                        // spawn a cage around fox
-                        Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
-                        GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
+                    // spawn a cage around fox
+                    Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
+                    GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
 
-                        this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
-                    } 
-                    else if (captured)
-                    {
-                        captured = false;
-                    }   
-                }
-
-                if (Input.GetKeyDown(KeyCode.R))
+                    this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
+                } 
+                else if (captured)
                 {
-                    captured = true;
-                }
+                    captured = false;
+                }   
+            }
 
-                if (!driving)
-                {
-                    Movement();
-                }
+            // temporary cursor unlock 
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                locked = locked ? false : true;
+                
+            } 
+            if (locked) {
+                Cursor.lockState = CursorLockMode.Locked;
+            } else {
+                Cursor.lockState = CursorLockMode.None;
+            }
+
+            if (!driving)
+            {
+                Movement();
             }
         }
     }

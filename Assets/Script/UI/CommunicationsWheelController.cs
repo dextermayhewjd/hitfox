@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 using UnityEngine.UI;
+using Photon.Pun;
+using TMPro;
 
 public class CommunicationsWheelController : MonoBehaviour
 {
     // Todo
-    // - Expand to add more communications depending on what the player is looking at.
+    // - Expand to suit needs.
 
     // Main UI Controller.
     private GameObject uiControllerObj;
@@ -18,7 +19,11 @@ public class CommunicationsWheelController : MonoBehaviour
     // The parent object of the wheel.
     [SerializeField] private GameObject wheelParent;
 
-    [SerializeField] private GameObject groundWheelParent;
+    // Array of parent object of wheels of differnt sizes.
+    [SerializeField] private GameObject[] wheelParents;
+
+    // Crosshair object.
+    [SerializeField] private GameObject crossHair;
 
     // Screen Variables.
     private int screenWidth;
@@ -33,6 +38,7 @@ public class CommunicationsWheelController : MonoBehaviour
     // Layers;
     private int layerGround;
     private int layerObject;
+    private int layerPickableObjects;
     private int currLayer;
 
     // Rays.
@@ -45,7 +51,6 @@ public class CommunicationsWheelController : MonoBehaviour
     [SerializeField] private float groundYOffset;
 
     // Defines the parameters of a single sector of the wheel.
-    [System.Serializable]
     public class CommunicationPing
     {
         public float sectorStart;
@@ -68,18 +73,19 @@ public class CommunicationsWheelController : MonoBehaviour
         PICKABLE
     }
 
-    private Hashtable wheels;
+    [SerializeField] private float[] sectorStartsDegrees;
 
     // Holds all communication fields that can be placed on the ground.
-    [SerializeField] private List<CommunicationPing> groundWheel;
+    [SerializeField] private List<string> groundWheel;
 
     // Holds all of the fields when the player is captured.
-    [SerializeField] private List<CommunicationPing> capturedWheel;
+    [SerializeField] private List<string> capturedWheel;
 
     // Holds all the communication pings regarding any ojbects that can be picked up.
-    [SerializeField] private List<CommunicationPing> pickableObjectsWheel;
+    [SerializeField] private List<string> pickableObjectsWheel;
 
     private Wheel currWheel;
+    private List<CommunicationPing> currWheelList;
 
     // Start is called before the first frame update
     void Start()
@@ -90,14 +96,26 @@ public class CommunicationsWheelController : MonoBehaviour
         UpdateScreenVars();
         UpdateWheelVars();
         UpdateLayers();
-        // Define the wheel programatically.
-        // CreateWheel();
-        CloseWheel();
+
+        if (wheelParent != null)
+        {
+            wheelParent.SetActive(false);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (uiController.CharacterControlsLocked())
+        {
+            if (wheelParent != null)
+            {
+                wheelParent.SetActive(false);
+                castRays = false;
+            }
+            return;
+        }
+
         if (Input.GetKeyDown(wheelKey))
         //if (Input.GetButtonDown(wheelKey))
         {
@@ -106,7 +124,7 @@ public class CommunicationsWheelController : MonoBehaviour
         else if (Input.GetKeyUp(wheelKey))
         //if (Input.GetButtonUp(wheelKey))
         {
-            CommunicationPing selectedPing = GetSelectedPing();
+            CommunicationPing selectedPing = GetSelectedPing(currWheelList);
             if (selectedPing != null) {
                 StartPing(selectedPing);
             }
@@ -120,8 +138,15 @@ public class CommunicationsWheelController : MonoBehaviour
             switch(currWheel)
             {
                 case Wheel.GROUND:
-                    groundWheelParent.SetActive(true);
+                    currWheelList = CreateWheel(groundWheel);
                     break;
+                case Wheel.PICKABLE:
+                    currWheelList = CreateWheel(pickableObjectsWheel);
+                    break;
+                default:
+                    currWheelList = CreateWheel(groundWheel);
+                    break;
+
             }
         }
     }
@@ -138,15 +163,13 @@ public class CommunicationsWheelController : MonoBehaviour
         wheelCentre = screenCentre;
         wheelDiameter = (screenWidth > screenHeight) ? screenHeight : screenWidth;
         wheelRadius = wheelDiameter / 2;
-
-        wheels = new Hashtable();
-        wheels[Wheel.GROUND] = groundWheel;
     }
 
     private void UpdateLayers()
     {
         layerGround = LayerMask.NameToLayer("Ground");
         layerObject = LayerMask.NameToLayer("Object");
+        layerPickableObjects = LayerMask.NameToLayer("PickableObjects");
     }
 
     private void OpenWheel()
@@ -172,7 +195,6 @@ public class CommunicationsWheelController : MonoBehaviour
         if (wheelParent != null)
         {
             wheelParent.SetActive(false);
-            groundWheelParent.SetActive(false);
             castRays = false;
             uiController.UnlockFreeLook();
             uiController.LockCursor();
@@ -181,7 +203,6 @@ public class CommunicationsWheelController : MonoBehaviour
 
     private void CastRaysFromCrossHair()
     {
-        // Vector2 crossHairPos = new Vector2(x, y);
         Vector2 crossHairPos = screenCentre;
 
         ray = Camera.main.ScreenPointToRay(crossHairPos);
@@ -197,12 +218,10 @@ public class CommunicationsWheelController : MonoBehaviour
             }
             else if (currLayer == layerObject)
             {
-                switch(hit.transform.gameObject.name)
-                {
-                    case "":
-                        currWheel = Wheel.PICKABLE;
-                        break;
-                }
+            }
+            else if (currLayer == layerPickableObjects)
+            {
+                currWheel = Wheel.PICKABLE;
             }
             else
             {
@@ -211,9 +230,9 @@ public class CommunicationsWheelController : MonoBehaviour
         }
     }
 
-    private CommunicationPing GetSelectedPing()
+    private CommunicationPing GetSelectedPing(List<CommunicationPing> wheel)
     {
-        foreach (CommunicationPing currPing in (List<CommunicationPing>)wheels[currWheel])
+        foreach (CommunicationPing currPing in wheel)
         {
             if (WithinSector(currPing.sectorStart, currPing.sectorEnd, Input.mousePosition))
             {
@@ -229,9 +248,15 @@ public class CommunicationsWheelController : MonoBehaviour
 
         Vector3 pingPos = new Vector3(hit.point.x, hit.point.y, hit.point.z);
 
-        // GameObject player = GameObject.FindWithTag("Player");
-        // string userName = player.GetComponent<PhotonView>().Owner.NickName;
-        string userName = "Player";
+        string userName = "Me";
+
+        try
+        {
+            userName = GameObject.Find("FoxPlayer").GetComponent<PhotonView>().Owner.NickName;
+        } catch
+        {
+            // Blank
+        }
 
         // Ground Layer.
         if (currLayer == layerGround)
@@ -240,25 +265,79 @@ public class CommunicationsWheelController : MonoBehaviour
             pingController.PlaceGroundMarker(pingPos, 5, userName, ping.message);
         }
         // Object Layer.
-        else if (currLayer == layerObject)
+        else if (currLayer == layerObject || currLayer == layerPickableObjects)
         {
-
+            pingController.PlaceObjectMarker(hit.transform.gameObject, 5, userName, ping.message);
         }
         // Place the ping on top of the player if a ground or object is not being looked at.
         else
         {
-            // Dunno how this will work with photon but need to get the player object that the ping was called from.
             pingPos = GameObject.FindWithTag("Player").transform.position;
             pingController.PlaceGroundMarker(pingPos, 5, userName, ping.message);
         }
     }
 
-    // Code the messages ping.
-    private void CreateWheel()
+    private List<CommunicationPing> CreateWheel(List<string> msgs)
     {
+        List<CommunicationPing> newList = new List<CommunicationPing>();
+
+        int numMsg = msgs.Count;
+
+        if (numMsg == 0 || numMsg > 6)
+        {
+            return newList;
+        }
+
+        float sectorSize = (numMsg == 1) ? 180 : 360 / numMsg;
+
+        float sectorStart = 0;
+
+        sectorStart = sectorStartsDegrees[numMsg - 1];
+
+        for (int i = 0; i < numMsg; i++)
+        {
+            float sectorEnd = (sectorStart + sectorSize) % 360;
+            if (sectorEnd == 0)
+            {
+                sectorEnd = 360;
+            }
+            newList.Add(new CommunicationPing(sectorStart, sectorEnd, msgs[i]));
+            sectorStart = sectorEnd;
+        }
+
+        GameObject currWheelObj = wheelParents[0];
+        int wheelParentIndex = 0;
+        foreach (GameObject wheelParent in wheelParents)
+        {
+            if (wheelParentIndex == numMsg - 1)
+            {
+                wheelParent.SetActive(true);
+                currWheelObj = wheelParent;
+            }
+            else
+            {
+                wheelParent.SetActive(false);
+            }
+            wheelParentIndex++;
+        }
+
+        if (currWheelObj != null)
+        {
+            TMP_Text[] wheelTextFields;
+            wheelTextFields = currWheelObj.GetComponentsInChildren<TMP_Text>();
+            int textFieldsIndex = 0;
+            foreach (TMP_Text textField in wheelTextFields)
+            {
+                textField.text = msgs[textFieldsIndex];
+                textFieldsIndex++;
+            }
+        }
+
+        return newList;
     }
 
     // Check if the point lies within the sector of the circle.
+    // Max 180 degree sector.
     // @param sectorStart {float} The starting angle of the sector in degrees.
     // @param sectorEnd {float} The end angle of the sector in degrees, counter-clockwise from the sectorStart.
     // @param point {Vector2} The point in question.

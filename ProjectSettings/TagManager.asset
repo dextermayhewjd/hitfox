@@ -8,6 +8,10 @@ TagManager:
   - Vehicle
   - Dog
   - DogChase
+  - Fire
+  - BlueNPC
+  - Canvas
+  - Bucket
   layers:
   - Default
   - TransparentFX
@@ -17,9 +21,9 @@ TagManager:
   - UI
   - Player
   - Path
-  - 
-  - 
-  - 
+  - Ground
+  - Object
+  - PickableObjects
   - 
   - 
   - 
