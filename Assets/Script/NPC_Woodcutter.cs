@@ -48,6 +48,9 @@ public class NPC_Woodcutter : OnTrigger {
 
 
     public bool calming;
+    public bool isStunned;
+    public Canvas angrySign;
+    public GameObject axe;
 
 
     GameObject FindClosestTarget(string trgt) {
@@ -60,15 +63,15 @@ public class NPC_Woodcutter : OnTrigger {
 
     void Start(){
         isCutting = false;
-
+        isStunned = false;
         chaseDistance = 20;
-        curiousDistance = 50;
+        curiousDistance = 150;
         speed = 3;
         calmTime = 5;
         cutDistance = 3.0f;
-        catchDistance = 3.0f;
+        catchDistance = 2.0f;
         calming = false;
-
+        angrySign.enabled = false;
 
         if (treeToCut == null) {
             treeToCut = GameObject.FindGameObjectWithTag("Tree");
@@ -82,13 +85,35 @@ public class NPC_Woodcutter : OnTrigger {
 
     }
 
-    public void Interact() {
+    public IEnumerator Interact(int secs) {
         if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null)
         {
             Debug.Log("Interacted with NPC");
             chasedPlayer = FindClosestTarget("Player");
+            agent.speed = 0;
+            isStunned = true;
+            this.photonView.RPC("RPC_ShowAngrySign", RpcTarget.AllBuffered);
+            if (axe != null) {
+                this.photonView.RPC("RPC_DropAxe", RpcTarget.AllBuffered);
+            }
             state = WoodcutterState.CHASE;
+            yield return new WaitForSeconds(secs);
+            isStunned = false;
+            agent.speed = speed * 2;
         }
+    }
+
+    public IEnumerator PauseAfterCatch(int secs)
+    {
+        // agent.speed = 0;
+        transform.Find("Collision").gameObject.SetActive(false);
+        this.photonView.RPC("RPC_HideAngrySign", RpcTarget.AllBuffered);
+        state = WoodcutterState.SEEKINGTREE;
+        yield return new WaitForSeconds(secs);
+        // transform.Find("Collision").gameObject.SetActive(false);
+        // agent.speed = speed;
+        // yield return new WaitForSeconds(2);
+        transform.Find("Collision").gameObject.SetActive(true);
     }
 
     // Update is called once per frame
@@ -96,7 +121,7 @@ public class NPC_Woodcutter : OnTrigger {
 
         if (Input.GetButtonDown("Interact")) 
         {
-            Interact();
+            StartCoroutine(Interact(2));
         }
 
         if(pauseTime > 0f)
@@ -107,80 +132,86 @@ public class NPC_Woodcutter : OnTrigger {
             if (pauseTime <= 0f)
             {
                 pauseTime = 0f;
-                agent.speed = 3f;
+                agent.speed = speed;
             }
         }else{
-        dest = agent.destination;
-        if (view.IsMine) {
-            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-            GameObject[] trees = GameObject.FindGameObjectsWithTag("Tree");
+            if (!isStunned)
+            {
+                dest = agent.destination;
+                if (view.IsMine) {
+                    GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                    GameObject[] trees = GameObject.FindGameObjectsWithTag("Tree");
 
-            if (treeToCut != null) {
-                distanceToTree = Vector3.Distance(treeToCut.transform.position, transform.position);
-            } else {
-                treeToCut = trees[UnityEngine.Random.Range(0, trees.Length)];
-                distanceToTree = Vector3.Distance(treeToCut.transform.position, transform.position);
-            }
-
-            switch (state) {
-                case WoodcutterState.SEEKINGTREE:
-                    agent.destination = treeToCut.transform.position;
-
-                    if (distanceToTree < cutDistance) {
-                        Debug.Log("should be cutting!");
-                        state = WoodcutterState.CUTTING;
-                    }
-                    break;
-                
-                case WoodcutterState.CUTTING:
-                    // TODO: cutting sound and animation
-                    if(!isCutting) StartCoroutine(CutTree(3, treeToCut)); // secs to cut a tree
-                    isCutting = true;
-                    break;
-
-                case WoodcutterState.CHASE:
-                    // TODO: sound and animation
-                    // Debug.Log("chasing 1");
-                    treeToCut = null;
-                    
-                    if(chasedPlayer == null) {
-                        chasedPlayer = FindClosestTarget("Player");
+                    if (treeToCut != null) {
+                        distanceToTree = Vector3.Distance(treeToCut.transform.position, transform.position);
+                    } else {
+                        treeToCut = trees[UnityEngine.Random.Range(0, trees.Length)];
+                        distanceToTree = Vector3.Distance(treeToCut.transform.position, transform.position);
                     }
 
-                    agent.destination = chasedPlayer.transform.position;
-                    
-                    float distance = Vector3.Distance(chasedPlayer.transform.position, transform.position);
-                    PlayerMovement pm = chasedPlayer.GetComponent<PlayerMovement>();
+                    switch (state) {
+                        case WoodcutterState.SEEKINGTREE:
+                            agent.destination = treeToCut.transform.position;
 
-                    if(distance < catchDistance && CanSee(chasedPlayer, distance)) {
-                        pm.Catch();
-                        state = WoodcutterState.SEEKINGTREE;
-                    }
+                            if (distanceToTree < cutDistance) {
+                                Debug.Log("should be cutting!");
+                                state = WoodcutterState.CUTTING;
+                                goto case WoodcutterState.CUTTING;
+                            }
+                            break;
+                        
+                        case WoodcutterState.CUTTING:
+                            // TODO: cutting sound and animation
+                            if(!isCutting) StartCoroutine(CutTree(3, treeToCut)); // secs to cut a tree
+                            isCutting = true;
+                            break;
 
-                    if(distance < curiousDistance && distance > chaseDistance && !pm.captured) {
-                        state = WoodcutterState.CURIOUS;
-                        goto case WoodcutterState.CURIOUS;
-                    }
-                
+                        case WoodcutterState.CHASE:
+                            // TODO: sound and animation
+                            // Debug.Log("chasing 1");
+                            treeToCut = null;
+                            
+                            if(chasedPlayer == null) {
+                                chasedPlayer = FindClosestTarget("Player");
+                            }
 
-                    break;
-                
-                case WoodcutterState.CURIOUS:
-                    // for calmTime secs after loses sight of player, they can still go into chase mode if they catch sight of a player
+                            agent.destination = chasedPlayer.transform.position;
+                            
+                            float distance = Vector3.Distance(chasedPlayer.transform.position, transform.position);
+                            PlayerMovement pm = chasedPlayer.GetComponent<PlayerMovement>();
 
-                    if(!calming) {
-                        StartCoroutine(CalmDown(calmTime));
-                        calming = true;
+                            if(distance <= catchDistance && CanSee(chasedPlayer, distance) && !isStunned) {
+                                pm.Catch();
+                                StartCoroutine(PauseAfterCatch(3));
+                            }
+
+                            if(distance <= curiousDistance && distance >= chaseDistance && !pm.captured) {
+                                agent.speed = speed;
+                                this.photonView.RPC("RPC_HideAngrySign", RpcTarget.AllBuffered);
+                                state = WoodcutterState.CURIOUS;
+                                goto case WoodcutterState.CURIOUS;
+                            }
+                        
+
+                            break;
+                        
+                        case WoodcutterState.CURIOUS:
+                            // for calmTime secs after loses sight of player, they can still go into chase mode if they catch sight of a player
+
+                            if(!calming) {
+                                StartCoroutine(CalmDown(calmTime));
+                                calming = true;
+                            }
+                            
+                            foreach (GameObject player in players) {
+                                float pdistance = Vector3.Distance(player.transform.position, transform.position);
+                                if(pdistance < chaseDistance && CanSee(player, pdistance)) {
+                                    state = WoodcutterState.CHASE;
+                                }
+                            }
+                        break;
+                        }                
                     }
-                    
-                    foreach (GameObject player in players) {
-                        float pdistance = Vector3.Distance(player.transform.position, transform.position);
-                        if(pdistance < chaseDistance && CanSee(player, pdistance)) {
-                            state = WoodcutterState.CHASE;
-                        }
-                    }
-                  break;
-                }                
             }
         }
     }
@@ -204,7 +235,10 @@ public class NPC_Woodcutter : OnTrigger {
         //tree.transform.Rotate(90.0f, 0.0f, 0.0f, Space.Self);
         treeToCut = null;
         Debug.Log("cut a tree");
-        state = WoodcutterState.SEEKINGTREE;
+        if (state != WoodcutterState.CHASE)
+        {
+            state = WoodcutterState.SEEKINGTREE;
+        }
         isCutting = false;
     }
 
@@ -229,5 +263,28 @@ public class NPC_Woodcutter : OnTrigger {
             }
         }
         return false;
+    }
+
+    [PunRPC]
+    void RPC_ShowAngrySign()
+    {
+        angrySign.enabled = true;
+    }
+    [PunRPC]
+    void RPC_HideAngrySign()
+    {
+        angrySign.enabled = false;
+    }
+
+    [PunRPC]
+    void RPC_DropAxe()
+    {
+        Debug.Log("Axe dropped");
+        axe.transform.SetParent(null);
+        axe.GetComponent<Rigidbody>().isKinematic = false;
+        axe.GetComponent<Rigidbody>().detectCollisions = true;
+        // this.transform.position = playerView.transform.Find("Mouth").position;
+        // this.transform.rotation = playerView.transform.Find("Mouth").rotation;
+        axe.GetComponent<PhotonRigidbodyView>().enabled = true;
     }
 }

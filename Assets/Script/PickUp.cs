@@ -30,9 +30,8 @@ public class PickUp : OnTrigger
             } 
             else 
             {
-                if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null)
+                if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null && colliders.Find(x => x.GetComponent<PhotonView>().IsMine).transform.Find("Mouth").childCount == 0)
                 {
-                    Debug.Log(colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>().ViewID);
                     // base.photonView.RequestOwnership();
                     this.photonView.RPC("RPC_PickUp", RpcTarget.AllBuffered, colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>().ViewID);
                 }
@@ -46,8 +45,8 @@ public class PickUp : OnTrigger
         Debug.Log("Object dropped");
         pickedUp = false;
         this.transform.SetParent(null);
-        this.transform.position = playerView.transform.GetChild(0).gameObject.transform.position;
-        this.transform.rotation = playerView.transform.GetChild(0).gameObject.transform.rotation;
+        this.transform.position = playerView.transform.Find("Mouth").position;
+        this.transform.rotation = playerView.transform.Find("Mouth").rotation;
         rigidbody.isKinematic = false;
         rigidbody.detectCollisions = true;
         rigidbodyView.enabled = true;
@@ -60,7 +59,7 @@ public class PickUp : OnTrigger
         Debug.Log("Picked up");
         pickedUp = true;
         playerView = PhotonView.Find(player);
-        this.transform.SetParent(playerView.transform.GetChild(0).gameObject.transform);
+        this.transform.SetParent(playerView.transform.Find("Mouth"));
         this.transform.localPosition = Vector3.zero;
         this.transform.localRotation = Quaternion.identity;
         rigidbody.isKinematic = true;

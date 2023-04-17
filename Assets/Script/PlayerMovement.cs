@@ -31,7 +31,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     private Vector3 moveDirection;
     private Vector3 velocity;
 
-    public bool captured = false;
+    public bool captured;
+    public bool hidden;
     public CinemachineFreeLook cam;
     public Transform cameraTransform;
     [SerializeField] AudioSource jumpSFX;
@@ -66,6 +67,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
 
         footstep.SetActive(false);
         captured = false;
+        hidden = false;
         stepOffset = controller.stepOffset;
         Cursor.lockState = CursorLockMode.Locked;
         view = GetComponent<PhotonView>();
@@ -97,11 +99,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             {
                 if (!captured)
                 {
-                    // spawn a cage around fox
-                    Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
-                    GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
-
-                    this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
+                    Catch();
                 } 
                 else if (captured)
                 {
@@ -134,6 +132,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         float verticalInput = Input.GetAxis("Vertical");
 
         moveDirection = new Vector3(horizontalInput, 0, verticalInput);
+        // float magnitude = Mathf.Clamp01(moveDirection.magnitude) * moveSpeed;
+        // moveDirection.Normalize();
 
         // Stop moving when in the air.
         // At the same time need to allow for momemntum when in the air.
@@ -268,7 +268,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     private void Run()
     {
         moveSpeed = walkSpeed * sprintMultiplier;
-        // animator.SetFloat("Speed", 1, 0.1f, Time.deltaTime);
+        animator.SetFloat("Speed", 1, 0.1f, Time.deltaTime);
         // Need to speed up to sync with animation and move speed. Or replace how this is played.
         Footsteps();
     }

@@ -24,6 +24,7 @@ public class BushScript : OnTrigger
                 CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
                 cam.LookAt = playerInBush.transform;
                 cam.Follow = playerInBush.transform;
+                this.photonView.RPC("RPC_PlaySound", RpcTarget.AllBuffered);
                 this.photonView.RPC("RPC_UnhidePlayer", RpcTarget.AllBuffered);
                 this.photonView.RPC("RPC_HideSign", RpcTarget.OthersBuffered);
                 
@@ -31,6 +32,7 @@ public class BushScript : OnTrigger
 
             else if (!inUse && colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null) 
             {
+                this.photonView.RPC("RPC_PlaySound", RpcTarget.AllBuffered);
                 this.photonView.RPC("RPC_HidePlayer", RpcTarget.AllBuffered, colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>().ViewID);
                 this.photonView.RPC("RPC_ShowSign", RpcTarget.OthersBuffered);
                 if (playerInBush.IsMine) 
@@ -49,6 +51,7 @@ public class BushScript : OnTrigger
         Debug.Log("Player left hiding spot");
         playerInBush.transform.SetParent(null);
         playerInBush.gameObject.SetActive(true);
+        playerInBush.gameObject.GetComponent<PlayerMovement>().hidden = false;
         playerInBush = null;
         inUse = false;
     }
@@ -61,6 +64,7 @@ public class BushScript : OnTrigger
         playerInBush = PhotonView.Find(player);
         playerInBush.transform.SetParent(this.transform);
         playerInBush.gameObject.SetActive(false);
+        playerInBush.gameObject.GetComponent<PlayerMovement>().hidden = true;
     }
 
     [PunRPC]
@@ -72,5 +76,11 @@ public class BushScript : OnTrigger
     void RPC_HideSign()
     {
         inUseSign.enabled = false;
+    }
+
+    [PunRPC]
+    void RPC_PlaySound()
+    {
+        this.GetComponent<AudioSource>().Play();
     }
 }

@@ -10,7 +10,7 @@ public class FireInteraction : MonoBehaviourPun
     public float health = 1f;
     public float recoverSpeed = 0.025f;    
 
-        // for the fire it encounter 
+    // for the fire it encounter 
     private BucketFill BucketFillInteraction;
     
     void Update(){

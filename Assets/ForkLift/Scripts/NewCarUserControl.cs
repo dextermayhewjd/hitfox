@@ -32,7 +32,7 @@ public class NewCarUserControl : OnTrigger
             if (handbrake >= 1f) {
                 handbrake = 1f;
             } else {
-                handbrake += 0.001f;
+                handbrake += 0.01f;
             }
         }
         m_Car.Move(h, v, v, handbrake);
@@ -89,7 +89,7 @@ public class NewCarUserControl : OnTrigger
         Debug.Log("Player entered vehicle");
         driving = true;
         acceleratePlayerView = PhotonView.Find(player);
-        acceleratePlayerView.transform.SetParent(this.transform.GetChild(0).gameObject.transform);
+        acceleratePlayerView.transform.SetParent(this.transform.Find("AccelerateSeat"));
         // acceleratePlayerView.gameObject.SetActive(false);
         acceleratePlayerView.transform.localPosition = Vector3.zero;
         acceleratePlayerView.transform.localRotation = Quaternion.identity;

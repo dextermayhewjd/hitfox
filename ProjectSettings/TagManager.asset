@@ -16,6 +16,8 @@ TagManager:
   - Water
   - Lumberjack
   - Forklift
+  - Bin
+  - Trash
   layers:
   - Default
   - TransparentFX
