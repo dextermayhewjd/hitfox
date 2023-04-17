@@ -7,6 +7,7 @@ public class PickUp : OnTrigger
 {
     public bool pickedUp = false;
     public PhotonView playerView = null;
+    public float throwForce = 2500f; // the force added to the picked up things
 
     private Rigidbody rigidbody = null;
     private PhotonRigidbodyView rigidbodyView = null;
@@ -37,6 +38,12 @@ public class PickUp : OnTrigger
                 }
             }
         }
+        if (photonView.IsMine && pickedUp && Input.GetKeyDown(KeyCode.Q)) {
+            Transform mouthTransform = playerView.gameObject.transform.Find("Mouth");
+            if (Camera.main != null) {
+            photonView.RPC("ThrowBucket", RpcTarget.AllViaServer, Camera.main.transform.forward);
+        }
+        }
     }
 
     [PunRPC]
@@ -52,7 +59,6 @@ public class PickUp : OnTrigger
         rigidbodyView.enabled = true;
         playerView = null;
     }
-
     [PunRPC]
     void RPC_PickUp(int player)
     {
@@ -65,5 +71,14 @@ public class PickUp : OnTrigger
         rigidbody.isKinematic = true;
         rigidbody.detectCollisions = false;
         rigidbodyView.enabled = false;
+    }    
+    
+    [PunRPC]
+    void ThrowBucket(Vector3 direction){
+        pickedUp = false;
+        rigidbody.transform.SetParent(null);
+        rigidbody.isKinematic = false; // unfreeze the rigidbody
+        rigidbody.detectCollisions = true;
+        rigidbody.AddForce(direction * throwForce);
     }
 }
