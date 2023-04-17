@@ -55,12 +55,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0
-  walkSpeed: 2
+  walkSpeed: 5
   sprintMultiplier: 2.5
   rotationSpeed: 500
-  jumpDelay: 0.2
+  jumpDelay: 0.3
   jumpSpeed: 6
-  jumpGracePeriod: 1
+  jumpGracePeriod: 2
   captured: 0
   hidden: 0
   cam: {fileID: 0}
@@ -929,6 +929,14 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 1e63cca5b2263b84ca9c5b0256b3c9d1, type: 2}
+    - target: {fileID: 5866666021909216657, guid: db797dd40f378ef4db2f76bd576af27e, type: 3}
+      propertyPath: m_UpdateMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: db797dd40f378ef4db2f76bd576af27e, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5908449372881947637, guid: db797dd40f378ef4db2f76bd576af27e, type: 3}
       propertyPath: m_Layer
       value: 6
