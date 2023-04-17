@@ -55,6 +55,7 @@ MonoBehaviour:
   - ReleaseRPC
   - RPC_Catch
   - RPC_Rescue
+  - ThrowBucket
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
