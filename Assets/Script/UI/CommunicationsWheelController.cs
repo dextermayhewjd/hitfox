@@ -240,47 +240,29 @@ public class CommunicationsWheelController : MonoBehaviour
 
         Vector3 pingPos = new Vector3(hit.point.x, hit.point.y, hit.point.z);
 
-        string userName = "Me";
-
-        try
-        {
-            foreach (GameObject fox in GameObject.FindGameObjectsWithTag("Player")) {
-                if(fox.GetComponent<PhotonView>().IsMine) {
-                    userName = fox.GetComponent<PhotonView>().Owner.NickName;
-                }
-            }
-        } catch
-        {
-            // Blank
-        }
-
         // Ground Layer.
         if (currLayer == layerGround)
         {
             pingPos.y += groundYOffset;
-            pingController.PlaceGroundMarker(pingPos, 5, userName, ping.message);
+            pingController.PlaceGroundMarker(pingPos, 8, ping.message);
         }
         // Object Layer.
         else if (currLayer == layerObject || currLayer == layerPickableObjects)
         {
-            pingController.PlaceObjectMarker(hit.transform.gameObject, 5, userName, ping.message);
+            pingController.PlaceObjectMarker(hit.transform.gameObject, 8, ping.message);
         }
         // Place the ping on top of the player if a ground or object is not being looked at.
         else
         {
-            // pingPos = player.transform.position;
-            try
+            Vector3 playerPos = new Vector3(0, 0, 0);
+
+            foreach (GameObject fox in GameObject.FindGameObjectsWithTag("Player"))
             {
-                foreach (GameObject fox in GameObject.FindGameObjectsWithTag("Player")) {
-                    if(fox.GetComponent<PhotonView>().IsMine) {
-                        pingPos = fox.transform.position;
-                    }
+                if(fox.GetComponent<PhotonView>().IsMine) {
+                    playerPos = fox.transform.position;
                 }
-            } catch
-            {
-                // Blank
             }
-            pingController.PlaceGroundMarker(pingPos, 5, userName, ping.message);
+            pingController.PlaceGroundMarker(playerPos, 8, ping.message);
         }
     }
 

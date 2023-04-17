@@ -118,11 +118,13 @@ public class GameMenuController : MonoBehaviour
         if (developerModeActive)
         {
             CloseDeveloperModeMenu();
+            uiController.DisableDeveloperMode();
             developerModeActive = false;
         }
         else
         {
             OpenDeveloperModeMenu();
+            uiController.EnableDeveloperMode();
             developerModeActive = true;
         }
     }

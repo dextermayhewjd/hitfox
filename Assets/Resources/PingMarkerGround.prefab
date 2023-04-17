@@ -85,6 +85,9 @@ MonoBehaviour:
   target: {fileID: 2626917578217483014}
   userName: Me
   message: Needs Help
+  minScale: 1
+  maxScale: 5
+  maxDistance: 200
 --- !u!114 &4166476201755172807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,12 +147,12 @@ MonoBehaviour:
     ExtrapolateIncludingRoundTripTime: 1
     ExtrapolateNumberOfStoredPositions: 1
   m_RotationModel:
-    SynchronizeEnabled: 1
+    SynchronizeEnabled: 0
     InterpolateOption: 1
     InterpolateRotateTowardsSpeed: 180
     InterpolateLerpSpeed: 5
   m_ScaleModel:
-    SynchronizeEnabled: 1
+    SynchronizeEnabled: 0
     InterpolateOption: 0
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 0

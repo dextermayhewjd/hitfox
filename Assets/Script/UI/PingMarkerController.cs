@@ -12,7 +12,6 @@ public class PingMarkerController : MonoBehaviour
     //   it is always perpendicular to the horizontal axis.
     // - Add audio.
     // - Add animations.
-    // - Test to see if GameObject.Find("FoxPlayer") only returns local fox player.
 
     // Ping prefabs.
     [SerializeField] private GameObject pingMarkerGround;
@@ -34,14 +33,12 @@ public class PingMarkerController : MonoBehaviour
     }
 
     // Ground markers get placed relative to the ground.
-    public void PlaceGroundMarker(Vector3 pos, float timer, string userName, string message)
+    public void PlaceGroundMarker(Vector3 pos, float timer, string message)
     {
         Ping pingComponent = pingMarkerGround.GetComponent<Ping>();
 
         pingComponent.useTimer = true;
         pingComponent.timer = timer;
-
-        pingComponent.userName = userName;
         pingComponent.message = message;
 
         try
@@ -58,12 +55,10 @@ public class PingMarkerController : MonoBehaviour
 
         }
 
-        // pingComponent.origin = GameObject.Find("FoxPlayer");
         pingComponent.target = pingMarkerGround;
 
         try
         {
-            // Instantiate(pingMarkerGround, pos, Quaternion.identity);
             PhotonNetwork.Instantiate(pingMarkerGround.name, pos, Quaternion.identity);
         } 
         catch
@@ -73,14 +68,12 @@ public class PingMarkerController : MonoBehaviour
     }
 
     // Object markers attatches itself to the object.
-    public void PlaceObjectMarker(GameObject targetObj, float timer, string userName, string message)
+    public void PlaceObjectMarker(GameObject targetObj, float timer, string message)
     {
         Ping pingComponent = pingMarkerObject.GetComponent<Ping>();
 
         pingComponent.useTimer = true;
         pingComponent.timer = timer;
-
-        pingComponent.userName = userName;
         pingComponent.message = message;
 
         try
@@ -96,12 +89,10 @@ public class PingMarkerController : MonoBehaviour
         {
 
         }
-        // pingComponent.origin = GameObject.Find("FoxPlayer");
         pingComponent.target = targetObj;
 
         try
         {
-            // Instantiate(pingMarkerObject, targetObj.transform.position, Quaternion.identity);
             PhotonNetwork.Instantiate(pingMarkerObject.name, targetObj.transform.position, Quaternion.identity);
         }
         catch

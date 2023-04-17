@@ -30,6 +30,7 @@ public class UIController : MonoBehaviour
     private CursorController cursorController;
 
     private bool characterControlsLocked;
+    public bool developerModeEnabled;
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +50,7 @@ public class UIController : MonoBehaviour
         cursorController = GetComponent<CursorController>();
 
         characterControlsLocked = false;        
+        developerModeEnabled = false;
     }
 
     // Update is called once per frame
@@ -107,5 +109,13 @@ public class UIController : MonoBehaviour
         return characterControlsLocked;
     }
 
-    
+    public void EnableDeveloperMode()
+    {
+        developerModeEnabled = true;
+    }
+
+    public void DisableDeveloperMode()
+    {
+        developerModeEnabled = false;
+    }
 }
