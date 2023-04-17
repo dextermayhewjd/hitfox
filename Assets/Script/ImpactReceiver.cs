@@ -12,12 +12,15 @@ class ImpactReceiver : MonoBehaviour {
     public CharacterController characterController;
 
     void Start() {
+        Debug.Log("In ImpactReceiver Start().");
+        Debug.Log(characterController);
         mass = 3.0f;
         impact = Vector3.zero;
         characterController = GetComponent<CharacterController>();
     }
 
     public void AddImpact(Vector3 dir, float force) {
+        Debug.Log("adding impact");
         dir.Normalize();
         if (dir.y < 0) dir.y = -dir.y; // reflect down force on the ground
         dir.Normalize();

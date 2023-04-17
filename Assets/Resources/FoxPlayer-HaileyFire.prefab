@@ -271,7 +271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mass: 0
   impact: {x: 0, y: 0, z: 0}
-  characterController: {fileID: 0}
+  characterController: {fileID: 5849248995649383711}
 --- !u!1 &490985581340680788
 GameObject:
   m_ObjectHideFlags: 0

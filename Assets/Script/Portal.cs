@@ -7,16 +7,16 @@ public class Portal : OnTrigger
 {
     [SerializeField] Transform destination;
  
-    private void Update()
-    {
-        if (Input.GetButtonDown("Interact"))
-        { 
-            if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>() != null)
-            {
-                colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>().Teleport(destination.position, destination.rotation);
-            }
-        }
-    }
+    private void Update() {}
+    // {
+    //     if (Input.GetButtonDown("Interact"))
+    //     { 
+    //         if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>() != null)
+    //         {
+    //             colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>().Teleport(destination.position, destination.rotation);
+    //         }
+    //     }
+    // }
 
     void OnDrawGizmos() 
     {
