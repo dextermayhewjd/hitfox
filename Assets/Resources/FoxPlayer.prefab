@@ -55,12 +55,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0
-  walkSpeed: 5
+  walkSpeed: 2
   sprintMultiplier: 2.5
   rotationSpeed: 500
-  jumpDelay: 0.3
+  jumpDelay: 0.2
   jumpSpeed: 6
-  jumpGracePeriod: 2
+  jumpGracePeriod: 1
   captured: 0
   hidden: 0
   cam: {fileID: 0}
