@@ -39,7 +39,14 @@ public class Ping : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        markerTextFields[2].text = Distance(origin.transform.position, target.transform.position).ToString() + "m";
+        try
+        {
+            markerTextFields[2].text = Distance(origin.transform.position, target.transform.position).ToString() + "m";
+        }
+        catch
+        {
+
+        }
 
         if (target != null)
         {
@@ -65,8 +72,8 @@ public class Ping : MonoBehaviour
         
     private void StopPing()
     {
-        // PhotonNetwork.Destroy(this.gameObject);
-        Destroy(this.gameObject);
+        PhotonNetwork.Destroy(this.gameObject);
+        // Destroy(this.gameObject);
     }
 
     private float Distance(Vector3 origin, Vector3 target)

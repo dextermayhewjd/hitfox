@@ -44,11 +44,32 @@ public class PingMarkerController : MonoBehaviour
         pingComponent.userName = userName;
         pingComponent.message = message;
 
-        pingComponent.origin = GameObject.Find("FoxPlayer");
+        try
+        {
+            foreach (GameObject fox in GameObject.FindGameObjectsWithTag("Player")) {
+                if(fox.GetComponent<PhotonView>().IsMine)
+                {
+                    pingComponent.origin = fox;
+                }
+            }
+        }
+        catch
+        {
+
+        }
+
+        // pingComponent.origin = GameObject.Find("FoxPlayer");
         pingComponent.target = pingMarkerGround;
 
-        Instantiate(pingMarkerGround, pos, Quaternion.identity);
-        // PhotonNetwork.Instantiate(pingMarkerObject.name, pos, Quaternion.identity);
+        try
+        {
+            // Instantiate(pingMarkerGround, pos, Quaternion.identity);
+            PhotonNetwork.Instantiate(pingMarkerGround.name, pos, Quaternion.identity);
+        } 
+        catch
+        {
+
+        }
     }
 
     // Object markers attatches itself to the object.
@@ -62,10 +83,30 @@ public class PingMarkerController : MonoBehaviour
         pingComponent.userName = userName;
         pingComponent.message = message;
 
-        pingComponent.origin = GameObject.Find("FoxPlayer");
+        try
+        {
+            foreach (GameObject fox in GameObject.FindGameObjectsWithTag("Player")) {
+                if(fox.GetComponent<PhotonView>().IsMine)
+                {
+                    pingComponent.origin = fox;
+                }
+            }
+        }
+        catch
+        {
+
+        }
+        // pingComponent.origin = GameObject.Find("FoxPlayer");
         pingComponent.target = targetObj;
 
-        Instantiate(pingMarkerObject, targetObj.transform.position, Quaternion.identity);
-        // PhotonNetwork.Instantiate(pingMarkerObject.name, targetObj.transform.position, Quaternion.identity);
+        try
+        {
+            // Instantiate(pingMarkerObject, targetObj.transform.position, Quaternion.identity);
+            PhotonNetwork.Instantiate(pingMarkerObject.name, targetObj.transform.position, Quaternion.identity);
+        }
+        catch
+        {
+
+        }
     }
 }
