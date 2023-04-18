@@ -6,6 +6,11 @@ using Cinemachine;
 
 public class PlayerMovement : MonoBehaviourPun, ICatchable
 {
+    // Main UI Controller.
+    private GameObject uiControllerObj;
+    private UIController uiController;
+    private InputController inputController;
+
     // define the speed of an object
     private CharacterController controller;
     private Animator animator;
@@ -31,7 +36,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     private Vector3 moveDirection;
     private Vector3 velocity;
 
-    public bool captured = false;
+    public bool captured;
+    public bool hidden;
     public CinemachineFreeLook cam;
     public Transform cameraTransform;
     [SerializeField] AudioSource jumpSFX;
@@ -64,8 +70,16 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         // Fox Animator Controller.
         animator = GetComponentInChildren<Animator>();
 
+        // UI controller.
+        uiControllerObj = GameObject.Find("UIController");
+        uiController = uiControllerObj.GetComponent<UIController>();
+
+        // Input controller.
+        inputController = GameObject.Find("InputController").GetComponent<InputController>();
+
         footstep.SetActive(false);
         captured = false;
+        hidden = false;
         stepOffset = controller.stepOffset;
         Cursor.lockState = CursorLockMode.Locked;
         view = GetComponent<PhotonView>();
@@ -93,36 +107,16 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     {
         if (view.IsMine)
         {
-            // if (Input.GetKeyDown(KeyCode.L))
-            // {
-            //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
-            // }
             if (Input.GetKeyDown(KeyCode.R))
             {
                 if (!captured)
                 {
-                    // spawn a cage around fox
-                    Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
-                    GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
-
-                    this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
+                    Catch();
                 } 
                 else if (captured)
                 {
                     captured = false;
                 }   
-            }
-
-            // temporary cursor unlock 
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                locked = locked ? false : true;
-                
-            } 
-            if (locked) {
-                Cursor.lockState = CursorLockMode.Locked;
-            } else {
-                Cursor.lockState = CursorLockMode.None;
             }
 
             if (!driving)
@@ -134,21 +128,23 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
 
     void Movement()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        float horizontalInput = inputController.GetInputAxis("Horizontal");
+        float verticalInput = inputController.GetInputAxis("Vertical");
 
         moveDirection = new Vector3(horizontalInput, 0, verticalInput);
+        // float magnitude = Mathf.Clamp01(moveDirection.magnitude) * moveSpeed;
+        // moveDirection.Normalize();
 
         // Stop moving when in the air.
         // At the same time need to allow for momemntum when in the air.
         // Need to fix collider first and improve how grounding works.
-        // if (controller.isGrounded)
-        // {
+        if (isGrounded)
+        {
             if (moveDirection != Vector3.zero)
             {
                 animator.SetBool("isMoving", true);
 
-                if (Input.GetButton("Sprint"))
+                if (inputController.GetInput("Sprint"))
                 {
                     Run();
                 }
@@ -162,7 +158,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             {
                 Idle();
             }
-        // }
+
+        }
 
         moveDirection = Quaternion.AngleAxis(cameraTransform.rotation.eulerAngles.y, Vector3.up) * moveDirection;
         moveDirection.Normalize();
@@ -175,19 +172,17 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         if (controller.isGrounded) {
             onground = true;
             lastGroundedTime = Time.time;
+            if (inputController.GetInputDown("Jump"))
+            {
+                jumpedTime = Time.time;
+            }
         } else {
             onground = false;
         }
 
-        if (Input.GetButtonDown("Jump"))
-        {
-            jumpedTime = Time.time;
-            jumpSFX.Play();
-        }
-
         if (Time.time - lastGroundedTime <= jumpGracePeriod) {
             controller.stepOffset = stepOffset;
-            ySpeed = -0.5f;
+            // ySpeed = -0.5f;
 
             animator.SetBool("isGrounded", true);
             isGrounded = true;
@@ -200,6 +195,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
                 // Delay before jumping.
                 if (Time.time - jumpedTime >= jumpDelay)
                 {
+                    jumpSFX.Play();
                     ySpeed = jumpSpeed;
                     jumpedTime = null;
                     lastGroundedTime = null;
@@ -219,12 +215,11 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             }
         }
 
-        // Need to consider rotating with respect to a slope.
-        // Which might fix gravity keeping up with the movement speed.
-        transform.Translate(moveDirection * moveSpeed * Time.deltaTime, Space.World);
+        // transform.Translate(moveDirection * moveSpeed * Time.deltaTime, Space.World);
 
         velocity = moveDirection * moveSpeed;
-        velocity.y = ySpeed;
+        velocity = AdjustVelocityToSlope(velocity);
+        velocity.y += ySpeed;
         controller.Move(velocity * Time.deltaTime);
 
         // if player is moving, rotate towards the direction of the movement
@@ -233,6 +228,24 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             Quaternion rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
         }
+    }
+
+    private Vector3 AdjustVelocityToSlope(Vector3 velocity)
+    {
+        var ray = new Ray(transform.position, Vector3.down);
+
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 0.2f))
+        {
+            var slopeRotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+            var adjustedVelocity = slopeRotation * velocity;
+
+            if (adjustedVelocity.y < 0)
+            {
+                return adjustedVelocity;
+            }
+        }
+
+        return velocity;
     }
 
     private void Idle()
@@ -266,14 +279,5 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     private void StopFootsteps()
     {
         footstep.SetActive(false);
-    }
-
-    private void OnApplicationFocus(bool focusStatus) {
-        if (focusStatus) {
-            Cursor.lockState = CursorLockMode.Locked;
-        } else {
-            Cursor.lockState = CursorLockMode.None;
-        }
-        
     }
 }

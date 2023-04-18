@@ -4,36 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 
-public class FireInteraction : MonoBehaviour
+public class FireInteraction : MonoBehaviourPun
 {
     public Slider progressBar;
     public float health = 1f;
     public float recoverSpeed = 0.025f;    
 
-        // for the fire it encounter 
+    // for the fire it encounter 
     private BucketFill BucketFillInteraction;
     
     void Update(){
-        if(health <= 0)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            if(health >=1f)
-            {
-                health = 1f;
-            }
-            health += recoverSpeed*Time.deltaTime;
-        }
-        progressBar.value = Mathf.Clamp(health,0f,1f);        
-    }
-
-    void OnDestroy()
-    {
-        BucketFillInteraction.isPouring = false;
-        GameObject objectives = GameObject.Find("ObjectivesTracker");
-        objectives.GetComponent<ObjectivesScript>().currentPoints += 10;
+        this.photonView.RPC("RPC_UpdateBucket", RpcTarget.AllBuffered);
     }
 
     void OnTriggerEnter(Collider collision)
@@ -43,5 +24,35 @@ public class FireInteraction : MonoBehaviour
             // Get the FireInteraction component of the current fire
             BucketFillInteraction = collision.gameObject.GetComponent<BucketFill>();
         }
+    }
+
+    void OnTriggerExit(Collider collision)
+    {   
+        if (collision.gameObject.CompareTag("Bucket"))
+        {    
+            BucketFillInteraction = null;
+        }
+    }
+
+    [PunRPC]
+    void RPC_UpdateBucket()
+    {
+        // if the fire is put out
+        if(health <= 0)
+        {
+            BucketFillInteraction.isPouring = false;
+            GameObject objectives = GameObject.Find("ObjectivesTracker");
+            objectives.GetComponent<ObjectivesScript>().currentPoints += 10;
+            PhotonNetwork.Destroy(this.gameObject);
+        }
+        else
+        {
+            if(health >=1f)
+            {
+                health = 1f;
+            }
+            health += recoverSpeed*Time.deltaTime;
+        }
+        progressBar.value = Mathf.Clamp(health,0f,1f);
     }
 }
