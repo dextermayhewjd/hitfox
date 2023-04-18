@@ -7,7 +7,12 @@ public class Timer : MonoBehaviour
 {
     public Text timerText;
     private float startTime;
-    private float maxtime = 300f;//5 minutes
+    // private float maxtime = 300f;//5 minutes
+    private float maxtime = 3f;// for testing 
+    public Text victoryText;
+    public Text failedText;
+    public int totalPoints = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,9 +25,17 @@ public class Timer : MonoBehaviour
         //countdown from 5 minutes
         float t = Time.time - startTime;//seconds since started
         float rem = maxtime - t;
+        
+        if (totalPoints >= 500) {
+        victoryText.gameObject.SetActive(true);
+        return;
+        }
+
         if (rem <= 0)
         {
             timerText.text = "Time's up!";
+            failedText.gameObject.SetActive(true);
+        return;
         }
         else
         {

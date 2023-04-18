@@ -63,6 +63,7 @@ MonoBehaviour:
   - RPC_ShowAngrySign
   - RPC_PlaySound
   - RPC_DropAxe
+  - ThrowBucket
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
