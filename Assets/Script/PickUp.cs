@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 
 public class PickUp : OnTrigger
 {
@@ -11,6 +12,9 @@ public class PickUp : OnTrigger
 
     private Rigidbody rigidbody = null;
     private PhotonRigidbodyView rigidbodyView = null;
+    // public Text pickupText = null; // reference to the text mesh component
+    // private bool isPlayerColliding = false; // flag to track whether player is colliding with object
+
 
     void Start()
     {
@@ -45,6 +49,26 @@ public class PickUp : OnTrigger
         }
         }
     }
+    //     void OnTriggerEnter(Collider other)
+    // {
+    //     if (other.CompareTag("Player"))
+    //     {
+    //         isPlayerColliding = true;
+    //         pickupText.gameObject.SetActive(true); // show the text mesh when player enters the trigger zone
+    //     }
+    // }
+
+    // void OnTriggerExit(Collider other)
+    // {
+    //     if (other.CompareTag("Player"))
+    //     {
+    //         isPlayerColliding = false;
+    //         pickupText.gameObject.SetActive(false); // hide the text mesh when player exits the trigger zone
+    //     }
+    // }
+    
+
+
 
     [PunRPC]
     void RPC_Drop()
