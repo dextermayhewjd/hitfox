@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3769968981457862173}
   - component: {fileID: 6672352526067475281}
   - component: {fileID: 5627927313532667454}
-  - component: {fileID: 8241878415258004488}
+  - component: {fileID: 2877430354341057522}
   m_Layer: 0
   m_Name: Object_7
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8241878415258004488
+--- !u!64 &2877430354341057522
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 4266416016139256477}
   - component: {fileID: 3238809464402872240}
   - component: {fileID: 8642922995873540801}
-  - component: {fileID: 3008800639852715448}
+  - component: {fileID: 3415547192519252856}
   m_Layer: 0
   m_Name: Object_6
   m_TagString: Untagged
@@ -182,7 +182,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3008800639852715448
+--- !u!64 &3415547192519252856
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -205,9 +205,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8974054615605712193}
-  - component: {fileID: 6533117981431626969}
   - component: {fileID: 517627157437380681}
-  - component: {fileID: 4515306840932364910}
+  - component: {fileID: 6370358599778650889}
+  - component: {fileID: 7516780030544743267}
   - component: {fileID: 1652895468544344650}
   - component: {fileID: 8223707536423081701}
   - component: {fileID: 145939503612058763}
@@ -236,21 +236,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6533117981431626969
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5174316512915270022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6d6b3f311ccdda5d95d8164bd0d61b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colliders: []
-  pickedUp: 0
-  playerView: {fileID: 0}
 --- !u!54 &517627157437380681
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -267,8 +252,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &4515306840932364910
-BoxCollider:
+--- !u!136 &6370358599778650889
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -277,9 +262,24 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 6.3, y: 2.8, z: 6.3}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 1.2049294
+  m_Height: 2.2117288
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.031473935, z: 0}
+--- !u!114 &7516780030544743267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5174316512915270022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f7af2675b8e6c46958f38e2c8779fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickedUp: 0
+  throwForce: 0
 --- !u!114 &1652895468544344650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 2342180352621544547}
   - component: {fileID: 8110566535542678014}
   - component: {fileID: 6068571117190017754}
-  - component: {fileID: 2637610624928436182}
+  - component: {fileID: 3796468649988729714}
   m_Layer: 0
   m_Name: Object_8
   m_TagString: Untagged
@@ -420,7 +420,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2637610624928436182
+--- !u!64 &3796468649988729714
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -431,6 +431,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: dba584470839a0793bbabdf6193b4854, type: 2}

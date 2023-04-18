@@ -58,7 +58,9 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     [PunRPC]
     void RPC_Catch(int playerID, int cageID) 
     {
-        PhotonView.Find(playerID).GetComponent<PlayerMovement>().captured = true;
+        PhotonView player = PhotonView.Find(playerID);
+        player.GetComponent<PlayerMovement>().captured = true;
+        player.GetComponent<CapsuleCollider>().enabled = false;
         PhotonView.Find(cageID).GetComponent<CageScript>().ownerId = playerID;
     }
 

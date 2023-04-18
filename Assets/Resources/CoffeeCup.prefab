@@ -105,9 +105,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470158329589914580}
-  - component: {fileID: 6685970534928784787}
   - component: {fileID: 115237560994632649}
-  - component: {fileID: 653803724235581702}
+  - component: {fileID: 6246686282938784957}
+  - component: {fileID: 3122013733087774210}
   - component: {fileID: 7382077663297645118}
   - component: {fileID: 5375034273247275633}
   - component: {fileID: 7864410896475234589}
@@ -134,21 +134,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6685970534928784787
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6978479405129824700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6d6b3f311ccdda5d95d8164bd0d61b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colliders: []
-  pickedUp: 0
-  playerView: {fileID: 0}
 --- !u!54 &115237560994632649
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -165,8 +150,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &653803724235581702
-BoxCollider:
+--- !u!136 &6246686282938784957
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -175,9 +160,24 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.54999995, z: 0.51400995}
-  m_Center: {x: -0.85, y: -0.5, z: 0.24299502}
+  m_Radius: 0.13663912
+  m_Height: 0.43773293
+  m_Direction: 1
+  m_Center: {x: -0.8401253, y: -0.5092833, z: 0.24052322}
+--- !u!114 &3122013733087774210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6978479405129824700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f7af2675b8e6c46958f38e2c8779fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickedUp: 0
+  throwForce: 0
 --- !u!114 &7382077663297645118
 MonoBehaviour:
   m_ObjectHideFlags: 0

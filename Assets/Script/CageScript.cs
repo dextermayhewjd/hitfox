@@ -11,7 +11,9 @@ public class CageScript : OnTrigger
     void RPC_Rescue(int playerID)
     {
         Debug.Log("Rescued");
-        PhotonView.Find(playerID).GetComponent<PlayerMovement>().captured = false;
+        PhotonView player = PhotonView.Find(playerID);
+        player.GetComponent<PlayerMovement>().captured = false;
+        player.GetComponent<CapsuleCollider>().enabled = true;
     }
 
     // Update is called once per frame
