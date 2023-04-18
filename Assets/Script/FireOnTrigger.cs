@@ -25,7 +25,7 @@ public class FireOnTrigger : MonoBehaviourPun
             ImpactReceiver cgoir = cgo.GetComponentInChildren<ImpactReceiver>();
             Debug.Log("cgoir");
             Debug.Log(cgoir);
-            cgoir.AddImpact(direction, 50.0f);
+            cgoir.AddImpact(-direction, 50.0f);
         }
     }
  
