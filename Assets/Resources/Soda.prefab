@@ -236,12 +236,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7651888612805924722}
-  - component: {fileID: 5538435088045510127}
   - component: {fileID: 8484200855195778498}
-  - component: {fileID: 8501747125289182198}
+  - component: {fileID: 5851898426137388085}
   - component: {fileID: 8700103904630966835}
   - component: {fileID: 7031390314083761557}
   - component: {fileID: 2580931572414732962}
+  - component: {fileID: 4350518354616720091}
   m_Layer: 0
   m_Name: Soda
   m_TagString: Trash
@@ -265,21 +265,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5538435088045510127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7092083984586214436}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6d6b3f311ccdda5d95d8164bd0d61b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colliders: []
-  pickedUp: 0
-  playerView: {fileID: 0}
 --- !u!54 &8484200855195778498
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -296,19 +281,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &8501747125289182198
-BoxCollider:
+--- !u!114 &5851898426137388085
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7092083984586214436}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 13.000001, y: 15.310762, z: 13.000001}
-  m_Center: {x: 0, y: 0.6553808, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f7af2675b8e6c46958f38e2c8779fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickedUp: 0
+  throwForce: 0
 --- !u!114 &8700103904630966835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,6 +351,20 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 1
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!136 &4350518354616720091
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7092083984586214436}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 3.56274
+  m_Height: 12.008076
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.37245953, z: 0}
 --- !u!1 &8909741203989414460
 GameObject:
   m_ObjectHideFlags: 0

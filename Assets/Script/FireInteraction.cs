@@ -41,8 +41,6 @@ public class FireInteraction : MonoBehaviourPun
         if(health <= 0)
         {
             BucketFillInteraction.isPouring = false;
-            GameObject objectives = GameObject.Find("ObjectivesTracker");
-            objectives.GetComponent<ObjectivesScript>().currentPoints += 10;
             PhotonNetwork.Destroy(this.gameObject);
         }
         else
@@ -54,5 +52,10 @@ public class FireInteraction : MonoBehaviourPun
             health += recoverSpeed*Time.deltaTime;
         }
         progressBar.value = Mathf.Clamp(health,0f,1f);
+    }
+
+    private void OnDestroy() {
+        GameObject objectives = GameObject.Find("ObjectivesTracker");
+        objectives.GetComponent<ObjectivesScript>().IncreaseScore(10);
     }
 }

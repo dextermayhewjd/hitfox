@@ -38,11 +38,11 @@ public class PickUp : OnTrigger
                 }
             }
         }
-        if (photonView.IsMine && pickedUp && Input.GetKeyDown(KeyCode.Q)) {
+        if (playerView.IsMine && pickedUp && Input.GetKeyDown(KeyCode.Q)) {
             Transform mouthTransform = playerView.gameObject.transform.Find("Mouth");
             if (Camera.main != null) {
-            photonView.RPC("ThrowBucket", RpcTarget.AllViaServer, Camera.main.transform.forward);
-        }
+                photonView.RPC("ThrowBucket", RpcTarget.AllViaServer, Camera.main.transform.forward);
+            }
         }
     }
 
