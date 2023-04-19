@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1197965768418123393}
   - component: {fileID: 977865991359150092}
   - component: {fileID: 995235519384554398}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Water_bottle_01_RGB_texture_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8513875001631797708}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Water_bottle_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,7 +139,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6326133089074828107}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sketchfab_model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -171,7 +171,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8239470059067462486}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: d29a4dae1ebb4be29545fb45126e257b.fbx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 179656891990049671}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RootNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -241,7 +241,7 @@ GameObject:
   - component: {fileID: 1600296261385781746}
   - component: {fileID: 5177949743825061829}
   - component: {fileID: 8601160294166005515}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WaterBottle
   m_TagString: Trash
   m_Icon: {fileID: 0}

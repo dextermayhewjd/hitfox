@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1302193337698955037}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sketchfab_model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7924198686258219228}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: pCylinder2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5307194559747281000}
   m_LocalRotation: {x: 0, y: 0, z: -0, w: -1}
-  m_LocalPosition: {x: 0, y: -3.281067, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -73,7 +73,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7868233939250797160}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: 7f6aa6c7b822412c96218e1390f0c6ae.fbx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 7382077663297645118}
   - component: {fileID: 5375034273247275633}
   - component: {fileID: 7864410896475234589}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CoffeeCup
   m_TagString: Trash
   m_Icon: {fileID: 0}
@@ -161,9 +161,9 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.13663912
-  m_Height: 0.43773293
+  m_Height: 0.41649914
   m_Direction: 1
-  m_Center: {x: -0.8401253, y: -0.5092833, z: 0.24052322}
+  m_Center: {x: -0.8401253, y: -0.48141402, z: 0.24052322}
 --- !u!114 &3122013733087774210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,7 +243,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 155109534590267770}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RootNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +278,7 @@ GameObject:
   - component: {fileID: 71597858967616140}
   - component: {fileID: 3940881218922815357}
   - component: {fileID: 9199271910582544340}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: pCylinder2_lambert1_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

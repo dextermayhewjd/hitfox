@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4629105782597346176}
   - component: {fileID: 918153092800223709}
   - component: {fileID: 8841625326136199027}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Axe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 3090037730569039223}
   - component: {fileID: 831618145716179002}
   - component: {fileID: 4564825023882890595}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Object_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,7 +244,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5142541389685952749}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Axe1.obj.cleaner.materialmerger.gles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,7 +280,7 @@ GameObject:
   - component: {fileID: 3479844832013006740}
   - component: {fileID: 6084535163072236799}
   - component: {fileID: 2550822245065716026}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Object_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -375,7 +375,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2403375774677242657}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sketchfab_model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

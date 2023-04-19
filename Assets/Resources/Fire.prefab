@@ -10034,7 +10034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 147eb454206e90e56a786650cd9b1701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToSpawn: Fire
+  objectToSpawnName: Fire
   spawnDelay: 10
   distanceX: 2.6
   distanceY: 2.6
@@ -14888,8 +14888,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.99607843, g: 0.6039216, b: 0.3764706, a: 1}
-  m_Intensity: 3.4490376
-  m_Range: 8.898075
+  m_Intensity: 0
+  m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10

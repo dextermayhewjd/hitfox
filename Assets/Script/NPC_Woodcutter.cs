@@ -64,7 +64,7 @@ public class NPC_Woodcutter : OnTrigger {
     void Start(){
         isCutting = false;
         isStunned = false;
-        chaseDistance = 20;
+        chaseDistance = 60;
         curiousDistance = 150;
         speed = 3;
         calmTime = 5;
@@ -106,25 +106,19 @@ public class NPC_Woodcutter : OnTrigger {
 
     public IEnumerator PauseAfterCatch(int secs)
     {
-        // agent.speed = 0;
+        agent.speed = 0;
+        // disable collisions otherwise he pushes the player out of the cage
         transform.Find("Collision").gameObject.SetActive(false);
+        yield return new WaitForSeconds(2);
+        agent.speed = speed;
         this.photonView.RPC("RPC_HideAngrySign", RpcTarget.AllBuffered);
         state = WoodcutterState.SEEKINGTREE;
         yield return new WaitForSeconds(secs);
-        // transform.Find("Collision").gameObject.SetActive(false);
-        // agent.speed = speed;
-        // yield return new WaitForSeconds(2);
         transform.Find("Collision").gameObject.SetActive(true);
     }
 
     // Update is called once per frame
     void Update(){
-
-        if (Input.GetButtonDown("Interact")) 
-        {
-            StartCoroutine(Interact(2));
-        }
-
         if(pauseTime > 0f)
         {
             pauseTime -= Time.deltaTime;
@@ -271,10 +265,14 @@ public class NPC_Woodcutter : OnTrigger {
     }
 
     private void OnTriggerStay(Collider other) {
-        if (other.CompareTag("Player") && state == WoodcutterState.CHASE)
+        if (Input.GetButtonDown("Interact")) 
+        {
+            StartCoroutine(Interact(2));
+        }
+        if (other.CompareTag("Player") && !other.gameObject.GetComponent<PlayerMovement>().captured && state == WoodcutterState.CHASE)
         {
             other.gameObject.GetComponent<PlayerMovement>().Catch();
-            StartCoroutine(PauseAfterCatch(3));
+            StartCoroutine(PauseAfterCatch(2));
         }
     }
 

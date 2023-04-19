@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6512859981684671872}
   - component: {fileID: 3672573227303910971}
   - component: {fileID: 2970324908687009382}
-  - component: {fileID: 6304524918949686832}
   m_Layer: 5
   m_Name: 'Timer '
   m_TagString: Untagged
@@ -81,22 +80,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 5 min timer
---- !u!114 &6304524918949686832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 595961238106624651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a914fd8368bbb624c81ec201dcc6386d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timerText: {fileID: 2970324908687009382}
-  victoryText: {fileID: 1160463065779013445}
-  failedText: {fileID: 5296854436713150129}
-  totalPoints: 0
 --- !u!1 &1877884479989541507
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,7 +92,9 @@ GameObject:
   - component: {fileID: 1877884479989541511}
   - component: {fileID: 1877884479989541510}
   - component: {fileID: 1877884479989541505}
+  - component: {fileID: 6664170835536476915}
   - component: {fileID: 1877884479989541504}
+  - component: {fileID: 1262724495864657611}
   m_Layer: 5
   m_Name: Timer+point
   m_TagString: Untagged
@@ -204,6 +189,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &6664170835536476915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1877884479989541507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a914fd8368bbb624c81ec201dcc6386d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timerText: {fileID: 2970324908687009382}
+  victoryText: {fileID: 1160463065779013445}
+  failedText: {fileID: 5296854436713150129}
+  totalPoints: 0
 --- !u!114 &1877884479989541504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,6 +219,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam1: {fileID: 0}
   cam2: {fileID: 0}
+--- !u!114 &1262724495864657611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1877884479989541507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1877884480773236405
 GameObject:
   m_ObjectHideFlags: 0
