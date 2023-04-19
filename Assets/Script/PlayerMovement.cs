@@ -7,6 +7,11 @@ using Cinemachine;
 
 public class PlayerMovement : MonoBehaviourPun, ICatchable
 {
+    // Main UI Controller.
+    private GameObject uiControllerObj;
+    private UIController uiController;
+    private InputController inputController;
+
     // define the speed of an object
     private CharacterController controller;
     private Animator animator;
@@ -19,7 +24,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     // Jumping / Falling
     // To account for charging up the jump animiation.
     [SerializeField] private float jumpDelay;
-    [SerializeField] private float jumpSpeed;
+    [SerializeField] private float jumpHeight;
+    [SerializeField] private float gravityMultiplier;
     [SerializeField] private float jumpGracePeriod;
     private float? lastGroundedTime;
     private float? jumpedTime;
@@ -32,7 +38,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     private Vector3 moveDirection;
     private Vector3 velocity;
 
-    public bool captured = false;
+    public bool captured;
+    public bool hidden;
     public CinemachineFreeLook cam;
     public Transform cameraTransform;
     [SerializeField] AudioSource jumpSFX;
@@ -53,7 +60,10 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     [PunRPC]
     void RPC_Catch(int playerID, int cageID) 
     {
-        PhotonView.Find(playerID).GetComponent<PlayerMovement>().captured = true;
+        PhotonView player = PhotonView.Find(playerID);
+        player.GetComponent<PlayerMovement>().captured = true;
+        player.GetComponent<CapsuleCollider>().enabled = false;
+        player.GetComponent<SphereCollider>().enabled = false;
         PhotonView.Find(cageID).GetComponent<CageScript>().ownerId = playerID;
     }
 
@@ -65,8 +75,16 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         // Fox Animator Controller.
         animator = GetComponentInChildren<Animator>();
 
+        // UI controller.
+        uiControllerObj = GameObject.Find("UIController");
+        uiController = uiControllerObj.GetComponent<UIController>();
+
+        // Input controller.
+        inputController = GameObject.Find("InputController").GetComponent<InputController>();
+
         footstep.SetActive(false);
         captured = false;
+        hidden = false;
         stepOffset = controller.stepOffset;
         Cursor.lockState = CursorLockMode.Locked;
         view = GetComponent<PhotonView>();
@@ -94,36 +112,17 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     {
         if (view.IsMine)
         {
-            // if (Input.GetKeyDown(KeyCode.L))
-            // {
-            //     Debug.Log(PhotonNetwork.PlayerList.Find(view.Owner));
-            // }
+            // manual capture only for testing
             if (Input.GetKeyDown(KeyCode.R))
             {
                 if (!captured)
                 {
-                    // spawn a cage around fox
-                    Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
-                    GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
-
-                    this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
+                    Catch();
                 } 
                 else if (captured)
                 {
                     captured = false;
                 }   
-            }
-
-            // temporary cursor unlock 
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                locked = locked ? false : true;
-                
-            } 
-            if (locked) {
-                Cursor.lockState = CursorLockMode.Locked;
-            } else {
-                Cursor.lockState = CursorLockMode.None;
             }
 
             if (!driving)
@@ -135,21 +134,23 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
 
     void Movement()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        float horizontalInput = inputController.GetInputAxis("Horizontal");
+        float verticalInput = inputController.GetInputAxis("Vertical");
 
         moveDirection = new Vector3(horizontalInput, 0, verticalInput);
+        // float magnitude = Mathf.Clamp01(moveDirection.magnitude) * moveSpeed;
+        // moveDirection.Normalize();
 
         // Stop moving when in the air.
         // At the same time need to allow for momemntum when in the air.
         // Need to fix collider first and improve how grounding works.
-        // if (controller.isGrounded)
-        // {
+        if (isGrounded)
+        {
             if (moveDirection != Vector3.zero)
             {
                 animator.SetBool("isMoving", true);
 
-                if (Input.GetButton("Sprint"))
+                if (inputController.GetInput("Sprint"))
                 {
                     Run();
                 }
@@ -163,27 +164,30 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             {
                 Idle();
             }
-        // }
+
+        }
 
         moveDirection = Quaternion.AngleAxis(cameraTransform.rotation.eulerAngles.y, Vector3.up) * moveDirection;
         moveDirection.Normalize();
 
         // Jumping and Falling
-        // Gravity being slow. Need to do some playing around with values or change how things are done.
-        ySpeed += Physics.gravity.y * Time.deltaTime;
+        float gravity = Physics.gravity.y * gravityMultiplier;
+        if (isJumping && ySpeed > 0 && inputController.GetInput("Jump") == false)
+        {
+            gravity *= 1.5f;
+        }
+        ySpeed += gravity * Time.deltaTime;
 
         //so footsteps SFX don't play when in air (share with Footsteps.cs)
         if (controller.isGrounded) {
             onground = true;
             lastGroundedTime = Time.time;
+            if (inputController.GetInputDown("Jump"))
+            {
+                jumpedTime = Time.time;
+            }
         } else {
             onground = false;
-        }
-
-        if (Input.GetButtonDown("Jump"))
-        {
-            jumpedTime = Time.time;
-            jumpSFX.Play();
         }
 
         if (Time.time - lastGroundedTime <= jumpGracePeriod) {
@@ -201,7 +205,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
                 // Delay before jumping.
                 if (Time.time - jumpedTime >= jumpDelay)
                 {
-                    ySpeed = jumpSpeed;
+                    jumpSFX.Play();
+                    ySpeed = Mathf.Sqrt(jumpHeight * -3 * gravity);
                     jumpedTime = null;
                     lastGroundedTime = null;
                 }
@@ -220,12 +225,11 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             }
         }
 
-        // Need to consider rotating with respect to a slope.
-        // Which might fix gravity keeping up with the movement speed.
-        transform.Translate(moveDirection * moveSpeed * Time.deltaTime, Space.World);
+        // transform.Translate(moveDirection * moveSpeed * Time.deltaTime, Space.World);
 
         velocity = moveDirection * moveSpeed;
-        velocity.y = ySpeed;
+        velocity = AdjustVelocityToSlope(velocity);
+        velocity.y += ySpeed;
         controller.Move(velocity * Time.deltaTime);
 
         // if player is moving, rotate towards the direction of the movement
@@ -234,6 +238,24 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             Quaternion rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
         }
+    }
+
+    private Vector3 AdjustVelocityToSlope(Vector3 velocity)
+    {
+        var ray = new Ray(transform.position, Vector3.down);
+
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 0.2f))
+        {
+            var slopeRotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+            var adjustedVelocity = slopeRotation * velocity;
+
+            if (adjustedVelocity.y < 0)
+            {
+                return adjustedVelocity;
+            }
+        }
+
+        return velocity;
     }
 
     private void Idle()
@@ -266,14 +288,5 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     private void StopFootsteps()
     {
         footstep.SetActive(false);
-    }
-
-    private void OnApplicationFocus(bool focusStatus) {
-        if (focusStatus) {
-            Cursor.lockState = CursorLockMode.Locked;
-        } else {
-            Cursor.lockState = CursorLockMode.None;
-        }
-        
     }
 }
