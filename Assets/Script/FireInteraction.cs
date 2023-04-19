@@ -56,6 +56,7 @@ public class FireInteraction : MonoBehaviourPun
 
     private void OnDestroy() {
         GameObject objectives = GameObject.Find("ObjectivesTracker");
-        objectives.GetComponent<ObjectivesScript>().IncreaseScore(10);
+        Debug.Log("20 points for putting out fire");
+        objectives.GetComponent<ObjectivesScript>().IncreaseScore(20);
     }
 }

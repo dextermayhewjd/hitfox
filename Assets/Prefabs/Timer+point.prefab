@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 1877884479989541510}
   - component: {fileID: 1877884479989541505}
   - component: {fileID: 6664170835536476915}
+  - component: {fileID: 8165562177284578375}
   - component: {fileID: 1877884479989541504}
   - component: {fileID: 1262724495864657611}
   m_Layer: 5
@@ -205,6 +206,20 @@ MonoBehaviour:
   victoryText: {fileID: 1160463065779013445}
   failedText: {fileID: 5296854436713150129}
   totalPoints: 0
+--- !u!114 &8165562177284578375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1877884479989541507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3933f0d4d0a4d0fd0820af8aba3dfba2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText: {fileID: 0}
+  objectivesTracker: {fileID: 0}
 --- !u!114 &1877884479989541504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498,7 +513,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4937986176196133053
 RectTransform:
   m_ObjectHideFlags: 0

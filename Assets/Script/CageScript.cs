@@ -13,8 +13,7 @@ public class CageScript : OnTrigger
         Debug.Log("Rescued");
         PhotonView player = PhotonView.Find(playerID);
         player.GetComponent<PlayerMovement>().captured = false;
-        player.GetComponent<CapsuleCollider>().enabled = true;
-        player.GetComponent<SphereCollider>().enabled = true;
+        player.gameObject.transform.Find("Collider").gameObject.SetActive(false);
     }
 
     // Update is called once per frame
