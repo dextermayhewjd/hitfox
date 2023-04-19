@@ -1,0 +1,11 @@
+Model Information:
+* title:	Low Poly Axe
+* source:	https://sketchfab.com/3d-models/low-poly-axe-f1124148a56640b98d94d99a8a9ad729
+* author:	ethan_garden (https://sketchfab.com/ethan_garden)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Low Poly Axe" (https://sketchfab.com/3d-models/low-poly-axe-f1124148a56640b98d94d99a8a9ad729) by ethan_garden (https://sketchfab.com/ethan_garden) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

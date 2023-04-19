@@ -3,7 +3,21 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Navigation Static
+  - Vehicle
+  - Dog
+  - DogChase
+  - Fire
+  - BlueNPC
+  - Canvas
+  - Bucket
+  - Tree
+  - Water
+  - Lumberjack
+  - Forklift
+  - Bin
+  - Trash
   layers:
   - Default
   - TransparentFX
@@ -11,13 +25,13 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Path
+  - Ground
+  - Object
+  - PickableObjects
+  - Vehicle
+  - Bush
   - 
   - 
   - 
