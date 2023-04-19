@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
 
+
 public class PlayerMovement : MonoBehaviourPun, ICatchable
 {
     // Main UI Controller.
@@ -263,8 +264,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         StopFootsteps();
     } 
 
-    private void Walk()
-    {
+    private void Walk() {
         moveSpeed = walkSpeed;
         animator.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);
         // Need to sync with animation and move speed. Or replace how this is played.

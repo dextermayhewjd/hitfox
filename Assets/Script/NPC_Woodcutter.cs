@@ -62,6 +62,8 @@ public class NPC_Woodcutter : OnTrigger {
 
 
     void Start(){
+        GetComponent<Rigidbody>().isKinematic = true; // otherwise he slides down the hill
+
         isCutting = false;
         isStunned = false;
         chaseDistance = 60;
