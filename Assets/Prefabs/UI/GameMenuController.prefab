@@ -771,8 +771,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameMenuParent: {fileID: 2878169045106688129}
-  gameMenuKey: 27
-  developerMode: 1
+  developerMode: 0
   developerMenuButton: {fileID: 237235220483659891}
 --- !u!1 &8967678332839007162
 GameObject:
