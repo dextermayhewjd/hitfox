@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class GameMenuController : MonoBehaviour
 {
@@ -163,6 +164,7 @@ public class GameMenuController : MonoBehaviour
 
     public void QuitToHomeMenu()
     {
-        Debug.Log("Quit");
-    }
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LoadLevel(0); 
+	}
 }
