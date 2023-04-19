@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class SpawnObject : MonoBehaviour
+public class SpawnObject : MonoBehaviourPun
 {
     public GameObject objectToSpawn;
     public float minX;
@@ -11,10 +11,21 @@ public class SpawnObject : MonoBehaviour
     public float minZ;
     public float maxZ;
     public float heightY;
+    bool alreadySpawnedPlayer = false;
 
     private void Start()
     {
-        Vector3 randomPosition = new Vector3(Random.Range(minX, maxX), heightY, Random.Range(minZ, maxZ));
-        PhotonNetwork.Instantiate(objectToSpawn.name, randomPosition, Quaternion.identity);
+        if (objectToSpawn.name == "PlayerNew")
+        {
+            alreadySpawnedPlayer = true;
+            Vector3 randomPosition = new Vector3(Random.Range(minX, maxX), heightY, Random.Range(minZ, maxZ));
+            PhotonNetwork.Instantiate(objectToSpawn.name, randomPosition, Quaternion.identity);
+        }
+
+        if (PhotonNetwork.IsMasterClient && !alreadySpawnedPlayer)
+        {
+            Vector3 randomPosition = new Vector3(Random.Range(minX, maxX), heightY, Random.Range(minZ, maxZ));
+            PhotonNetwork.Instantiate(objectToSpawn.name, randomPosition, Quaternion.identity);
+        }
     }
 }
