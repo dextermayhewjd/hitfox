@@ -13,6 +13,8 @@ public class ObjectInteraction : OnTriggerPickUp
     }
 
     private void Update() {
+        objectsToPickUp.RemoveAll(item => item == null);
+
         if (Input.GetButtonDown("Interact"))
         {
             if (objectInMouth != null) 
