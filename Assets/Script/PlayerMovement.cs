@@ -269,7 +269,6 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         moveSpeed = walkSpeed;
         animator.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);
         // Need to sync with animation and move speed. Or replace how this is played.
-        Footsteps(1.2);
     }
 
     private void Run()
@@ -277,12 +276,11 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         moveSpeed = walkSpeed * sprintMultiplier;
         animator.SetFloat("Speed", 1, 0.1f, Time.deltaTime);
         // Need to speed up to sync with animation and move speed. Or replace how this is played.
-        Footsteps(0.8);
+        Footsteps();
     }
 
-    private void Footsteps(float pitch = 1)
+    private void Footsteps()
     {
-        footstep.pitch = pitch;
         footstep.SetActive(true);
     }
 
