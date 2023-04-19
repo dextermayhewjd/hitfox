@@ -14,7 +14,27 @@ public class FireInteraction : MonoBehaviourPun
     private BucketFill BucketFillInteraction;
     
     void Update(){
-        this.photonView.RPC("RPC_UpdateBucket", RpcTarget.AllBuffered);
+        // if the fire is put out
+        if(health <= 0)
+        {
+            BucketFillInteraction.isPouring = false;
+            PhotonNetwork.Destroy(this.gameObject);
+            if (PhotonNetwork.IsMasterClient) {
+                GameObject objectives = GameObject.Find("Timer+point");
+                Debug.Log("20 points for putting out fire");
+                objectives.GetComponent<Timer>().IncreaseScore(20);
+            }
+        }
+        else
+        {
+            if(health >=1f)
+            {
+                health = 1f;
+            }
+            health += recoverSpeed*Time.deltaTime;
+        }
+        progressBar.value = Mathf.Clamp(health,0f,1f);
+        // this.photonView.RPC("RPC_UpdateBucket", RpcTarget.AllBuffered);
     }
 
     void OnTriggerEnter(Collider collision)
@@ -37,25 +57,6 @@ public class FireInteraction : MonoBehaviourPun
     [PunRPC]
     void RPC_UpdateBucket()
     {
-        // if the fire is put out
-        if(health <= 0)
-        {
-            BucketFillInteraction.isPouring = false;
-            PhotonNetwork.Destroy(this.gameObject);
-            if (PhotonNetwork.IsMasterClient) {
-                GameObject objectives = GameObject.Find("Timer+point");
-                Debug.Log("20 points for putting out fire");
-                objectives.GetComponent<Timer>().IncreaseScore(20);
-            }
-        }
-        else
-        {
-            if(health >=1f)
-            {
-                health = 1f;
-            }
-            health += recoverSpeed*Time.deltaTime;
-        }
-        progressBar.value = Mathf.Clamp(health,0f,1f);
+        
     }
 }

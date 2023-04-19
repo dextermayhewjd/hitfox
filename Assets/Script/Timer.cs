@@ -31,14 +31,15 @@ public class Timer : MonoBehaviourPun
             float rem = playtime - t;
             
             if (currentPoints >= requiredPoints) {
-                victoryText.gameObject.SetActive(true);
+                this.photonView.RPC("RPC_Victory", RpcTarget.AllBuffered);
+                // this.photonView.RPC("RPC_UpdateTimer", RpcTarget.AllBuffered, time);
+                this.photonView.RPC("RPC_UpdateScore", RpcTarget.OthersBuffered, currentPoints);
                 return;
             }
 
             if (rem <= 0)
             {
-                timerText.text = "Time's up!";
-                failedText.gameObject.SetActive(true);
+                this.photonView.RPC("RPC_Lose", RpcTarget.AllBuffered);
                 return;
             }
             else
@@ -78,5 +79,18 @@ public class Timer : MonoBehaviourPun
     void RPC_UpdateTimer(string time)
     {
         timerText.text = time;
+    }
+
+    [PunRPC]
+    void RPC_Victory()
+    {
+        victoryText.gameObject.SetActive(true);
+    }
+
+    [PunRPC]
+    void RPC_Lose()
+    {
+        timerText.text = "Time's up!";
+        failedText.gameObject.SetActive(true);
     }
 }

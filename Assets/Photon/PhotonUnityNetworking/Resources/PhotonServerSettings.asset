@@ -69,6 +69,8 @@ MonoBehaviour:
   - ThrowBucket1
   - RPC_UpdateTimer
   - RPC_IncreaseScore
+  - RPC_Lose
+  - RPC_Victory
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
