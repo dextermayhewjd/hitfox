@@ -13,13 +13,7 @@ public class ObjectInteraction : OnTriggerPickUp
     }
 
     private void Update() {
-        if (objectsToPickUp.Count != 0)
-        {
-            if (objectsToPickUp[0].GetComponent<PickUpObject>() == null)
-            {
-                objectsToPickUp.RemoveAt(0);
-            }
-        }
+        objectsToPickUp.RemoveAll(item => item == null);
 
         if (Input.GetButtonDown("Interact"))
         {
