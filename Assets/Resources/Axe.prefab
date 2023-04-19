@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 3933020184325799135}
   - component: {fileID: 1246770101255061219}
+  - component: {fileID: 5344958315095803581}
+  - component: {fileID: 1322131448313981998}
   - component: {fileID: 4629105782597346176}
   - component: {fileID: 918153092800223709}
   - component: {fileID: 8841625326136199027}
-  - component: {fileID: 8580325923109293773}
-  - component: {fileID: 6303361028492432261}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Axe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,6 +54,33 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &5344958315095803581
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2588448859890265741}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 133.83661, y: 444.00534, z: 384.79114}
+  m_Center: {x: -16.918253, y: 56.39432, z: 187.51085}
+--- !u!114 &1322131448313981998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2588448859890265741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f7af2675b8e6c46958f38e2c8779fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickedUp: 0
+  throwForce: 0
 --- !u!114 &4629105782597346176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,34 +137,6 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 1
   m_TeleportIfDistanceGreaterThan: 3
---- !u!65 &8580325923109293773
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2588448859890265741}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 209.89534, y: 474.06714, z: 451.84686}
-  m_Center: {x: -20.985565, y: 41.971207, z: 196.29666}
---- !u!114 &6303361028492432261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2588448859890265741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6d6b3f311ccdda5d95d8164bd0d61b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colliders: []
-  pickedUp: 0
-  playerView: {fileID: 0}
 --- !u!1 &2613159116659123789
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,7 +149,7 @@ GameObject:
   - component: {fileID: 3090037730569039223}
   - component: {fileID: 831618145716179002}
   - component: {fileID: 4564825023882890595}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Object_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +244,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5142541389685952749}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Axe1.obj.cleaner.materialmerger.gles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -281,7 +280,7 @@ GameObject:
   - component: {fileID: 3479844832013006740}
   - component: {fileID: 6084535163072236799}
   - component: {fileID: 2550822245065716026}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Object_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -376,7 +375,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2403375774677242657}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sketchfab_model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

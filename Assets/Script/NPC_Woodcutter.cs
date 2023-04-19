@@ -64,7 +64,7 @@ public class NPC_Woodcutter : OnTrigger {
     void Start(){
         isCutting = false;
         isStunned = false;
-        chaseDistance = 20;
+        chaseDistance = 60;
         curiousDistance = 150;
         speed = 3;
         calmTime = 5;
@@ -86,7 +86,8 @@ public class NPC_Woodcutter : OnTrigger {
     }
 
     public IEnumerator Interact(int secs) {
-        if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null)
+        if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null && 
+        !colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>().captured)
         {
             Debug.Log("Interacted with NPC");
             chasedPlayer = FindClosestTarget("Player");
@@ -96,8 +97,8 @@ public class NPC_Woodcutter : OnTrigger {
             if (axe != null) {
                 this.photonView.RPC("RPC_DropAxe", RpcTarget.AllBuffered);
             }
-            state = WoodcutterState.CHASE;
             yield return new WaitForSeconds(secs);
+            state = WoodcutterState.CHASE;
             isStunned = false;
             agent.speed = speed * 2;
         }
@@ -105,25 +106,19 @@ public class NPC_Woodcutter : OnTrigger {
 
     public IEnumerator PauseAfterCatch(int secs)
     {
-        // agent.speed = 0;
+        agent.speed = 0;
+        // disable collisions otherwise he pushes the player out of the cage
         transform.Find("Collision").gameObject.SetActive(false);
+        yield return new WaitForSeconds(2);
+        agent.speed = speed;
         this.photonView.RPC("RPC_HideAngrySign", RpcTarget.AllBuffered);
         state = WoodcutterState.SEEKINGTREE;
         yield return new WaitForSeconds(secs);
-        // transform.Find("Collision").gameObject.SetActive(false);
-        // agent.speed = speed;
-        // yield return new WaitForSeconds(2);
         transform.Find("Collision").gameObject.SetActive(true);
     }
 
     // Update is called once per frame
     void Update(){
-
-        if (Input.GetButtonDown("Interact")) 
-        {
-            StartCoroutine(Interact(2));
-        }
-
         if(pauseTime > 0f)
         {
             pauseTime -= Time.deltaTime;
@@ -180,12 +175,13 @@ public class NPC_Woodcutter : OnTrigger {
                             float distance = Vector3.Distance(chasedPlayer.transform.position, transform.position);
                             PlayerMovement pm = chasedPlayer.GetComponent<PlayerMovement>();
 
-                            if(distance <= catchDistance && CanSee(chasedPlayer, distance) && !isStunned) {
-                                pm.Catch();
-                                StartCoroutine(PauseAfterCatch(3));
-                            }
+                            // wasn't working in the latest merge, this way he captures the fox if he collides with it, doesn't need to see him that way
+                            // if(distance < catchDistance && CanSee(chasedPlayer, distance) && !isStunned) {
+                            //     pm.Catch();
+                            //     StartCoroutine(PauseAfterCatch(3));
+                            // }
 
-                            if(distance <= curiousDistance && distance >= chaseDistance && !pm.captured) {
+                            if(distance < curiousDistance && distance > chaseDistance && !pm.captured) {
                                 agent.speed = speed;
                                 this.photonView.RPC("RPC_HideAngrySign", RpcTarget.AllBuffered);
                                 state = WoodcutterState.CURIOUS;
@@ -254,15 +250,30 @@ public class NPC_Woodcutter : OnTrigger {
         float angle = Vector3.Angle(Vector3.Normalize(obj.transform.position - transform.position), transform.forward);
        
         if (Mathf.Abs(angle) < fov) {
+            Debug.Log("Mathf");
             RaycastHit hit;
             if (Physics.Raycast(transform.position, Vector3.Normalize(obj.transform.position - transform.position), out hit, distance)) {
+                Debug.Log("Raycast");
                 if (hit.collider.transform.parent != null) {
+                    Debug.Log("parent");
                     return hit.collider.transform.parent.gameObject.GetInstanceID() == obj.GetInstanceID();
                 }
                 return false;
             }
         }
         return false;
+    }
+
+    private void OnTriggerStay(Collider other) {
+        if (Input.GetButtonDown("Interact")) 
+        {
+            StartCoroutine(Interact(2));
+        }
+        if (other.CompareTag("Player") && !other.gameObject.GetComponent<PlayerMovement>().captured && state == WoodcutterState.CHASE)
+        {
+            other.gameObject.GetComponent<PlayerMovement>().Catch();
+            StartCoroutine(PauseAfterCatch(2));
+        }
     }
 
     [PunRPC]

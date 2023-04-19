@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1197965768418123393}
   - component: {fileID: 977865991359150092}
   - component: {fileID: 995235519384554398}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Water_bottle_01_RGB_texture_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8513875001631797708}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Water_bottle_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,7 +139,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6326133089074828107}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sketchfab_model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -171,7 +171,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8239470059067462486}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: d29a4dae1ebb4be29545fb45126e257b.fbx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 179656891990049671}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RootNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,13 +235,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4660835943346932302}
-  - component: {fileID: 8617624037660361341}
   - component: {fileID: 2165001541621905667}
-  - component: {fileID: 4037199956911262225}
+  - component: {fileID: 4090275746964101490}
+  - component: {fileID: 1690073020800026964}
   - component: {fileID: 1600296261385781746}
   - component: {fileID: 5177949743825061829}
   - component: {fileID: 8601160294166005515}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WaterBottle
   m_TagString: Trash
   m_Icon: {fileID: 0}
@@ -264,21 +264,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8617624037660361341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8840149073308605829}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6d6b3f311ccdda5d95d8164bd0d61b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colliders: []
-  pickedUp: 0
-  playerView: {fileID: 0}
 --- !u!54 &2165001541621905667
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -295,8 +280,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &4037199956911262225
-BoxCollider:
+--- !u!136 &4090275746964101490
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -305,9 +290,24 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5, z: 0.5}
-  m_Center: {x: 0, y: 0.14276867, z: 0}
+  m_Radius: 0.095010795
+  m_Height: 0.3530535
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.14224806, z: 0}
+--- !u!114 &1690073020800026964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8840149073308605829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f7af2675b8e6c46958f38e2c8779fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickedUp: 0
+  throwForce: 0
 --- !u!114 &1600296261385781746
 MonoBehaviour:
   m_ObjectHideFlags: 0

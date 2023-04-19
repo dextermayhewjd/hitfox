@@ -23,7 +23,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     // Jumping / Falling
     // To account for charging up the jump animiation.
     [SerializeField] private float jumpDelay;
-    [SerializeField] private float jumpSpeed;
+    [SerializeField] private float jumpHeight;
+    [SerializeField] private float gravityMultiplier;
     [SerializeField] private float jumpGracePeriod;
     private float? lastGroundedTime;
     private float? jumpedTime;
@@ -58,7 +59,10 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     [PunRPC]
     void RPC_Catch(int playerID, int cageID) 
     {
-        PhotonView.Find(playerID).GetComponent<PlayerMovement>().captured = true;
+        PhotonView player = PhotonView.Find(playerID);
+        player.GetComponent<PlayerMovement>().captured = true;
+        player.GetComponent<CapsuleCollider>().enabled = false;
+        player.GetComponent<SphereCollider>().enabled = false;
         PhotonView.Find(cageID).GetComponent<CageScript>().ownerId = playerID;
     }
 
@@ -107,6 +111,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     {
         if (view.IsMine)
         {
+            // manual capture only for testing
             if (Input.GetKeyDown(KeyCode.R))
             {
                 if (!captured)
@@ -165,8 +170,12 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         moveDirection.Normalize();
 
         // Jumping and Falling
-        // Gravity being slow. Need to do some playing around with values or change how things are done.
-        ySpeed += Physics.gravity.y * Time.deltaTime;
+        float gravity = Physics.gravity.y * gravityMultiplier;
+        if (isJumping && ySpeed > 0 && inputController.GetInput("Jump") == false)
+        {
+            gravity *= 1.5f;
+        }
+        ySpeed += gravity * Time.deltaTime;
 
         //so footsteps SFX don't play when in air (share with Footsteps.cs)
         if (controller.isGrounded) {
@@ -182,7 +191,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
 
         if (Time.time - lastGroundedTime <= jumpGracePeriod) {
             controller.stepOffset = stepOffset;
-            // ySpeed = -0.5f;
+            ySpeed = -0.5f;
 
             animator.SetBool("isGrounded", true);
             isGrounded = true;
@@ -196,7 +205,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
                 if (Time.time - jumpedTime >= jumpDelay)
                 {
                     jumpSFX.Play();
-                    ySpeed = jumpSpeed;
+                    ySpeed = Mathf.Sqrt(jumpHeight * -3 * gravity);
                     jumpedTime = null;
                     lastGroundedTime = null;
                 }

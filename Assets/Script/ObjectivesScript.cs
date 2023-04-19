@@ -18,4 +18,9 @@ public class ObjectivesScript : MonoBehaviourPun
 
         // if time runs out or all players are captured -> load lose screen 
     }
+
+    public void IncreaseScore(int amount)
+    {
+        currentPoints += amount;
+    }
 }
