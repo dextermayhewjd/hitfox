@@ -42,6 +42,11 @@ public class FireInteraction : MonoBehaviourPun
         {
             BucketFillInteraction.isPouring = false;
             PhotonNetwork.Destroy(this.gameObject);
+            if (PhotonNetwork.IsMasterClient) {
+                GameObject objectives = GameObject.Find("Timer+point");
+                Debug.Log("20 points for putting out fire");
+                objectives.GetComponent<Timer>().IncreaseScore(20);
+            }
         }
         else
         {
@@ -52,11 +57,5 @@ public class FireInteraction : MonoBehaviourPun
             health += recoverSpeed*Time.deltaTime;
         }
         progressBar.value = Mathf.Clamp(health,0f,1f);
-    }
-
-    private void OnDestroy() {
-        GameObject objectives = GameObject.Find("ObjectivesTracker");
-        Debug.Log("20 points for putting out fire");
-        objectives.GetComponent<ObjectivesScript>().IncreaseScore(20);
     }
 }

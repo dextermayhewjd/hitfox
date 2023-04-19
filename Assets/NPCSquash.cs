@@ -20,9 +20,9 @@ public class NPCSquash : MonoBehaviour
         if (collision.gameObject.CompareTag("Forklift") && collision.gameObject.GetComponent<NewCarUserControl>().driving && !isSquashed)
         {
             Debug.Log("start squashing ");
-            GameObject objectives = GameObject.Find("ObjectivesTracker");
+            GameObject objectives = GameObject.Find("Timer+point");
             Debug.Log("5 points for squashing");
-            objectives.GetComponent<ObjectivesScript>().IncreaseScore(5);
+            objectives.GetComponent<Timer>().IncreaseScore(5);
             // The NPC has been hit by the forklift and is not already squashed
             StartCoroutine(SquashAndRestore());
         }

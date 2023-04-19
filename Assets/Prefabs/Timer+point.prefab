@@ -93,9 +93,9 @@ GameObject:
   - component: {fileID: 1877884479989541510}
   - component: {fileID: 1877884479989541505}
   - component: {fileID: 6664170835536476915}
-  - component: {fileID: 8165562177284578375}
   - component: {fileID: 1877884479989541504}
   - component: {fileID: 1262724495864657611}
+  - component: {fileID: 269269669111739712}
   m_Layer: 5
   m_Name: Timer+point
   m_TagString: Untagged
@@ -203,23 +203,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerText: {fileID: 2970324908687009382}
+  playtime: 60
   victoryText: {fileID: 1160463065779013445}
   failedText: {fileID: 5296854436713150129}
-  totalPoints: 0
---- !u!114 &8165562177284578375
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1877884479989541507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3933f0d4d0a4d0fd0820af8aba3dfba2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreText: {fileID: 0}
-  objectivesTracker: {fileID: 0}
+  currentPoints: 0
+  requiredPoints: 15
 --- !u!114 &1877884479989541504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,6 +244,20 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &269269669111739712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1877884479989541507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3933f0d4d0a4d0fd0820af8aba3dfba2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText: {fileID: 802169332019636528}
+  timerAndPoints: {fileID: 1877884479989541507}
 --- !u!1 &1877884480773236405
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,12 +510,12 @@ GameObject:
   - component: {fileID: 5836385484466168673}
   - component: {fileID: 802169332019636528}
   m_Layer: 5
-  m_Name: total_points
+  m_Name: TotalPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4937986176196133053
 RectTransform:
   m_ObjectHideFlags: 0
