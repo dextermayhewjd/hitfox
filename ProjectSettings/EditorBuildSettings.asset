@@ -24,12 +24,15 @@ EditorBuildSettings:
     path: Assets/Scenes/Prototype2.unity
     guid: 4cb69416f1e5827dd86b41650da66f84
   - enabled: 0
-    path: Assets/Scenes/SquashNPC.unity
-    guid: 370e8bce3329c1be58e9a341d9ef8d66
-  - enabled: 1
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
     path: Assets/Scenes/Hailey_Fire.unity
     guid: 2a5c80381bf6c2fb98e6b1d1c2ddf5a3
-  - enabled: 1
-    path: Assets/Scenes/map-with-ai.unity
+  - enabled: 0
+    path: Assets/Scenes/schoolsday-tuesday.unity
     guid: 12cc932082d64684783dc65f65de81bd
+  - enabled: 1
+    path: Assets/Scenes/map-build-1-azmil.unity
+    guid: c30f4eff38d6ebd7386d549de23b7d80
   m_configObjects: {}

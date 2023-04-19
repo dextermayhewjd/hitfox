@@ -29,7 +29,7 @@ public class NPC_Behaviour : MonoBehaviour{
                 case State.WALK: agent.destination = goTo.transform.position;
                     if (Vector3.Distance(transform.position, goTo.transform.position) < 1) {
                         if (dog != null) {
-                            if (Vector3.Distance(transform.position, dog.transform.position) < 2)) {
+                            if (Vector3.Distance(transform.position, dog.transform.position) < 2) {
                                 Destroy(dog);
                                 Destroy(gameObject);
                             }
