@@ -10,7 +10,7 @@ public class PickUpObject : MonoBehaviourPun
 
     private Rigidbody rigidbody;
     private PhotonRigidbodyView rigidbodyView;
-    public bool addPoints = true;
+    public bool hasBeenDeleted = false;
 
     void Start()
     {

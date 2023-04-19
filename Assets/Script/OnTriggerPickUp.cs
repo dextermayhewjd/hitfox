@@ -37,12 +37,4 @@ public class OnTriggerPickUp : MonoBehaviourPun
             objectsToPickUp.Remove(other);
         }
     }
-
-    private void Update() {
-        Debug.Log(objectsToPickUp[0].gameObject.activeSelf);
-        if (objectsToPickUp[0].gameObject.activeSelf == false)
-        {
-            objectsToPickUp.Remove(objectsToPickUp[0]);
-        }
-    }
 }
