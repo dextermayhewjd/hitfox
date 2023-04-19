@@ -10,6 +10,7 @@ public class NPC_Behaviour : MonoBehaviour{
     public State state;
     UnityEngine.AI.NavMeshAgent agent;
     PhotonView view;
+    float recallTimer = 0;
 
     public enum State { 
         WALK
@@ -27,8 +28,20 @@ public class NPC_Behaviour : MonoBehaviour{
             switch (state) {
                 case State.WALK: agent.destination = goTo.transform.position;
                     if (Vector3.Distance(transform.position, goTo.transform.position) < 1) {
-                        Destroy(dog);
-                        Destroy(gameObject);
+                        if (dog != null) {
+                            if (Vector3.Distance(transform.position, dog.transform.position) < 2)) {
+                                Destroy(dog);
+                                Destroy(gameObject);
+                            }
+
+                            if (recallTimer <= 0) {
+                                dog.BroadcastMessage("recall");
+                                recallTimer = 5;
+                            }
+                            recallTimer -= Time.deltaTime;
+                        }
+                        
+                        else Destroy(gameObject);
                     }
                     break;
             }

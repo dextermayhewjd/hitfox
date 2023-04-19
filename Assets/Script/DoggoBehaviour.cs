@@ -125,7 +125,7 @@ public class DoggoBehaviour : MonoBehaviour {
                 case DoggoState.BARK:
 
                     transform.LookAt(interactingWith.transform, Vector3.up);
-                    if (Random.Range(0, 100) < 0.001) Instantiate(woof, transform);
+                    if (Random.Range(0, 100) < 0.001) PhotonNetwork.Instantiate(woof.name, transform.position,transform.rotation);
                     if (timer > 5) {
 
                         if (distance > 3) state = DoggoState.SEARCH;
