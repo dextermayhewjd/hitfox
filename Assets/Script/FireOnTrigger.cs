@@ -29,6 +29,7 @@ public class FireOnTrigger : MonoBehaviourPun
 
         }
     }
+    // d
  
     public void OnTriggerExit(Collider col)
     {
