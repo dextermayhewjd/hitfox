@@ -27,6 +27,8 @@ public class DoggoBehaviour : MonoBehaviour {
     public DoggoState state = DoggoState.WALK;
     public GameObject interactingWith;
     public GameObject woof;
+    public GameObject owner;
+    public GameObject destination;
     PhotonView view;
 
     UnityEngine.AI.NavMeshAgent agent;
@@ -38,7 +40,8 @@ public class DoggoBehaviour : MonoBehaviour {
         ATTACK,
         BARK,
         SEARCH,
-        PLAY
+        PLAY,
+        RECALL
 
     }
 
@@ -75,6 +78,7 @@ public class DoggoBehaviour : MonoBehaviour {
                 case DoggoState.WALK:
                     timer-=Time.deltaTime;
                     agent.speed = walkSpeed;
+                    agent.destination = destination.transform.position;
                     foreach (GameObject dog in dogs) {
                         if (CanSee(dog, reactivity)) {
                             interactingWith = dog;
@@ -90,7 +94,8 @@ public class DoggoBehaviour : MonoBehaviour {
                         }
                     }
 
-                    if (timer <= 0) {
+                    /*Old Wander code
+                     * if (timer <= 0) {
                         Vector3 newPos = Random.onUnitSphere;
                         newPos.y = 0;
                         newPos = Vector3.RotateTowards(newPos, transform.forward, Mathf.Deg2Rad * 0.5f * Vector3.Angle(newPos, transform.forward), 0);
@@ -98,7 +103,7 @@ public class DoggoBehaviour : MonoBehaviour {
                         agent.SetDestination(transform.position + newPos);
                         timer = 1;
                         //Debug.Log("Changing direction: "+ newPos + ", " + transform.position);
-                    }
+                    }*/
                     
 
                     Debug.DrawRay(transform.position, agent.destination-transform.position, Color.black, 0, false);
@@ -120,7 +125,7 @@ public class DoggoBehaviour : MonoBehaviour {
                 case DoggoState.BARK:
 
                     transform.LookAt(interactingWith.transform, Vector3.up);
-                    if (Random.Range(0, 100) < 0.001) Instantiate(woof, transform);
+                    if (Random.Range(0, 100) < 0.001) PhotonNetwork.Instantiate(woof.name, transform.position,transform.rotation);
                     if (timer > 5) {
 
                         if (distance > 3) state = DoggoState.SEARCH;
@@ -197,6 +202,12 @@ public class DoggoBehaviour : MonoBehaviour {
                     }
                     break;
 
+                case DoggoState.RECALL:
+                    agent.speed = speed;
+                    agent.destination = owner.transform.position;
+                    if (Vector3.Distance(owner.transform.position, transform.position) < 2) state = DoggoState.WALK;
+                    break;
+
                 default:
                     break;
             }
@@ -226,5 +237,10 @@ public class DoggoBehaviour : MonoBehaviour {
             state = DoggoState.RUNAWAY;
             timer2 = param.time;
         }
+    }
+
+    void recall() {
+        
+        if(responsiveness > Random.Range(1,100))state = DoggoState.RECALL;
     }
 }
