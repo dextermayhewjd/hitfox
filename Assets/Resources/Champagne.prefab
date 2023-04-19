@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6672352526067475281}
   - component: {fileID: 5627927313532667454}
   - component: {fileID: 2877430354341057522}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Object_7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 3238809464402872240}
   - component: {fileID: 8642922995873540801}
   - component: {fileID: 3415547192519252856}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Object_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 1652895468544344650}
   - component: {fileID: 8223707536423081701}
   - component: {fileID: 145939503612058763}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Champagne
   m_TagString: Trash
   m_Icon: {fileID: 0}
@@ -348,7 +348,7 @@ GameObject:
   - component: {fileID: 8110566535542678014}
   - component: {fileID: 6068571117190017754}
   - component: {fileID: 3796468649988729714}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Object_8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -431,6 +431,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: dba584470839a0793bbabdf6193b4854, type: 2}

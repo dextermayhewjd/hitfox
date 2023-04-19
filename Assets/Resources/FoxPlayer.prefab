@@ -59,7 +59,8 @@ MonoBehaviour:
   sprintMultiplier: 2.5
   rotationSpeed: 500
   jumpDelay: 0.2
-  jumpSpeed: 6
+  jumpHeight: 2
+  gravityMultiplier: 1.5
   jumpGracePeriod: 1
   captured: 0
   hidden: 0

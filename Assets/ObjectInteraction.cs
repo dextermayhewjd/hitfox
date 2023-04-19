@@ -12,41 +12,6 @@ public class ObjectInteraction : OnTriggerPickUp
         objectInMouth = null;
     }
 
-    // private void OnTriggerStay(Collider other) {
-    //     if (other.gameObject.GetComponent<PickUpObject>() != null)
-    //     {
-    //         if (Input.GetButtonDown("Interact"))
-    //             if (objectInMouth == null)
-    //             {
-    //                 Debug.Log("Can pick up");
-    //                 // if (Input.GetButtonDown("Interact"))
-    //                 // {
-    //                     objectInMouth = other.gameObject;
-    //                     other.gameObject.GetComponent<PickUpObject>().Interact(this.GetComponent<PhotonView>());
-    //                 // }
-    //             } else {
-    //                 // if (Input.GetButtonDown("Interact"))
-    //                 // {
-    //                     Debug.Log("Drop");
-    //                     objectInMouth.GetComponent<PickUpObject>().Interact(this.GetComponent<PhotonView>());
-    //                     objectInMouth = null;
-    //                 // }
-    //             }
-    //             {
-    //             }
-    //         // else 
-    //         // {
-    //         //     Debug.Log("Switch");
-    //         //     if (Input.GetButtonDown("Interact"))
-    //         //     {
-    //         //         objectInMouth.GetComponent<PickUpObject>().Interact(this.GetComponent<PhotonView>());
-    //         //         other.gameObject.GetComponent<PickUpObject>().Interact(this.GetComponent<PhotonView>());
-    //         //         objectInMouth = null;
-    //         //     }
-    //         // }
-    //     }
-    // }
-
     private void Update() {
         if (Input.GetButtonDown("Interact"))
         {
