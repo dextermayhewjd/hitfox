@@ -265,8 +265,12 @@ public class NPC_Woodcutter : OnTrigger {
     }
 
     private void OnTriggerStay(Collider other) {
-        if (Input.GetButtonDown("Interact")) 
+        if (Input.GetButtonDown("Interact") && !isStunned && other.CompareTag("Player") && other.gameObject.GetComponent<PhotonView>().IsMine) 
         {
+            GameObject objectives = GameObject.Find("ObjectivesTracker");
+            Debug.Log("10 for biting");
+            objectives.GetComponent<ObjectivesScript>().IncreaseScore(10);
+    
             StartCoroutine(Interact(2));
         }
         if (other.CompareTag("Player") && !other.gameObject.GetComponent<PlayerMovement>().captured && state == WoodcutterState.CHASE)

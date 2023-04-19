@@ -18,6 +18,10 @@ public class OnTriggerPickUp : MonoBehaviourPun
 
     public void OnTriggerStay(Collider other)
     {
+        if (other == null)
+        {
+            Debug.Log("pice");
+        }
         if (other.gameObject.GetComponent<PickUpObject>() != null)
         {
             Debug.Log("Can pick up");
@@ -31,6 +35,14 @@ public class OnTriggerPickUp : MonoBehaviourPun
         {
             Debug.Log("Too far to pick up");
             objectsToPickUp.Remove(other);
+        }
+    }
+
+    private void Update() {
+        Debug.Log(objectsToPickUp[0].gameObject.activeSelf);
+        if (objectsToPickUp[0].gameObject.activeSelf == false)
+        {
+            objectsToPickUp.Remove(objectsToPickUp[0]);
         }
     }
 }

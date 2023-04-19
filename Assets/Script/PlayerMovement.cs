@@ -61,8 +61,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     {
         PhotonView player = PhotonView.Find(playerID);
         player.GetComponent<PlayerMovement>().captured = true;
-        player.GetComponent<CapsuleCollider>().enabled = false;
-        player.GetComponent<SphereCollider>().enabled = false;
+        player.gameObject.transform.Find("Collider").gameObject.SetActive(false);
         PhotonView.Find(cageID).GetComponent<CageScript>().ownerId = playerID;
     }
 
