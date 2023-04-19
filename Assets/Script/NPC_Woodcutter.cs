@@ -269,9 +269,9 @@ public class NPC_Woodcutter : OnTrigger {
     private void OnTriggerStay(Collider other) {
         if (Input.GetButtonDown("Interact") && !isStunned && other.CompareTag("Player") && other.gameObject.GetComponent<PhotonView>().IsMine) 
         {
-            GameObject objectives = GameObject.Find("ObjectivesTracker");
+            GameObject objectives = GameObject.Find("Timer+point");
             Debug.Log("10 for biting");
-            objectives.GetComponent<ObjectivesScript>().IncreaseScore(10);
+            objectives.GetComponent<Timer>().IncreaseScore(10);
     
             StartCoroutine(Interact(2));
         }

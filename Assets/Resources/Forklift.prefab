@@ -933,7 +933,7 @@ GameObject:
   - component: {fileID: 2899546663289761586}
   m_Layer: 11
   m_Name: Forklift
-  m_TagString: Vehicle
+  m_TagString: Forklift
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -9,10 +9,11 @@ public class Timer : MonoBehaviourPun
     public Text timerText;
     private float startTime;
     // private float maxtime = 300f;//5 minutes
-    private float maxtime = 300f;// for testing 
+    public float playtime;// for testing 
     public Text victoryText;
     public Text failedText;
-    public int totalPoints = 0;
+    public int currentPoints;
+    public int requiredPoints;
 
     // Start is called before the first frame update
     void Start()
@@ -27,9 +28,9 @@ public class Timer : MonoBehaviourPun
         {
             //countdown from 5 minutes
             float t = Time.time - startTime;//seconds since started
-            float rem = maxtime - t;
+            float rem = playtime - t;
             
-            if (totalPoints >= 500) {
+            if (currentPoints >= requiredPoints) {
                 victoryText.gameObject.SetActive(true);
                 return;
             }
@@ -50,9 +51,27 @@ public class Timer : MonoBehaviourPun
                 }
                 string time = minutes + ":" + seconds;
                 this.photonView.RPC("RPC_UpdateTimer", RpcTarget.AllBuffered, time);
+                this.photonView.RPC("RPC_UpdateScore", RpcTarget.OthersBuffered, currentPoints);
             }
             //Note: change later so when reaches 1 min left turns red/blue
         }
+    }
+
+    public void IncreaseScore(int amount)
+    {
+        this.GetComponent<PhotonView>().RPC("RPC_IncreaseScore", RpcTarget.MasterClient, amount);
+    }
+
+    [PunRPC]
+    void RPC_IncreaseScore(int amount)
+    {
+        currentPoints += amount;
+    }
+
+    [PunRPC]
+    void RPC_UpdateScore(int actualPoints)
+    {
+        currentPoints = actualPoints;
     }
 
     [PunRPC]
