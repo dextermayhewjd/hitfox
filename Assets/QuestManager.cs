@@ -18,7 +18,7 @@ public class QuestManager : MonoBehaviour
     void Start()
     {
         questText = GetComponentInChildren<Text>();
-        int trashCount = GameObject.FindGameObjectsWithTag("trash").Length;
+        int trashCount = GameObject.FindGameObjectsWithTag("Trash").Length;
         
 
         // Define each quest
@@ -29,7 +29,7 @@ public class QuestManager : MonoBehaviour
             new Quest() { ID = 3, description = "Rescue the fox", completed = false },
             new Quest() { ID = 4, description = "try stop the lumberjack by stealing his axe ", completed = false },
             new Quest() { ID = 5, description = "try the forklift~~", completed = false },
-            new Quest() { ID = 6, description = "Rescue the fox", completed = false }
+            new Quest() { ID = 6, description = "Rescue the fox", completed = false },
             new Quest() { ID = 7, description = $"Collect all the trash {collectedTrash}/{trashCount}", completed = false, trashCount = trashCount, collectedTrashCount = 0 } 
         };
         

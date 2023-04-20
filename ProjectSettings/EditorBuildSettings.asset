@@ -41,7 +41,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/timer+point.unity
     guid: 92b72eb47b0ca480eb3ef2847e1a24b3
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/QuestSystem.unity
     guid: 0033f362bf67b1d40a1fc4f56d24b9f9
+  - enabled: 1
+    path: Assets/Scenes/QuestSystemInUptoDate.unity
+    guid: 9a528fb6a4f18fc4292e29fcb5e19d9c
   m_configObjects: {}
