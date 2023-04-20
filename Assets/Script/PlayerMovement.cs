@@ -16,13 +16,15 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     private CharacterController controller;
     private Animator animator;
 
+    [Header("Movement")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float walkSpeed;
     [SerializeField] private float sprintMultiplier;
+
+    [Header("Camera")]
     [SerializeField] private float rotationSpeed;
 
-    // Jumping / Falling
-    // To account for charging up the jump animiation.
+    [Header("Jumping")]
     [SerializeField] private float jumpDelay;
     [SerializeField] private float jumpHeight;
     [SerializeField] private float gravityMultiplier;
@@ -35,6 +37,11 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     private bool isFalling;
     private bool isGrounded;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource walkSFX;
+    [SerializeField] private AudioSource runSFX;
+    [SerializeField] private AudioSource jumpSFX;
+
     private Vector3 moveDirection;
     private Vector3 velocity;
 
@@ -42,7 +49,6 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     public bool hidden;
     public CinemachineFreeLook cam;
     public Transform cameraTransform;
-    [SerializeField] AudioSource jumpSFX;
     public PhotonView view;
     public static bool onground = false;
     public bool driving = false;
@@ -261,30 +267,22 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     {
         animator.SetFloat("Speed", 0, 0.1f, Time.deltaTime);
         animator.SetBool("isMoving", false);
-        StopFootsteps();
+        walkSFX.enabled = false;
+        runSFX.enabled = false;
     } 
 
     private void Walk() {
         moveSpeed = walkSpeed;
         animator.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);
-        // Need to sync with animation and move speed. Or replace how this is played.
+        walkSFX.enabled = true;
+        runSFX.enabled = false;
     }
 
     private void Run()
     {
         moveSpeed = walkSpeed * sprintMultiplier;
         animator.SetFloat("Speed", 1, 0.1f, Time.deltaTime);
-        // Need to speed up to sync with animation and move speed. Or replace how this is played.
-        Footsteps();
-    }
-
-    private void Footsteps()
-    {
-        footstep.SetActive(true);
-    }
-
-    private void StopFootsteps()
-    {
-        footstep.SetActive(false);
+        walkSFX.enabled = false;
+        runSFX.enabled = true;
     }
 }
