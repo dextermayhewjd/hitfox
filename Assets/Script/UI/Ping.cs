@@ -22,7 +22,7 @@ public class Ping : MonoBehaviour
     public float timer;
 
     // Where the ping was casted from. i.e. the player.
-    public GameObject origin;
+    private GameObject origin;
     // The object if any that the ping will attatch to.
     public GameObject target;
 
@@ -50,15 +50,17 @@ public class Ping : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        pv = GetComponent<PhotonView>();
+        // pv = GetComponent<PhotonView>();
         originalScale = this.transform.localScale;
 
         markerTextFields = GetComponentsInChildren<TMP_Text>();
-        markerTextFields[0].text = pv.Owner.NickName; 
+        markerTextFields[0].text = userName; 
         markerTextFields[1].text = message; 
 
-        foreach (GameObject fox in GameObject.FindGameObjectsWithTag("Player")) {
-            if(fox.GetComponent<PhotonView>().IsMine) {
+        foreach (GameObject fox in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if(fox.GetComponent<PhotonView>().IsMine)
+            {
                 origin = fox;
             }
         }
@@ -115,7 +117,7 @@ public class Ping : MonoBehaviour
         
     private void StopPing()
     {
-        PhotonNetwork.Destroy(this.gameObject);
+        Destroy(this.gameObject);
     }
 
     private float Distance(Vector3 origin, Vector3 target)
