@@ -13,6 +13,14 @@ public class FireInteraction : MonoBehaviourPun
     // for the fire it encounter 
     private BucketFill BucketFillInteraction;
     
+    private QuestManager questManager;
+    
+    private void Start()
+    {
+        // Get the QuestManager instance
+        questManager = FindObjectOfType<QuestManager>();
+    }
+
     void Update(){
         // if the fire is put out
         if(health <= 0)
@@ -23,6 +31,7 @@ public class FireInteraction : MonoBehaviourPun
                 GameObject objectives = GameObject.Find("Timer+point");
                 Debug.Log("20 points for putting out fire");
                 objectives.GetComponent<Timer>().IncreaseScore(20);
+                // questManager.CompleteQuest(0);
                 // QuestSystem.GetComponent<Quest>().missionComplete("Fire");
             }
         }

@@ -18,13 +18,13 @@ public class QuestManager : MonoBehaviour
     void Start()
     {
         questText = GetComponentInChildren<Text>();
-        int trashCount = GameObject.FindGameObjectsWithTag("Trash").Length;
+        trashCount = GameObject.FindGameObjectsWithTag("Trash").Length;
         
 
         // Define each quest
         quests = new Quest[] {
             new Quest() { ID = 0, description = "Find a bucket", completed = false },
-            new Quest() { ID = 1, description = "Collect water with the bucket", completed = false },
+            new Quest() { ID = 1, description = "Fill up the bucket with water ", completed = false },
             new Quest() { ID = 2, description = $"Extinguish the fire", completed = false },
             new Quest() { ID = 3, description = "Rescue the fox", completed = false },
             new Quest() { ID = 4, description = "try stop the lumberjack by stealing his axe ", completed = false },
@@ -33,26 +33,13 @@ public class QuestManager : MonoBehaviour
             new Quest() { ID = 7, description = $"Collect all the trash {collectedTrash}/{trashCount}", completed = false, trashCount = trashCount, collectedTrashCount = 0 } 
         };
         
-        foreach (Quest quest in quests)
-        {
-            DisplayQuest(quest);
-        }
+            DisplayQuest(); 
+
     }
 
       void Update()
     {
-        // // Update the quest list UI
-        // string questListText = "";
-        // foreach (Quest quest in quests)
-        // {
-        //     string questText = quest.description;
-        //     if (quest.completed)
-        //     {
-        //         questText = "<color=green>" + questText + "</color>";
-        //     }
-        //     questListText += "- " + questText + "\n";
-        // }
-        // questList.text = questListText;
+
             foreach (Quest quest in quests)
         {
             if (quest.ID == 7 && !quest.completed)
@@ -65,42 +52,34 @@ public class QuestManager : MonoBehaviour
         }
     }
     
-    public void DisplayQuest(Quest quest)
+    public void DisplayQuest()
     {
-        questText.text += "- " + quest.description + "\n";
+            // questText.text += "- " + quest.description + "\n";
+        questText.text = "";
+        foreach (Quest quest in quests)
+        {
+            if(quest.completed)
+            {
+                questText.text += "- " + "<color=green>" + quest.description+ "</color>"+ "\n";
+            }else{
+                questText.text += "- " + quest.description + "\n";
+
+            }
+        } 
+
+
     }
 
     
     public void CompleteQuest(int id)
     {
         // Find the quest with the specified ID
+
     Quest quest = System.Array.Find(quests, q => q.ID == id);   
-
-
-
-        if (quest != null)
-        {
-            // Mark the quest as completed
-            quest.completed = true;
-            quest.description = "<color=green>" + questText + "</color>";
-            // Remove the quest from the UI after a delay
-            Invoke("RemoveQuest", questDisplayDuration);
-        }
+    quest.completed = true;
+    DisplayQuest();
     }
-    private void RemoveQuest()
-    {
-        // Clear the quest text
-        questText.text = "";
 
-        // Display only the active quests
-        foreach (Quest quest in quests)
-        {
-            if (!quest.completed)
-            {
-                DisplayQuest(quest);
-            }
-        }
-    }
 }
 
 public class Quest : MonoBehaviour
