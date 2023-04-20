@@ -88,7 +88,7 @@ CharacterController:
   m_Radius: 0.6
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.6, z: 0}
 --- !u!114 &9140337751510435539
@@ -426,9 +426,9 @@ GameObject:
   - component: {fileID: 6075148825976632414}
   - component: {fileID: 2904997934169772955}
   - component: {fileID: 4725970250936767859}
-  m_Layer: 13
+  m_Layer: 6
   m_Name: Collider
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
