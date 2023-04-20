@@ -9,7 +9,7 @@ public class FireInteraction : MonoBehaviourPun
     public Slider progressBar;
     public float health = 1f;
     public float recoverSpeed = 0.025f;    
-
+    // public GameObject QuestSystem = GameObject.Find("QuestManager");
     // for the fire it encounter 
     private BucketFill BucketFillInteraction;
     
@@ -23,6 +23,7 @@ public class FireInteraction : MonoBehaviourPun
                 GameObject objectives = GameObject.Find("Timer+point");
                 Debug.Log("20 points for putting out fire");
                 objectives.GetComponent<Timer>().IncreaseScore(20);
+                // QuestSystem.GetComponent<Quest>().missionComplete("Fire");
             }
         }
         else
