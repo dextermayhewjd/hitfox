@@ -35,10 +35,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/map-build-1-azmil.unity
     guid: c30f4eff38d6ebd7386d549de23b7d80
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/StealAxe.unity
     guid: 8338c1944a283ddc78610352f952445f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/timer+point.unity
     guid: 92b72eb47b0ca480eb3ef2847e1a24b3
   - enabled: 0
