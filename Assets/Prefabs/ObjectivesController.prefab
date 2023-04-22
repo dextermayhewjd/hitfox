@@ -51,7 +51,7 @@ MonoBehaviour:
   objectivesList:
   - id: Fire
     objectsToSpawn:
-    - {fileID: 3031503343641055030, guid: 2ac18ca1c51f8e30c826446a07bd177f, type: 3}
+    - {fileID: 3236137045476491398, guid: acc85975b897be144a5db2f719eecc5c, type: 3}
     spawnLocations: []
   - id: Trash
     objectsToSpawn:
@@ -59,6 +59,9 @@ MonoBehaviour:
     - {fileID: 7092083984586214436, guid: 3ff40d4a5096215958ce82846ba1f507, type: 3}
     - {fileID: 8840149073308605829, guid: 8a85006438c21789a85bcaff4a57d80c, type: 3}
     - {fileID: 8486783653839049495, guid: 249c99ffd0566f833afa740c72762986, type: 3}
+    spawnLocations: []
+  - id: FoxCaptured
+    objectsToSpawn: []
     spawnLocations: []
   trashObjects:
   - {fileID: 5174316512915270022, guid: 465d826a68f2e45419e11e437734a324, type: 3}

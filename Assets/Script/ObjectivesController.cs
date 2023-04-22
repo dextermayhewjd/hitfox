@@ -9,25 +9,39 @@ public class ObjectivesController : MonoBehaviour
     public class Objective
     {
         public string id;
+        public string description;
+
+        // Variables to add when spawning objects.
         public GameObject[] objectsToSpawn;
         public SpawnLocation[] spawnLocations; 
 
+        // The time that the objective started.
         private float startTime;
-        private bool active;
-        private List<GameObject> spawnedObjects;
-        private SpawnLocation location;
 
-        public Objective(float startTime, List<GameObject> spawnedObjects, SpawnLocation location)
+        private List<GameObject> spawnedObjects;
+        // This is where the objective objects get spawned.
+        private SpawnLocation spawnLocation;
+
+        public Objective(string id, float startTime, List<GameObject> spawnedObjects, SpawnLocation spawnLocation)
         {
-            this.active = true;
+            this.id = id;
             this.startTime = startTime;
             this.spawnedObjects = spawnedObjects;
-            this.location = location;
+            this.spawnLocation = spawnLocation;
         }
 
-        public void AddSpawnedObject(GameObject newObject)
+        // This is for objects like the cage, etc.
+        private GameObject objectiveObjectRef;
+        // To not be confused with spawnLocation, this is the location of things like the cage object when foxes get captured.
+        // Potentially NPCS, etc.
+        private Vector3 objectiveLocation;
+
+        public Objective(string id, float startTime, GameObject objectRef, Vector3 location)
         {
-            spawnedObjects.Add(newObject);
+            this.id = id;
+            this.startTime = startTime;
+            this.objectiveObjectRef = objectRef;
+            this.objectiveLocation = location;
         }
 
         public int NumbActiveObjects()
@@ -41,7 +55,25 @@ public class ObjectivesController : MonoBehaviour
                 }
             }
 
+            if (objectiveObjectRef != null)
+            {
+                i++;
+            }
+
             return i;
+        }
+
+        // This is only the number of active fires of one fire objective.
+        public int NumActiveFires()
+        {
+            if (this.id != "Fire")
+            {
+                Debug.Log("Not A Fire Objective");
+                return 0;
+            }
+
+            FireSource fireSource = spawnedObjects[0].GetComponent<FireSource>();
+            return fireSource.NumFires();
         }
     }
 
@@ -87,13 +119,13 @@ public class ObjectivesController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.G))
         {
-            // SpawnFire();
-            SpawnTrash(1);
+            SpawnFire();
+            // SpawnTrash(1);
         }
 
         UpdateObjectives();
         UpdateObjectiveRates();
-        HandleObjectiveEvents();
+        // HandleObjectiveEvents();
         
     }
 
@@ -204,7 +236,7 @@ public class ObjectivesController : MonoBehaviour
             return;
         }
 
-        int spawnLocationIndex = Random.Range(0, numSpawnLocations + 1);
+        int spawnLocationIndex = Random.Range(0, numSpawnLocations);
         SpawnLocation spawnLocationArea = trashObjective.spawnLocations[spawnLocationIndex];
 
         if (location != "")
@@ -229,7 +261,7 @@ public class ObjectivesController : MonoBehaviour
             // Debug.Log(objectToSpawn.name + " Spawned At " + spawnLocation);
         }
 
-        activeObjectives.Add(new Objective(Time.time, spawnedObjects, spawnLocationArea));
+        activeObjectives.Add(new Objective(trashObjective.id, Time.time, spawnedObjects, spawnLocationArea));
 
         // Add Marker at center of spawnLocationArea and add to quest.
     }
@@ -247,13 +279,13 @@ public class ObjectivesController : MonoBehaviour
         GameObject objectToSpawn = fireObjective.objectsToSpawn[0];
         if (objectToSpawn == null)
         {
-            Debug.Log("Fire Object not set");
+            Debug.Log("FireSource Object not set");
             return;
         }
 
-        if (objectToSpawn.name != "Fire")
+        if (objectToSpawn.name != "FireSource")
         {
-            Debug.Log("Object is not a fire object");
+            Debug.Log("Object is not a FireSource object");
             return;
         }
 
@@ -265,7 +297,7 @@ public class ObjectivesController : MonoBehaviour
             return;
         }
 
-        int spawnLocationIndex = Random.Range(0, numSpawnLocations + 1);
+        int spawnLocationIndex = Random.Range(0, numSpawnLocations);
         SpawnLocation spawnLocationArea = fireObjective.spawnLocations[spawnLocationIndex];
 
         if (location != "")
@@ -288,7 +320,7 @@ public class ObjectivesController : MonoBehaviour
         // Debug.Log("Fire Spawned At " + spawnLocation);
         spawnedObjects.Add(spawnedObject);
 
-        activeObjectives.Add(new Objective(Time.time, spawnedObjects, spawnLocationArea));
+        activeObjectives.Add(new Objective(fireObjective.id, Time.time, spawnedObjects, spawnLocationArea));
 
 
         // Add Marker at center of spawnLocationArea and add to quest.
@@ -301,6 +333,20 @@ public class ObjectivesController : MonoBehaviour
 
     public void SpawnDog()
     {
+        // TODO
+    }
+
+    public void FoxCaptured(GameObject capturedFox)
+    {
+        Objective capturedFoxObjective;
+
+        if (!objectives.TryGetValue("FoxCaptured", out capturedFoxObjective))
+        {
+            Debug.Log("Fox Captured Objective not Set");
+            return;
+        }
+
+        activeObjectives.Add(new Objective(capturedFoxObjective.id, Time.time, capturedFox, capturedFox.transform.position));
         // TODO
     }
 
