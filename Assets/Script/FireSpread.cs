@@ -6,6 +6,8 @@ using Photon.Pun;
 
 public class FireSpread : MonoBehaviour
 {
+    public FireSource fireSource;
+
     public string objectToSpawnName = "Fire";
     public float spawnDelay;
     private float timer = 0f;
@@ -61,9 +63,11 @@ public class FireSpread : MonoBehaviour
                             if (hit.collider.CompareTag("Navigation Static")) {
                                 Vector3 spawnPoint = hit.point;
                                 spawnPoint.y -= 0.5f;
-                                FireSource fireSource = this.transform.parent.gameObject.GetComponent<FireSource>();
-                                fireSource.StartFire(spawnPoint);
-                                // PhotonNetwork.Instantiate(prefabName: objectToSpawnName, spawnPoint, Quaternion.identity);
+                                GameObject spawnedFire = PhotonNetwork.Instantiate(prefabName: objectToSpawnName, spawnPoint, Quaternion.identity);
+                                if (fireSource != null)
+                                {
+                                    fireSource.AddFire(spawnedFire);
+                                }
                                 
                                 // if a fire is spawned, decrease the chance to spawn fire again
                                 spawnDelay += 5;
