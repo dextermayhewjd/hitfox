@@ -95,7 +95,7 @@ public class ObjectivesController : MonoBehaviour
     [SerializeField] private GameObject[] trashObjects;
 
     private Dictionary<string, Objective> objectives;
-    private List<Objective> activeObjectives;
+    public List<Objective> activeObjectives;
 
     private float previousEventStart;
 
