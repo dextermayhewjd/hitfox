@@ -61,7 +61,9 @@ public class FireSpread : MonoBehaviour
                             if (hit.collider.CompareTag("Navigation Static")) {
                                 Vector3 spawnPoint = hit.point;
                                 spawnPoint.y -= 0.5f;
-                                PhotonNetwork.Instantiate(prefabName: objectToSpawnName, spawnPoint, Quaternion.identity);
+                                FireSource fireSource = this.transform.parent.gameObject.GetComponent<FireSource>();
+                                fireSource.StartFire(spawnPoint);
+                                // PhotonNetwork.Instantiate(prefabName: objectToSpawnName, spawnPoint, Quaternion.identity);
                                 
                                 // if a fire is spawned, decrease the chance to spawn fire again
                                 spawnDelay += 5;
