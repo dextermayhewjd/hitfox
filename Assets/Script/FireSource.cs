@@ -19,13 +19,16 @@ public class FireSource : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (fires.Count == 0)
+        if (PhotonNetwork.IsMasterClient)
         {
-            FiresPutOut();
-            return;
-        }
+            if (fires.Count == 0)
+            {
+                FiresPutOut();
+                return;
+            }
 
-        UpdateFireList();
+            UpdateFireList();
+        }
     }
 
     private void UpdateFireList()
@@ -48,8 +51,16 @@ public class FireSource : MonoBehaviour
 
     public void StartFire(Vector3 location)
     {
-        GameObject fire = PhotonNetwork.Instantiate(fireObject.name, location, Quaternion.identity);
-        fire.transform.SetParent(this.transform);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameObject fire = PhotonNetwork.Instantiate(fireObject.name, location, Quaternion.identity);
+            fire.GetComponent<FireSpread>().fireSource = this;
+            fires.Add(fire);
+        }
+    }
+
+    public void AddFire(GameObject fire)
+    {
         fires.Add(fire);
     }
 
