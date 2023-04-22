@@ -5,6 +5,7 @@ using UnityEngine;
 public class SpawnLocation : MonoBehaviour
 {
     public string name;
+    public string description;
 
     public Vector3 centre;
     public Vector3 minPoint;

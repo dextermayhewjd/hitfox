@@ -45,6 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9460ea58064acde4a81b861b86124e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectivesEventRate: 20
+  objectivesEventMax: 3
+  numObjectivesPerEvent: 1
   objectivesList:
   - id: Fire
     objectsToSpawn:

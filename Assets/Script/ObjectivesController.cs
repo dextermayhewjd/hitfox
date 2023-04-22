@@ -15,12 +15,14 @@ public class ObjectivesController : MonoBehaviour
         private float startTime;
         private bool active;
         private List<GameObject> spawnedObjects;
+        private SpawnLocation location;
 
-        public Objective(float startTime, List<GameObject> spawnedObjects)
+        public Objective(float startTime, List<GameObject> spawnedObjects, SpawnLocation location)
         {
             this.active = true;
             this.startTime = startTime;
             this.spawnedObjects = spawnedObjects;
+            this.location = location;
         }
 
         public void AddSpawnedObject(GameObject newObject)
@@ -43,6 +45,18 @@ public class ObjectivesController : MonoBehaviour
         }
     }
 
+    private class ObjectiveInfo
+    {
+        public string name;
+        public int numObjectsToSpawn;
+        public string location;
+    }
+
+    [Header("Objectives Parameters")]
+    [SerializeField] private float objectivesEventRate;
+    [SerializeField] private float objectivesEventMax;
+    [SerializeField] private int numObjectivesPerEvent;
+
     [Header("Objectives")]
     [SerializeField] public List<Objective> objectivesList;
 
@@ -50,6 +64,8 @@ public class ObjectivesController : MonoBehaviour
 
     private Dictionary<string, Objective> objectives;
     private List<Objective> activeObjectives;
+
+    private float previousEventStart;
 
     // Start is called before the first frame update
     void Start()
@@ -62,6 +78,8 @@ public class ObjectivesController : MonoBehaviour
         }
 
         activeObjectives = new List<Objective>();
+
+        previousEventStart = -objectivesEventRate;
     }
 
     // Update is called once per frame
@@ -72,7 +90,15 @@ public class ObjectivesController : MonoBehaviour
             // SpawnFire();
             SpawnTrash(1);
         }
+
+        UpdateObjectives();
+        UpdateObjectiveRates();
+        HandleObjectiveEvents();
         
+    }
+
+    private void UpdateObjectives()
+    {
         for (int i = 0; i < activeObjectives.Count; i++)
         {
             Objective objective = activeObjectives[i];
@@ -83,6 +109,65 @@ public class ObjectivesController : MonoBehaviour
                 break;
             }
         }
+    }
+
+    private void HandleObjectiveEvents()
+    {
+        if (Time.time <= previousEventStart + objectivesEventRate)
+        {
+            return;
+        }
+
+        if (activeObjectives.Count < objectivesEventMax)
+        {
+            StartObjectiveEvent();
+        }
+    }
+
+    private void StartObjectiveEvent()
+    {
+        // int playerCount = PhotonNetwork.PlayerList.Length;
+
+        // if (playerCount == 1)
+        // {
+
+        // }
+        for (int i = 0; i < numObjectivesPerEvent; i++)
+        {
+            ObjectiveInfo objectiveToStart = DecideObjective();
+            StartObjective(objectiveToStart.name, objectiveToStart.numObjectsToSpawn);
+        }
+
+        previousEventStart = Time.time;
+    }
+
+    private ObjectiveInfo DecideObjective()
+    {
+        ObjectiveInfo info = new ObjectiveInfo();
+        info.name = "Trash";
+        info.numObjectsToSpawn = 5;
+        return info;
+    }
+
+    private void StartObjective(string objectiveId, int numObjects, string location = "")
+    {
+        switch(objectiveId)
+        {
+            case "Trash":
+                SpawnTrash(numObjects, location);
+                break;
+            case "Fire":
+                SpawnFire(location);
+                break;
+        }
+
+        Debug.Log(objectiveId + " Objective Begins At " + Time.time);
+    }
+
+    // Update objective rates based on number of players.
+    private void UpdateObjectiveRates()
+    {
+        // TODO
     }
 
     public void SpawnTrash(int numTrash = 5, string location = "")
@@ -119,7 +204,7 @@ public class ObjectivesController : MonoBehaviour
             return;
         }
 
-        int spawnLocationIndex = Random.Range(0, numSpawnLocations);
+        int spawnLocationIndex = Random.Range(0, numSpawnLocations + 1);
         SpawnLocation spawnLocationArea = trashObjective.spawnLocations[spawnLocationIndex];
 
         if (location != "")
@@ -144,7 +229,7 @@ public class ObjectivesController : MonoBehaviour
             // Debug.Log(objectToSpawn.name + " Spawned At " + spawnLocation);
         }
 
-        activeObjectives.Add(new Objective(Time.time, spawnedObjects));
+        activeObjectives.Add(new Objective(Time.time, spawnedObjects, spawnLocationArea));
 
         // Add Marker at center of spawnLocationArea and add to quest.
     }
@@ -180,7 +265,7 @@ public class ObjectivesController : MonoBehaviour
             return;
         }
 
-        int spawnLocationIndex = Random.Range(0, numSpawnLocations);
+        int spawnLocationIndex = Random.Range(0, numSpawnLocations + 1);
         SpawnLocation spawnLocationArea = fireObjective.spawnLocations[spawnLocationIndex];
 
         if (location != "")
@@ -200,14 +285,23 @@ public class ObjectivesController : MonoBehaviour
         List<GameObject> spawnedObjects = new List<GameObject>();
 
         GameObject spawnedObject = PhotonNetwork.Instantiate(objectToSpawn.name, spawnLocation, Quaternion.identity);
-
+        // Debug.Log("Fire Spawned At " + spawnLocation);
         spawnedObjects.Add(spawnedObject);
 
-        activeObjectives.Add(new Objective(Time.time, spawnedObjects));
+        activeObjectives.Add(new Objective(Time.time, spawnedObjects, spawnLocationArea));
 
-        // Debug.Log("Fire Spawned At " + spawnLocation);
 
         // Add Marker at center of spawnLocationArea and add to quest.
+    }
+
+    public void SpawnLumberJack()
+    {
+        // TODO
+    }
+
+    public void SpawnDog()
+    {
+        // TODO
     }
 
     private bool IsTrashObject(string name)
