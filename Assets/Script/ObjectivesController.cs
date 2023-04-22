@@ -16,11 +16,11 @@ public class ObjectivesController : MonoBehaviour
         public SpawnLocation[] spawnLocations; 
 
         // The time that the objective started.
-        private float startTime;
+        [HideInInspector] public float startTime;
 
-        private List<GameObject> spawnedObjects;
+        [HideInInspector] public List<GameObject> spawnedObjects;
         // This is where the objective objects get spawned.
-        private SpawnLocation spawnLocation;
+        [HideInInspector] public SpawnLocation spawnLocation;
 
         public Objective(string id, float startTime, List<GameObject> spawnedObjects, SpawnLocation spawnLocation)
         {
@@ -31,10 +31,10 @@ public class ObjectivesController : MonoBehaviour
         }
 
         // This is for objects like the cage, etc.
-        private GameObject objectiveObjectRef;
+        [HideInInspector] public GameObject objectiveObjectRef;
         // To not be confused with spawnLocation, this is the location of things like the cage object when foxes get captured.
         // Potentially NPCS, etc.
-        private Vector3 objectiveLocation;
+        [HideInInspector] public Vector3 objectiveLocation;
 
         public Objective(string id, float startTime, GameObject objectRef, Vector3 location)
         {
