@@ -57,6 +57,7 @@ MonoBehaviour:
     startTime: 0
     spawnedObjects: []
     spawnLocation: {fileID: 0}
+    initialNumSpawnedObjects: 0
     objectiveObjectRef: {fileID: 0}
     objectiveLocation: {x: 0, y: 0, z: 0}
   - id: Trash
@@ -70,6 +71,7 @@ MonoBehaviour:
     startTime: 0
     spawnedObjects: []
     spawnLocation: {fileID: 0}
+    initialNumSpawnedObjects: 0
     objectiveObjectRef: {fileID: 0}
     objectiveLocation: {x: 0, y: 0, z: 0}
   - id: FoxCaptured
@@ -79,6 +81,40 @@ MonoBehaviour:
     startTime: 0
     spawnedObjects: []
     spawnLocation: {fileID: 0}
+    initialNumSpawnedObjects: 0
+    objectiveObjectRef: {fileID: 0}
+    objectiveLocation: {x: 0, y: 0, z: 0}
+  - id: Bucket
+    description: 
+    objectsToSpawn:
+    - {fileID: 4993735558651106425, guid: 84a379138fff12d19a5464ca0a2f82fe, type: 3}
+    spawnLocations: []
+    startTime: 0
+    spawnedObjects: []
+    spawnLocation: {fileID: 0}
+    initialNumSpawnedObjects: 0
+    objectiveObjectRef: {fileID: 0}
+    objectiveLocation: {x: 0, y: 0, z: 0}
+  - id: Lumberjack
+    description: 
+    objectsToSpawn:
+    - {fileID: 6626836856569015522, guid: cd7bd6c004b30ef8cb041d8f8933366f, type: 3}
+    spawnLocations: []
+    startTime: 0
+    spawnedObjects: []
+    spawnLocation: {fileID: 0}
+    initialNumSpawnedObjects: 0
+    objectiveObjectRef: {fileID: 0}
+    objectiveLocation: {x: 0, y: 0, z: 0}
+  - id: Forklift
+    description: Run Over People
+    objectsToSpawn:
+    - {fileID: 2932343578486992406, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
+    spawnLocations: []
+    startTime: 0
+    spawnedObjects: []
+    spawnLocation: {fileID: 0}
+    initialNumSpawnedObjects: 0
     objectiveObjectRef: {fileID: 0}
     objectiveLocation: {x: 0, y: 0, z: 0}
   trashObjects:
