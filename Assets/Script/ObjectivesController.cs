@@ -22,12 +22,15 @@ public class ObjectivesController : MonoBehaviour
         // This is where the objective objects get spawned.
         [HideInInspector] public SpawnLocation spawnLocation;
 
+        [HideInInspector] public int initialNumSpawnedObjects;
+
         public Objective(string id, float startTime, List<GameObject> spawnedObjects, SpawnLocation spawnLocation)
         {
             this.id = id;
             this.startTime = startTime;
             this.spawnedObjects = spawnedObjects;
             this.spawnLocation = spawnLocation;
+            this.initialNumSpawnedObjects = spawnedObjects.Count;
         }
 
         // This is for objects like the cage, etc.
@@ -117,19 +120,38 @@ public class ObjectivesController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+
+        // Development Purposes.
+        // =================================
         if (Input.GetKeyDown(KeyCode.G))
         {
             SpawnFire();
-            // SpawnTrash(1);
+            SpawnBucket();
+            SpawnTrash(10);
+        }
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            SpawnLumberJack();
+            SpawnDog();
+        }
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            SpawnForklift();
         }
 
-        UpdateObjectives();
+        // ================================
+
+        UpdateActiveObjectives();
         UpdateObjectiveRates();
         // HandleObjectiveEvents();
         
     }
 
-    private void UpdateObjectives()
+    private void UpdateActiveObjectives()
     {
         for (int i = 0; i < activeObjectives.Count; i++)
         {
@@ -158,12 +180,6 @@ public class ObjectivesController : MonoBehaviour
 
     private void StartObjectiveEvent()
     {
-        // int playerCount = PhotonNetwork.PlayerList.Length;
-
-        // if (playerCount == 1)
-        // {
-
-        // }
         for (int i = 0; i < numObjectivesPerEvent; i++)
         {
             ObjectiveInfo objectiveToStart = DecideObjective();
@@ -176,6 +192,10 @@ public class ObjectivesController : MonoBehaviour
     private ObjectiveInfo DecideObjective()
     {
         ObjectiveInfo info = new ObjectiveInfo();
+
+        int numFireObjectives = 0;
+        int numTrashObjectives = 0;
+    
         info.name = "Trash";
         info.numObjectsToSpawn = 5;
         return info;
@@ -256,9 +276,9 @@ public class ObjectivesController : MonoBehaviour
         {
             Vector3 spawnLocation = spawnLocationArea.GetRandomPoint();
             GameObject objectToSpawn = objectsToSpawn[Random.Range(0, objectsToSpawn.Length)];
-            GameObject spawnedObject = PhotonNetwork.Instantiate(objectToSpawn.name, spawnLocation, Quaternion.identity);
+            GameObject spawnedObject = PhotonNetwork.InstantiateRoomObject(objectToSpawn.name, spawnLocation, Quaternion.identity);
             spawnedObjects.Add(spawnedObject);
-            // Debug.Log(objectToSpawn.name + " Spawned At " + spawnLocation);
+            Debug.Log(objectToSpawn.name + " Spawned At " + spawnLocationArea.name);
         }
 
         activeObjectives.Add(new Objective(trashObjective.id, Time.time, spawnedObjects, spawnLocationArea));
@@ -316,8 +336,8 @@ public class ObjectivesController : MonoBehaviour
 
         List<GameObject> spawnedObjects = new List<GameObject>();
 
-        GameObject spawnedObject = PhotonNetwork.Instantiate(objectToSpawn.name, spawnLocation, Quaternion.identity);
-        // Debug.Log("Fire Spawned At " + spawnLocation);
+        GameObject spawnedObject = PhotonNetwork.InstantiateRoomObject(objectToSpawn.name, spawnLocation, Quaternion.identity);
+        Debug.Log("Fire Source Spawned At " + spawnLocationArea.name);
         spawnedObjects.Add(spawnedObject);
 
         activeObjectives.Add(new Objective(fireObjective.id, Time.time, spawnedObjects, spawnLocationArea));
@@ -326,14 +346,186 @@ public class ObjectivesController : MonoBehaviour
         // Add Marker at center of spawnLocationArea and add to quest.
     }
 
-    public void SpawnLumberJack()
+    public void SpawnLumberJack(string location = "")
     {
-        // TODO
+        Objective lumberjackObjective;
+
+        if (!objectives.TryGetValue("Lumberjack", out lumberjackObjective))
+        {
+            Debug.Log("Forklift Objective not Set");
+            return;
+        }
+
+        GameObject objectToSpawn = lumberjackObjective.objectsToSpawn[0];
+        if (objectToSpawn == null)
+        {
+            Debug.Log("Lumberjack Object not set");
+            return;
+        }
+
+        if (objectToSpawn.name != "Lumberjack")
+        {
+            Debug.Log("Object is not a Lumberjack object");
+            return;
+        }
+
+        int numSpawnLocations = lumberjackObjective.spawnLocations.Length;
+
+        if (numSpawnLocations == 0)
+        {
+            Debug.Log("Lumberjack spawn location not set");
+            return;
+        }
+
+        int spawnLocationIndex = Random.Range(0, numSpawnLocations);
+        SpawnLocation spawnLocationArea = lumberjackObjective.spawnLocations[spawnLocationIndex];
+
+        if (location != "")
+        {
+            foreach (var loc in lumberjackObjective.spawnLocations)
+            {
+                if (loc.name == location)
+                {
+                    spawnLocationArea = loc;
+                }
+            }
+        }
+
+        Vector3 spawnLocation = spawnLocationArea.GetRandomPoint();
+        // Vector3 spawnLocation = spawnLocationArea.centre;
+
+        List<GameObject> spawnedObjects = new List<GameObject>();
+
+        GameObject spawnedObject = PhotonNetwork.InstantiateRoomObject(objectToSpawn.name, spawnLocation, Quaternion.identity);
+        Debug.Log("Lumberjack Spawned At " + spawnLocationArea.name);
+        spawnedObjects.Add(spawnedObject);
+
+        activeObjectives.Add(new Objective(lumberjackObjective.id, Time.time, spawnedObjects, spawnLocationArea));
+
+        // Add Marker at center of spawnLocationArea and add to quest.
     }
 
     public void SpawnDog()
     {
         // TODO
+    }
+
+    public void SpawnForklift(string location = "")
+    {
+        Objective forkliftObjective;
+
+        if (!objectives.TryGetValue("Forklift", out forkliftObjective))
+        {
+            Debug.Log("Forklift Objective not Set");
+            return;
+        }
+
+        GameObject objectToSpawn = forkliftObjective.objectsToSpawn[0];
+        if (objectToSpawn == null)
+        {
+            Debug.Log("Forklift Object not set");
+            return;
+        }
+
+        if (objectToSpawn.name != "Forklift")
+        {
+            Debug.Log("Object is not a Forklift object");
+            return;
+        }
+
+        int numSpawnLocations = forkliftObjective.spawnLocations.Length;
+
+        if (numSpawnLocations == 0)
+        {
+            Debug.Log("Forklift spawn location not set");
+            return;
+        }
+
+        int spawnLocationIndex = Random.Range(0, numSpawnLocations);
+        SpawnLocation spawnLocationArea = forkliftObjective.spawnLocations[spawnLocationIndex];
+
+        if (location != "")
+        {
+            foreach (var loc in forkliftObjective.spawnLocations)
+            {
+                if (loc.name == location)
+                {
+                    spawnLocationArea = loc;
+                }
+            }
+        }
+
+        Vector3 spawnLocation = spawnLocationArea.GetRandomPoint();
+        // Vector3 spawnLocation = spawnLocationArea.centre;
+
+        List<GameObject> spawnedObjects = new List<GameObject>();
+
+        GameObject spawnedObject = PhotonNetwork.InstantiateRoomObject(objectToSpawn.name, spawnLocation, Quaternion.identity);
+        Debug.Log("Forklift Spawned At " + spawnLocationArea.name);
+        spawnedObjects.Add(spawnedObject);
+
+        activeObjectives.Add(new Objective(forkliftObjective.id, Time.time, spawnedObjects, spawnLocationArea));
+
+        // Add Marker at center of spawnLocationArea and add to quest.
+    }
+    
+    public void SpawnBucket(string location = "")
+    {
+        Objective bucketObjective;
+
+        if (!objectives.TryGetValue("Bucket", out bucketObjective))
+        {
+            Debug.Log("Bucket Objective not Set");
+            return;
+        }
+
+        GameObject objectToSpawn = bucketObjective.objectsToSpawn[0];
+        if (objectToSpawn == null)
+        {
+            Debug.Log("Bucket Object not set");
+            return;
+        }
+
+        if (objectToSpawn.name != "Bucket")
+        {
+            Debug.Log("Object is not a Bucket object");
+            return;
+        }
+
+        int numSpawnLocations = bucketObjective.spawnLocations.Length;
+
+        if (numSpawnLocations == 0)
+        {
+            Debug.Log("Bucket spawn location not set");
+            return;
+        }
+
+        int spawnLocationIndex = Random.Range(0, numSpawnLocations);
+        SpawnLocation spawnLocationArea = bucketObjective.spawnLocations[spawnLocationIndex];
+
+        if (location != "")
+        {
+            foreach (var loc in bucketObjective.spawnLocations)
+            {
+                if (loc.name == location)
+                {
+                    spawnLocationArea = loc;
+                }
+            }
+        }
+
+        Vector3 spawnLocation = spawnLocationArea.GetRandomPoint();
+        // Vector3 spawnLocation = spawnLocationArea.centre;
+
+        List<GameObject> spawnedObjects = new List<GameObject>();
+
+        GameObject spawnedObject = PhotonNetwork.InstantiateRoomObject(objectToSpawn.name, spawnLocation, Quaternion.identity);
+        Debug.Log("Bucket Spawned At " + spawnLocationArea.name);
+        spawnedObjects.Add(spawnedObject);
+
+        activeObjectives.Add(new Objective(bucketObjective.id, Time.time, spawnedObjects, spawnLocationArea));
+
+        // Add Marker at center of spawnLocationArea and add to quest.
     }
 
     public void FoxCaptured(GameObject capturedFox)
@@ -347,7 +539,8 @@ public class ObjectivesController : MonoBehaviour
         }
 
         activeObjectives.Add(new Objective(capturedFoxObjective.id, Time.time, capturedFox, capturedFox.transform.position));
-        // TODO
+
+        // Add Marker at captured fox transform position of add to quest.
     }
 
     private bool IsTrashObject(string name)

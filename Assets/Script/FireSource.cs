@@ -5,13 +5,24 @@ using Photon.Pun;
 
 public class FireSource : MonoBehaviour
 {
-    [SerializeField] private GameObject fireObject;
+    [SerializeField] public GameObject fireObject;
+    [SerializeField] private float fireSourceSpreadRate;
+
+    // The maximum number of fires that this fire source will produce.
+    [SerializeField] public int maxFires;
+
+    [HideInInspector] public float fireSpreadRate;
 
     public List<GameObject> fires;
 
     // Start is called before the first frame update
     void Start()
     {
+        if (maxFires <= 0)
+        {
+            maxFires = 1;
+        }
+
         fires = new List<GameObject>();        
         StartFire(this.transform.position);
     }
@@ -28,6 +39,20 @@ public class FireSource : MonoBehaviour
             }
 
             UpdateFireList();
+            UpdateFireSpreadRate();
+        }
+    }
+
+    // Increase fire spread rate if there are more fires.
+    private void UpdateFireSpreadRate()
+    {
+        if (NumFires() <= 1)
+        {
+            fireSpreadRate = fireSourceSpreadRate;
+        }
+        else
+        {
+            fireSpreadRate = fireSourceSpreadRate * (1 - ((float)NumFires() / (float)maxFires));
         }
     }
 
@@ -43,6 +68,11 @@ public class FireSource : MonoBehaviour
         }
     }
 
+    public bool FireLimitReached()
+    {
+        return NumFires() >= maxFires;
+    }
+
     public int NumFires()
     {
         UpdateFireList();
@@ -53,7 +83,7 @@ public class FireSource : MonoBehaviour
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            GameObject fire = PhotonNetwork.Instantiate(fireObject.name, location, Quaternion.identity);
+            GameObject fire = PhotonNetwork.InstantiateRoomObject(fireObject.name, location, Quaternion.identity);
             fire.GetComponent<FireSpread>().fireSource = this;
             fires.Add(fire);
         }

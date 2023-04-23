@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7189999415880944412}
-  - component: {fileID: 8107798864661061244}
+  - component: {fileID: 7911332678156578730}
   m_Layer: 0
   m_Name: SpawnPlayers
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8107798864661061244
+--- !u!114 &7911332678156578730
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,12 +41,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 6730385783366499917}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19cb8c735d6c5725787a56192aca7131, type: 3}
+  m_Script: {fileID: 11500000, guid: 817ca60d3ea763e58ac4239a3e4d9cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToSpawn: {fileID: 199324029112467782, guid: 99befc65788663062b859b0840211686, type: 3}
-  minX: 0
-  maxX: 15
-  minZ: -25
-  maxZ: -10
-  heightY: 60
+  playerObject: {fileID: 199324029112467782, guid: 99befc65788663062b859b0840211686, type: 3}
+  spawnLocation: {fileID: 0}
