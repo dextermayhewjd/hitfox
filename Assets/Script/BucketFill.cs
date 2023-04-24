@@ -22,9 +22,10 @@ public class BucketFill : MonoBehaviour
     // for the fire it encounter 
     private FireInteraction currentFireInteraction;
     private NPC_Woodcutter currentNPC_Woodcutter;
-
+    private QuestManager questManager;
     void Start()
     {
+        questManager = FindObjectOfType<QuestManager>();
         water = this.transform.GetChild(1);
         water.gameObject.SetActive(false);
         waterLevelHeightTop = water.transform.localPosition.y;
@@ -49,6 +50,8 @@ public class BucketFill : MonoBehaviour
                 Debug.Log("bucket is filled");
                 fillAmount = 1;
                 isFilling = false;
+                questManager.CompleteQuest(1);
+                Debug.Log("should complete Quest 1");
                 // water.transform.localPosition = new Vector3(0f, waterLevelHeightTop, 0f);
             }
             else
