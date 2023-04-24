@@ -29,8 +29,18 @@ public class NPCFactory : MonoBehaviour {
     void spawnNpc() {
         GameObject newNpc = PhotonNetwork.Instantiate(npc.name, transform.position+Vector3.up, Quaternion.identity);
         GameObject[] factories = GameObject.FindGameObjectsWithTag("NPCFactory");
+        GameObject[] picnics = GameObject.FindGameObjectsWithTag("PicnicSpot");
         GameObject goTo;
-        do {
+        if (Random.Range(0, 100) < 20) {
+            int i = Random.Range(0, picnics.Length);
+            PicnicNPCHolder npcHolder = picnics[i].GetComponent<PicnicNPCHolder>();
+            if (npcHolder.setNPC(newNpc)) goTo = picnics[i];
+            else do {
+                    i = Random.Range(0, factories.Length);
+                    goTo = factories[i];
+                } while (goTo == gameObject);
+        }
+        else do {
             int i = Random.Range(0, factories.Length);
             goTo = factories[i];
         } while (goTo==gameObject);

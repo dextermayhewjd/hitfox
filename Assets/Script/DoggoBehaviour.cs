@@ -111,6 +111,7 @@ public class DoggoBehaviour : MonoBehaviour {
                 case DoggoState.RUNTOWARD:
                     agent.speed = speed;
                     if (interactingWith != null) {
+                        if (!CanSee(interactingWith, distance)) state = DoggoState.SEARCH;
                         if (distance > Mathf.Lerp(2, 5, fearfulness / 100))
                             agent.destination = interactingWith.transform.position;
                         else if (interactingWith.tag == "Player") {
@@ -125,7 +126,10 @@ public class DoggoBehaviour : MonoBehaviour {
                 case DoggoState.BARK:
 
                     transform.LookAt(interactingWith.transform, Vector3.up);
-                    if (Random.Range(0, 100) < 0.001) PhotonNetwork.Instantiate(woof.name, transform.position,transform.rotation);
+                    if (Random.Range(0, 100) <= 2) { 
+                        PhotonNetwork.Instantiate(woof.name, transform.position, transform.rotation);
+                        Debug.Log("Woof");
+                    }
                     if (timer > 5) {
 
                         if (distance > 3) state = DoggoState.SEARCH;
