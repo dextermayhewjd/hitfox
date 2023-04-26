@@ -190,8 +190,12 @@ public class Launcher : MonoBehaviourPunCallbacks
         Destroy(playerListItems[otherPlayer.ActorNumber].gameObject);
         playerListItems.Remove(otherPlayer.ActorNumber);
     }
-}
+}	
 
+public void ExitTheGame()
+{
+	Application.Quit();
+}
 
 
 
