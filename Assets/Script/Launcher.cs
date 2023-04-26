@@ -19,7 +19,13 @@ public class Launcher : MonoBehaviourPunCallbacks
 		[SerializeField] GameObject PlayerListItemPrefab;
 		[SerializeField] GameObject startGameButton;		
 
+		/* Add the roomListItems dictionary here*/
+    private Dictionary<string, RoomListItem> roomListItems = new Dictionary<string, RoomListItem>();
+		private Dictionary<int, PlayerListItem> playerListItems = new Dictionary<int, PlayerListItem>();
+		/* to improve efficiency*/
 		
+		
+
 		void Awake()
 		{
 			Instance = this;
@@ -42,7 +48,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         MenuManager.Instance.OpenMenu("title"); // maybe
         UnityEngine.Debug.Log("Joined Lobby");
-				// later would be replaced with user name system
     }
     
 	public void CreateRoom()
@@ -66,11 +71,16 @@ public class Launcher : MonoBehaviourPunCallbacks
 		{
 			Destroy(child.gameObject);
 		}
-
-		for(int i = 0; i < players.Count(); i++)
-		{
-			Instantiate(PlayerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
-		}
+		// UPDATED
+		playerListItems.Clear();
+		// for(int i = 0; i < players.Count(); i++)
+		// {
+		// 	// Instantiate(PlayerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
+		// }
+		 foreach (Player player in players)
+        {
+            AddPlayerListItem(player);
+        }
 
 		startGameButton.SetActive(PhotonNetwork.IsMasterClient);
 	}	
@@ -105,20 +115,50 @@ public class Launcher : MonoBehaviourPunCallbacks
 		MenuManager.Instance.OpenMenu("title");
 	}
 	
-	public override void OnRoomListUpdate(List<RoomInfo> roomList) // get from the roomlist
-	{
-		foreach(Transform trans in roomListContent)
-		{
-			Destroy(trans.gameObject);
-		}
-	//destory all the current button and add them into current rooms
-		for(int i = 0; i < roomList.Count; i++)
-		{
-			if(roomList[i].RemovedFromList)
-				continue;
-			Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
-		}
-	}
+	// public override void OnRoomListUpdate(List<RoomInfo> roomList) // get from the roomlist
+	// {
+	// 	foreach(Transform trans in roomListContent)
+	// 	{
+	// 		Destroy(trans.gameObject);
+	// 	}
+	// //destory all the current button and add them into current rooms
+	// 	for(int i = 0; i < roomList.Count; i++)
+	// 	{
+	// 		if(roomList[i].RemovedFromList)
+	// 			continue;
+	// 		Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
+	// 	}
+	// }
+
+	public override void OnRoomListUpdate(List<RoomInfo> roomList)
+{
+    foreach (RoomInfo roomInfo in roomList)
+    {
+        if (roomInfo.RemovedFromList)
+        {
+            if (roomListItems.ContainsKey(roomInfo.Name))
+            {
+                Destroy(roomListItems[roomInfo.Name].gameObject);
+                roomListItems.Remove(roomInfo.Name);
+            }
+        }
+        else
+        {
+            if (!roomListItems.ContainsKey(roomInfo.Name))
+            {
+                RoomListItem roomListItem = Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>();
+                roomListItem.SetUp(roomInfo);
+                roomListItems.Add(roomInfo.Name, roomListItem);
+            }
+            else
+            {
+                roomListItems[roomInfo.Name].SetUp(roomInfo);
+            }
+        }
+    }
+}
+
+
 	public void JoinRoom(RoomInfo info)
 	{
 		PhotonNetwork.JoinRoom(info.Name);
@@ -129,6 +169,35 @@ public class Launcher : MonoBehaviourPunCallbacks
 	
 	public override void OnPlayerEnteredRoom(Player newPlayer)
 	{
-		Instantiate(PlayerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
+			 AddPlayerListItem(newPlayer);
+		// Instantiate(PlayerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
 	}
+
+		private void AddPlayerListItem(Player player)
+	{
+			if (!playerListItems.ContainsKey(player.ActorNumber))
+			{
+					PlayerListItem playerListItem = Instantiate(PlayerListItemPrefab, playerListContent).GetComponent<PlayerListItem>();
+					playerListItem.SetUp(player);
+					playerListItems.Add(player.ActorNumber, playerListItem);
+			}
+	}
+
+	public override void OnPlayerLeftRoom(Player otherPlayer)
+{
+    if (playerListItems.ContainsKey(otherPlayer.ActorNumber))
+    {
+        Destroy(playerListItems[otherPlayer.ActorNumber].gameObject);
+        playerListItems.Remove(otherPlayer.ActorNumber);
+    }
+}	
+
+public void ExitTheGame()
+{
+	Application.Quit();
 }
+
+
+
+}
+
