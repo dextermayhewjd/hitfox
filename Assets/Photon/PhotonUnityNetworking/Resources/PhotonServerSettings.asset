@@ -71,6 +71,11 @@ MonoBehaviour:
   - RPC_IncreaseScore
   - RPC_Lose
   - RPC_Victory
+  - PlaceGroundMarker
+  - PlaceObjectMarker
+  - RPC_DropHedgehog
+  - RPC_PickUpHedgehog
+  - RPC_SaveHedgehog
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
