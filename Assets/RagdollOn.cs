@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
+using UnityEngine.AI;
 
 
 public class RagdollOn : MonoBehaviour
@@ -10,6 +11,8 @@ public class RagdollOn : MonoBehaviour
     public GameObject StudentRig;
     public Animator StudentAnimator;
     Stopwatch stopwatch = new Stopwatch();
+    public NavMeshAgent agent;
+    public GameObject target;
 
     void Start()
     {
@@ -17,11 +20,15 @@ public class RagdollOn : MonoBehaviour
         RagDollModeOff();
         //check tag == Player
     }
+    void Update()
+    {
+        Vector3 characterPosition = transform.position;
+        Vector3 targetPosition = target.transform.position;
 
-    // void Update()
-    /*    {
-
-        }*/
+        //Ray ray = new Ray(characterPosition, direction);
+        //RaycastHit hit; //then if hit then ...
+        agent.SetDestination(targetPosition);
+    }
     private void OnCollisionEnter(Collision collision)
     {
         UnityEngine.Debug.Log("COllIDED");
