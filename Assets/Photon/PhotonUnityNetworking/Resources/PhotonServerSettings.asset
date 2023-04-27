@@ -71,6 +71,8 @@ MonoBehaviour:
   - RPC_IncreaseScore
   - RPC_Lose
   - RPC_Victory
+  - PlaceGroundMarker
+  - PlaceObjectMarker
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
