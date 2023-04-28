@@ -76,6 +76,7 @@ MonoBehaviour:
   - RPC_DropHedgehog
   - RPC_PickUpHedgehog
   - RPC_SaveHedgehog
+  - RPC_ThrowBucket
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
