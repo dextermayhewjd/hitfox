@@ -73,6 +73,9 @@ MonoBehaviour:
   - RPC_Victory
   - PlaceGroundMarker
   - PlaceObjectMarker
+  - RPC_DropHedgehog
+  - RPC_PickUpHedgehog
+  - RPC_SaveHedgehog
   - RPC_ThrowBucket
   DisableAutoOpenWizard: 1
   ShowSettings: 1
