@@ -194,6 +194,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             if (inputController.GetInputDown("Jump"))
             {
                 jumpedTime = Time.time;
+                walkSFX.enabled = false;
+                runSFX.enabled = false;
             }
         } else {
             onground = false;
@@ -227,6 +229,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             controller.stepOffset = 0.0f;
             animator.SetBool("isGrounded", false);
             isGrounded = false;
+            walkSFX.enabled = false;
+            runSFX.enabled = false;
 
             if ((isJumping && ySpeed < 0) || ySpeed < -2)
             {
