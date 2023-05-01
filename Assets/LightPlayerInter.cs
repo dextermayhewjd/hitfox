@@ -5,6 +5,7 @@ using UnityEngine;
 public class LightPlayerInter : MonoBehaviour
 {
     public Light spotlight;
+    private bool once = false;
     public float playerHoldTime = 2f;  // How long to hold E to swap back to tree from treewithposter
     private float playerHoldTimer = 0f;
     private float gameTime = 0f;
@@ -34,9 +35,11 @@ public class LightPlayerInter : MonoBehaviour
             {
                 Debug.Log("Pressing E");
                 playerHoldTimer += Time.deltaTime;
-                if (playerHoldTimer >= playerHoldTime)
+                if ((playerHoldTimer >= playerHoldTime) && spotlight.enabled)
                 {
+                    Debug.Log("Before: " + spotlight.enabled);
                     spotlight.enabled = false;
+                    Debug.Log("After: " + spotlight.enabled);
                     GameObject objectives = GameObject.Find("Timer+point");
                     Debug.Log("Lampost off get 5 points");
                     objectives.GetComponent<Timer>().IncreaseScore(5);
@@ -48,10 +51,11 @@ public class LightPlayerInter : MonoBehaviour
     void Update()
     {
         gameTime += Time.deltaTime;
-        if(gameTime >= 10f)
+        if(gameTime >= 10f && !once)//how many seconds till lamposts turn on(should turn on at halftime)
         {
             timeMid = true;
             spotlight.enabled = true;
+            once = true;
         }
     }
 }
