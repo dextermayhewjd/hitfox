@@ -6,24 +6,31 @@ using Photon.Pun;
 
 public class FireSpread : MonoBehaviour
 {
-    public FireSource fireSource;
+    public int fireSourceID;
 
     private float timer = 0f;
 
     [SerializeField] private float distanceX;
     [SerializeField] private float distanceY;
 
+    void Start()
+    {
+        fireSourceID = (int)GetComponent<PhotonView>().InstantiationData[0];
+    }
+
     void Update()
     {
-        if (fireSource == null)
-        {
-            return;
-        }
-
         if (!PhotonNetwork.IsMasterClient)
         {
             return;
         }
+
+        if (PhotonView.Find(fireSourceID) == null)
+        {
+            return;
+        }
+
+        FireSource fireSource = PhotonView.Find(fireSourceID).gameObject.GetComponent<FireSource>();
 
         if (fireSource.FireLimitReached())
         {
@@ -73,9 +80,10 @@ public class FireSpread : MonoBehaviour
                     if (hit.collider.CompareTag("Navigation Static")) {
                         Vector3 spawnPoint = hit.point;
                         spawnPoint.y -= 0.5f;
-                        GameObject spawnedFire = PhotonNetwork.InstantiateRoomObject(fireSource.fireObject.name, spawnPoint, Quaternion.identity);
-                        spawnedFire.GetComponent<FireSpread>().fireSource = this.fireSource;
-                        fireSource.AddFire(spawnedFire);
+                        object[] instanceData = new object[1];
+                        instanceData[0] = fireSourceID;
+                        GameObject spawnedFire = PhotonNetwork.InstantiateRoomObject(fireSource.fireObject.name, spawnPoint, Quaternion.identity, 0, instanceData);
+                        PhotonView.Find(fireSourceID).GetComponent<FireSource>().AddFire(spawnedFire.GetComponent<PhotonView>().ViewID);
                     } 
                     else 
                     {
