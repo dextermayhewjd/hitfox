@@ -77,6 +77,8 @@ MonoBehaviour:
   - RPC_PickUpHedgehog
   - RPC_SaveHedgehog
   - RPC_ThrowBucket
+  - RPC_InteractWithLumberjack
+  - RPC_UpdateLumberjack
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

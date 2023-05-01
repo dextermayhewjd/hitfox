@@ -34,6 +34,7 @@ public class ObjectInteraction : OnTriggerPickUp
                if (Camera.main != null) 
                {
                 objectInMouth.GetComponent<PickUpObject>().Throw(this.GetComponent<PhotonView>());
+                objectInMouth = null;
                }
         }
     }

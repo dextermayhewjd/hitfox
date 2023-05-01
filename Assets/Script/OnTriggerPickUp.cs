@@ -18,10 +18,6 @@ public class OnTriggerPickUp : MonoBehaviourPun
 
     public void OnTriggerStay(Collider other)
     {
-        if (other == null)
-        {
-            Debug.Log("pice");
-        }
         if (other.gameObject.GetComponent<PickUpObject>() != null)
         {
             Debug.Log("Can pick up");
