@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
-using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviourPun
 {
@@ -15,8 +14,6 @@ public class Timer : MonoBehaviourPun
     public Text failedText;
     public int currentPoints;
     public int requiredPoints;
-    bool wait2sec = false;
-    float tsectimer = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -37,11 +34,6 @@ public class Timer : MonoBehaviourPun
                 this.photonView.RPC("RPC_Victory", RpcTarget.AllBuffered);
                 // this.photonView.RPC("RPC_UpdateTimer", RpcTarget.AllBuffered, time);
                 this.photonView.RPC("RPC_UpdateScore", RpcTarget.OthersBuffered, currentPoints);
-                tsectimer += Time.deltaTime;
-                if (tsectimer >= 5f)//waits 5 seconds before switching onto credits
-                {
-                    SceneManager.LoadScene(2);//loads credits scene
-                }
                 return;
             }
 

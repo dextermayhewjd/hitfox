@@ -797,6 +797,25 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!1 &413343330 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3244759606386296845, guid: e5b6f19dbefe105c5898f28c6f210c59, type: 3}
+  m_PrefabInstance: {fileID: 2124912278}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &413343333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413343330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56c16c55189f61d4cb5abe5d65d4919e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HintBox: {fileID: 690957050}
+  bucket: {fileID: 1134048661}
 --- !u!1 &541447146
 GameObject:
   m_ObjectHideFlags: 0
@@ -2252,7 +2271,7 @@ ParticleSystem:
     arc:
       value: 360
       mode: 0
-      spread: 0.2
+      spread: 0
       speed:
         serializedVersion: 2
         minMaxState: 0
@@ -2312,7 +2331,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 5
       minScalar: 10
       maxCurve:
         serializedVersion: 2

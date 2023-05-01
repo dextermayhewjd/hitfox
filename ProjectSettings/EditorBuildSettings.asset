@@ -33,7 +33,7 @@ EditorBuildSettings:
     path: Assets/Scenes/schoolsday-tuesday.unity
     guid: 12cc932082d64684783dc65f65de81bd
   - enabled: 0
-    path: Assets/Scenes/map-build.unity
+    path: Assets/Scenes/map-build-2-azmil.unity
     guid: c30f4eff38d6ebd7386d549de23b7d80
   - enabled: 0
     path: Assets/Scenes/StealAxe.unity
@@ -48,9 +48,6 @@ EditorBuildSettings:
     path: Assets/Scenes/QuestSystemInUptoDate.unity
     guid: 9a528fb6a4f18fc4292e29fcb5e19d9c
   - enabled: 1
-    path: Assets/Scenes/QuestSystemInUptoDate AB.unity
-    guid: 8b62a7837b2ae7e40a129dc1892b2c32
-  - enabled: 1
-    path: Assets/Scenes/Credits.unity
-    guid: 5575b74676b4389419de2ae33b609a05
+    path: Assets/Scenes/Hedhehog test.unity
+    guid: 67ce39eb219f7af5cbc3e40172e4b683
   m_configObjects: {}
