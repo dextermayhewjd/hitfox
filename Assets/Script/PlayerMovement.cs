@@ -134,6 +134,10 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             {
                 Movement();
             }
+            else
+            {
+                Idle();
+            }
         }
     }
 
