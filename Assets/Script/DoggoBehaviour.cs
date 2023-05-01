@@ -106,7 +106,7 @@ public class DoggoBehaviour : MonoBehaviour {
                     }*/
                     
 
-                    Debug.DrawRay(transform.position, agent.destination-transform.position, Color.black, 0, false);
+                    //Debug.DrawRay(transform.position, agent.destination-transform.position, Color.black, 0, false);
                     break;
                 case DoggoState.RUNTOWARD:
                     agent.speed = speed;
@@ -245,6 +245,6 @@ public class DoggoBehaviour : MonoBehaviour {
 
     void recall() {
         
-        if(responsiveness > Random.Range(1,100))state = DoggoState.RECALL;
+        /*if(responsiveness > Random.Range(0,100))*/state = DoggoState.RECALL;
     }
 }

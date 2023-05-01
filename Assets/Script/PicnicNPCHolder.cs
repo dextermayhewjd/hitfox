@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PicnicNPCHolder : MonoBehaviour{
     public GameObject npc;
-    public bool isOccupied;
+    public bool isOccupied = false;
 
     // Update is called once per frame
     void Update(){
