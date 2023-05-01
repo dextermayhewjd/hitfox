@@ -26,11 +26,11 @@ public class LightPlayerInter : MonoBehaviour
 
         }
     }
-    void OnCollisionStay(Collision col)
+    void OnTriggerStay(Collider col)
     {
-        if (col.gameObject.tag == "Player" && timeMid)
+        if (col.gameObject.tag == "Player")
         {
-            Debug.Log("Player stayed");
+            Debug.Log("Lampost");
             if (Input.GetKey(KeyCode.E))
             {
                 Debug.Log("Pressing E");
