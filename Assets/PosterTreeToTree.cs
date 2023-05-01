@@ -46,7 +46,7 @@ public class PosterTreeToTree : MonoBehaviour
                 SwapToTreeWithPoster();
             }
         }
-        else if (col.gameObject.tag == "Player")
+        else if ((col.gameObject.tag == "Player") && (poster.activeSelf == true))
         {
             Debug.Log("Player collided");
             if(Input.GetKey(KeyCode.E))
@@ -85,6 +85,9 @@ public class PosterTreeToTree : MonoBehaviour
     // Swap treewithposter back to the default tree prefab
     void SwapToTree()
     {
+        GameObject objectives = GameObject.Find("Timer+point");
+        Debug.Log("Poster taken down get 5 points");
+        objectives.GetComponent<Timer>().IncreaseScore(5);
         poster.SetActive(false);
     }
 }
