@@ -1,0 +1,148 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2414947285445646500
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8486373494614902437}
+  - component: {fileID: 8917352240062771272}
+  - component: {fileID: 7187319587734717210}
+  m_Layer: 0
+  m_Name: ObjectivesController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8486373494614902437
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2414947285445646500}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8917352240062771272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2414947285445646500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9460ea58064acde4a81b861b86124e74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectivesEventRate: 20
+  objectivesEventMax: 3
+  numObjectivesPerEvent: 1
+  objectivesList:
+  - id: Fire
+    description: Put Out The Fires!
+    objectsToSpawn:
+    - {fileID: 3236137045476491398, guid: acc85975b897be144a5db2f719eecc5c, type: 3}
+    spawnLocations: []
+    startTime: 0
+    spawnedObjects: []
+    spawnLocation: {fileID: 0}
+    initialNumSpawnedObjects: 0
+    objectiveObjectRef: {fileID: 0}
+    objectiveLocation: {x: 0, y: 0, z: 0}
+  - id: Trash
+    description: Put The Rubbish In The Bin!
+    objectsToSpawn:
+    - {fileID: 5174316512915270022, guid: 465d826a68f2e45419e11e437734a324, type: 3}
+    - {fileID: 7092083984586214436, guid: 3ff40d4a5096215958ce82846ba1f507, type: 3}
+    - {fileID: 8840149073308605829, guid: 8a85006438c21789a85bcaff4a57d80c, type: 3}
+    - {fileID: 8486783653839049495, guid: 249c99ffd0566f833afa740c72762986, type: 3}
+    spawnLocations: []
+    startTime: 0
+    spawnedObjects: []
+    spawnLocation: {fileID: 0}
+    initialNumSpawnedObjects: 0
+    objectiveObjectRef: {fileID: 0}
+    objectiveLocation: {x: 0, y: 0, z: 0}
+  - id: FoxCaptured
+    description: Rescue the Captured Fox!
+    objectsToSpawn: []
+    spawnLocations: []
+    startTime: 0
+    spawnedObjects: []
+    spawnLocation: {fileID: 0}
+    initialNumSpawnedObjects: 0
+    objectiveObjectRef: {fileID: 0}
+    objectiveLocation: {x: 0, y: 0, z: 0}
+  - id: Bucket
+    description: 
+    objectsToSpawn:
+    - {fileID: 4993735558651106425, guid: 84a379138fff12d19a5464ca0a2f82fe, type: 3}
+    spawnLocations: []
+    startTime: 0
+    spawnedObjects: []
+    spawnLocation: {fileID: 0}
+    initialNumSpawnedObjects: 0
+    objectiveObjectRef: {fileID: 0}
+    objectiveLocation: {x: 0, y: 0, z: 0}
+  - id: Lumberjack
+    description: 
+    objectsToSpawn:
+    - {fileID: 6626836856569015522, guid: cd7bd6c004b30ef8cb041d8f8933366f, type: 3}
+    spawnLocations: []
+    startTime: 0
+    spawnedObjects: []
+    spawnLocation: {fileID: 0}
+    initialNumSpawnedObjects: 0
+    objectiveObjectRef: {fileID: 0}
+    objectiveLocation: {x: 0, y: 0, z: 0}
+  - id: Forklift
+    description: Run Over People
+    objectsToSpawn:
+    - {fileID: 2932343578486992406, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
+    spawnLocations: []
+    startTime: 0
+    spawnedObjects: []
+    spawnLocation: {fileID: 0}
+    initialNumSpawnedObjects: 0
+    objectiveObjectRef: {fileID: 0}
+    objectiveLocation: {x: 0, y: 0, z: 0}
+  trashObjects:
+  - {fileID: 5174316512915270022, guid: 465d826a68f2e45419e11e437734a324, type: 3}
+  - {fileID: 6978479405129824700, guid: b0b199f47ca3605e2b9ad972e8d27bd9, type: 3}
+  - {fileID: 7092083984586214436, guid: 3ff40d4a5096215958ce82846ba1f507, type: 3}
+  - {fileID: 8840149073308605829, guid: 8a85006438c21789a85bcaff4a57d80c, type: 3}
+  - {fileID: 8486783653839049495, guid: 249c99ffd0566f833afa740c72762986, type: 3}
+  activeObjectives: []
+--- !u!114 &7187319587734717210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2414947285445646500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

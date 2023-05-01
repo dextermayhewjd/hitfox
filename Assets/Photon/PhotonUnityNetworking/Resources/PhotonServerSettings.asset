@@ -68,6 +68,15 @@ MonoBehaviour:
   - RPC_PickUpObject
   - ThrowBucket1
   - RPC_UpdateTimer
+  - RPC_IncreaseScore
+  - RPC_Lose
+  - RPC_Victory
+  - PlaceGroundMarker
+  - PlaceObjectMarker
+  - RPC_DropHedgehog
+  - RPC_PickUpHedgehog
+  - RPC_SaveHedgehog
+  - RPC_ThrowBucket
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviourPun
 {
     public Text timerText;
     private float startTime;
     // private float maxtime = 300f;//5 minutes
-    private float maxtime = 300f;// for testing 
+    public float playtime;// for testing 
     public Text victoryText;
     public Text failedText;
-    public int totalPoints = 0;
+    public int currentPoints;
+    public int requiredPoints;
+    bool wait2sec = false;
+    float tsectimer = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -27,17 +31,23 @@ public class Timer : MonoBehaviourPun
         {
             //countdown from 5 minutes
             float t = Time.time - startTime;//seconds since started
-            float rem = maxtime - t;
+            float rem = playtime - t;
             
-            if (totalPoints >= 500) {
-                victoryText.gameObject.SetActive(true);
+            if (currentPoints >= requiredPoints) {
+                this.photonView.RPC("RPC_Victory", RpcTarget.AllBuffered);
+                // this.photonView.RPC("RPC_UpdateTimer", RpcTarget.AllBuffered, time);
+                this.photonView.RPC("RPC_UpdateScore", RpcTarget.OthersBuffered, currentPoints);
+                tsectimer += Time.deltaTime;
+                if (tsectimer >= 5f)//waits 5 seconds before switching onto credits
+                {
+                    SceneManager.LoadScene(2);//loads credits scene
+                }
                 return;
             }
 
             if (rem <= 0)
             {
-                timerText.text = "Time's up!";
-                failedText.gameObject.SetActive(true);
+                this.photonView.RPC("RPC_Lose", RpcTarget.AllBuffered);
                 return;
             }
             else
@@ -50,14 +60,45 @@ public class Timer : MonoBehaviourPun
                 }
                 string time = minutes + ":" + seconds;
                 this.photonView.RPC("RPC_UpdateTimer", RpcTarget.AllBuffered, time);
+                this.photonView.RPC("RPC_UpdateScore", RpcTarget.OthersBuffered, currentPoints);
             }
             //Note: change later so when reaches 1 min left turns red/blue
         }
+    }
+
+    public void IncreaseScore(int amount)
+    {
+        this.GetComponent<PhotonView>().RPC("RPC_IncreaseScore", RpcTarget.MasterClient, amount);
+    }
+
+    [PunRPC]
+    void RPC_IncreaseScore(int amount)
+    {
+        currentPoints += amount;
+    }
+
+    [PunRPC]
+    void RPC_UpdateScore(int actualPoints)
+    {
+        currentPoints = actualPoints;
     }
 
     [PunRPC]
     void RPC_UpdateTimer(string time)
     {
         timerText.text = time;
+    }
+
+    [PunRPC]
+    void RPC_Victory()
+    {
+        victoryText.gameObject.SetActive(true);
+    }
+
+    [PunRPC]
+    void RPC_Lose()
+    {
+        timerText.text = "Time's up!";
+        failedText.gameObject.SetActive(true);
     }
 }

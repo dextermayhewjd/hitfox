@@ -22,6 +22,8 @@ public class NPC_Woodcutter : OnTrigger {
     public float chaseDistance; // distance at which it will chase a fox
     public float curiousDistance;
     public float fov = 120;
+    public AudioSource themeAudio;
+    public AudioSource chaseAudio;
 
     public int calmTime; // for calmTime secs after loses sight of player, can still go into chase mode if they catch sight of a player
 
@@ -84,7 +86,7 @@ public class NPC_Woodcutter : OnTrigger {
         view = GetComponent<PhotonView>();
 
         agent.speed = speed;
-
+        themeAudio.enabled = true;
     }
 
     public IEnumerator Interact(int secs) {
@@ -167,6 +169,8 @@ public class NPC_Woodcutter : OnTrigger {
                             // TODO: sound and animation
                             // Debug.Log("chasing 1");
                             treeToCut = null;
+                            chaseAudio.enabled = true;
+                            themeAudio.enabled = false; 
                             
                             if(chasedPlayer == null) {
                                 chasedPlayer = FindClosestTarget("Player");
@@ -189,8 +193,9 @@ public class NPC_Woodcutter : OnTrigger {
                                 state = WoodcutterState.CURIOUS;
                                 goto case WoodcutterState.CURIOUS;
                             }
-                        
 
+                            chaseAudio.enabled = false;
+                            themeAudio.enabled = true;
                             break;
                         
                         case WoodcutterState.CURIOUS:
@@ -269,9 +274,9 @@ public class NPC_Woodcutter : OnTrigger {
     private void OnTriggerStay(Collider other) {
         if (Input.GetButtonDown("Interact") && !isStunned && other.CompareTag("Player") && other.gameObject.GetComponent<PhotonView>().IsMine) 
         {
-            GameObject objectives = GameObject.Find("ObjectivesTracker");
+            GameObject objectives = GameObject.Find("Timer+point");
             Debug.Log("10 for biting");
-            objectives.GetComponent<ObjectivesScript>().IncreaseScore(10);
+            objectives.GetComponent<Timer>().IncreaseScore(10);
     
             StartCoroutine(Interact(2));
         }

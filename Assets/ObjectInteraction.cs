@@ -13,6 +13,8 @@ public class ObjectInteraction : OnTriggerPickUp
     }
 
     private void Update() {
+        objectsToPickUp.RemoveAll(item => item == null);
+
         if (Input.GetButtonDown("Interact"))
         {
             if (objectInMouth != null) 
@@ -26,6 +28,13 @@ public class ObjectInteraction : OnTriggerPickUp
                 objectInMouth = objectsToPickUp[0].gameObject;
                 objectInMouth.GetComponent<PickUpObject>().Interact(this.GetComponent<PhotonView>());
             }
+        }
+        if (objectInMouth != null && Input.GetKeyDown(KeyCode.Q)) {
+               
+               if (Camera.main != null) 
+               {
+                objectInMouth.GetComponent<PickUpObject>().Throw(this.GetComponent<PhotonView>());
+               }
         }
     }
 }
