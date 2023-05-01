@@ -22,6 +22,8 @@ public class NPC_Woodcutter : OnTrigger {
     public float chaseDistance; // distance at which it will chase a fox
     public float curiousDistance;
     public float fov = 120;
+    public AudioSource themeAudio;
+    public AudioSource chaseAudio;
 
     public int calmTime; // for calmTime secs after loses sight of player, can still go into chase mode if they catch sight of a player
 
@@ -84,7 +86,7 @@ public class NPC_Woodcutter : OnTrigger {
         view = GetComponent<PhotonView>();
 
         agent.speed = speed;
-
+        themeAudio.enabled = true;
     }
 
     public IEnumerator Interact(int secs) {
@@ -165,6 +167,8 @@ public class NPC_Woodcutter : OnTrigger {
                                 // TODO: sound and animation
                                 // Debug.Log("chasing 1");
                                 treeToCut = null;
+                                chaseAudio.enabled = true;
+                                themeAudio.enabled = false; 
                                 
                                 if(chasedPlayer == null) {
                                     chasedPlayer = FindClosestTarget("Player");
@@ -188,7 +192,8 @@ public class NPC_Woodcutter : OnTrigger {
                                     goto case WoodcutterState.CURIOUS;
                                 }
                             
-
+                                chaseAudio.enabled = false;
+                                themeAudio.enabled = true;
                                 break;
                             
                             case WoodcutterState.CURIOUS:
