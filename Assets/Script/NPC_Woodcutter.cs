@@ -22,6 +22,8 @@ public class NPC_Woodcutter : OnTrigger {
     public float chaseDistance; // distance at which it will chase a fox
     public float curiousDistance;
     public float fov = 120;
+    public AudioSource themeAudio;
+    public AudioSource chaseAudio;
 
     public int calmTime; // for calmTime secs after loses sight of player, can still go into chase mode if they catch sight of a player
 
@@ -84,7 +86,7 @@ public class NPC_Woodcutter : OnTrigger {
         view = GetComponent<PhotonView>();
 
         agent.speed = speed;
-
+        themeAudio.enabled = true;
     }
 
     public IEnumerator Interact(int secs) {
@@ -154,7 +156,7 @@ public class NPC_Woodcutter : OnTrigger {
                                     goto case WoodcutterState.CUTTING;
                                 }
                                 break;
-                            
+
                             case WoodcutterState.CUTTING:
                                 // TODO: cutting sound and animation
                                 if(!isCutting) StartCoroutine(CutTree(3, treeToCut)); // secs to cut a tree
@@ -165,13 +167,15 @@ public class NPC_Woodcutter : OnTrigger {
                                 // TODO: sound and animation
                                 // Debug.Log("chasing 1");
                                 treeToCut = null;
-                                
+                                chaseAudio.enabled = true;
+                                themeAudio.enabled = false; 
+
                                 if(chasedPlayer == null) {
                                     chasedPlayer = FindClosestTarget("Player");
                                 }
 
                                 agent.destination = chasedPlayer.transform.position;
-                                
+
                                 float distance = Vector3.Distance(chasedPlayer.transform.position, transform.position);
                                 PlayerMovement pm = chasedPlayer.GetComponent<PlayerMovement>();
 
@@ -187,10 +191,11 @@ public class NPC_Woodcutter : OnTrigger {
                                     state = WoodcutterState.CURIOUS;
                                     goto case WoodcutterState.CURIOUS;
                                 }
-                            
 
+                                chaseAudio.enabled = false;
+                                themeAudio.enabled = true;
                                 break;
-                            
+
                             case WoodcutterState.CURIOUS:
                                 // for calmTime secs after loses sight of player, they can still go into chase mode if they catch sight of a player
 
@@ -198,7 +203,7 @@ public class NPC_Woodcutter : OnTrigger {
                                     StartCoroutine(CalmDown(calmTime));
                                     calming = true;
                                 }
-                                
+
                                 foreach (GameObject player in players) {
                                     float pdistance = Vector3.Distance(player.transform.position, transform.position);
                                     if(pdistance < chaseDistance && CanSee(player, pdistance)) {
