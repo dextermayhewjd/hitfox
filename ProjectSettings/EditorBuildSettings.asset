@@ -33,7 +33,11 @@ EditorBuildSettings:
     path: Assets/Scenes/schoolsday-tuesday.unity
     guid: 12cc932082d64684783dc65f65de81bd
   - enabled: 1
+<<<<<<< HEAD
+    path: Assets/Scenes/map-build-Tuesday.unity
+=======
     path: Assets/Scenes/map-build-wall.unity
+>>>>>>> 831b04ee872cf946b503c1e14386264ba195ddb8
     guid: c30f4eff38d6ebd7386d549de23b7d80
   - enabled: 0
     path: Assets/Scenes/StealAxe.unity
