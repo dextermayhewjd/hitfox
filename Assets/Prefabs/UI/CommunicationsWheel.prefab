@@ -340,8 +340,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae875d51383a0dc45ae7431baff6caa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pingMarkerGround: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
-  pingMarkerObject: {fileID: 2626917578217483014, guid: 8222ba91cfcee0b4fa481a34998a2bb9, type: 3}
+  canvas: {fileID: 0}
+  waypointMarkerGround: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
+  waypointMarkerObject: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
   audioWarning: {fileID: 0}
   audioNeutral: {fileID: 0}
 --- !u!114 &3099298112193204347

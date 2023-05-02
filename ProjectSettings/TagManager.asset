@@ -21,6 +21,7 @@ TagManager:
   - Bush
   - PicnicSpot
   - NPC
+  - UICanvas
   layers:
   - Default
   - TransparentFX
