@@ -33,11 +33,7 @@ EditorBuildSettings:
     path: Assets/Scenes/schoolsday-tuesday.unity
     guid: 12cc932082d64684783dc65f65de81bd
   - enabled: 1
-<<<<<<< HEAD
-    path: Assets/Scenes/map-build-Tuesday.unity
-=======
     path: Assets/Scenes/map-build-wall.unity
->>>>>>> e76ef19012eff4b43898ca412eadea92bcba84d5
     guid: c30f4eff38d6ebd7386d549de23b7d80
   - enabled: 0
     path: Assets/Scenes/StealAxe.unity
@@ -51,14 +47,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/QuestSystemInUptoDate.unity
     guid: 9a528fb6a4f18fc4292e29fcb5e19d9c
-<<<<<<< HEAD
-  - enabled: 1
-    path: Assets/Scenes/map-build-with ai.unity
-    guid: 3c4852e0e3b5e7c4a84820fc3b7c9eb2
-  - enabled: 1
-=======
   - enabled: 0
->>>>>>> e76ef19012eff4b43898ca412eadea92bcba84d5
     path: Assets/Scenes/QuestSystemInUptoDate AB.unity
     guid: 8b62a7837b2ae7e40a129dc1892b2c32
   - enabled: 0
