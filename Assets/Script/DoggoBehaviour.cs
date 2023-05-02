@@ -48,6 +48,7 @@ public class DoggoBehaviour : MonoBehaviour {
     struct ChaseParams {
         public GameObject dog;
         public float time;
+        public bool rpc;
     }
 
     void Start() {
@@ -179,7 +180,7 @@ public class DoggoBehaviour : MonoBehaviour {
                             interactingWith.BroadcastMessage("becomeChased", param);
                             state = DoggoState.RUNTOWARD;
                         }
-                        Debug.DrawRay(transform.position, agent.destination - transform.position, Color.black, 0, false);
+                        //Debug.DrawRay(transform.position, agent.destination - transform.position, Color.black, 0, false);
 
 
 
@@ -194,6 +195,7 @@ public class DoggoBehaviour : MonoBehaviour {
                         ChaseParams param = new ChaseParams();
                         param.dog = gameObject;
                         param.time = Random.Range(10, 20);
+                        param.rpc = false;
                         interactingWith.BroadcastMessage("becomeChased", param);
                         state = DoggoState.RUNTOWARD;
                     }
@@ -236,7 +238,11 @@ public class DoggoBehaviour : MonoBehaviour {
 
 
     void becomeChased(ChaseParams param) {
-        if (interactingWith.tag != "Player" && (state == DoggoState.PLAY || state == DoggoState.RUNTOWARD)) {
+        if (!param.rpc) {
+            param.rpc = true;
+            view.RPC("becomeChased", RpcTarget.AllBuffered,param);
+        }
+        if (view.IsMine && interactingWith.tag != "Player" && (state == DoggoState.PLAY || state == DoggoState.RUNTOWARD)) {
             interactingWith = param.dog;
             state = DoggoState.RUNAWAY;
             timer2 = param.time;
