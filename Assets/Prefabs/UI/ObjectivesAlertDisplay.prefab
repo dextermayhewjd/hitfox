@@ -81,6 +81,14 @@ MonoBehaviour:
     body: 'Pick Up Trash With [E]
 
       Throw In the Bin'
+  - objectiveId: hedgehogTaxi
+    location: 
+    header: Lost Hogs
+    subHeader: 
+    body: 'Find a Forklift
+
+      Pick up Hedgehogs and bring them back to their
+      home'
 --- !u!1 &2872178481444073242
 GameObject:
   m_ObjectHideFlags: 0

@@ -60,7 +60,7 @@ public class Waypoint : MonoBehaviour
         }
         if (targetObject != null)
         {
-            targetPos = targetObject.transform.position;
+            // targetPos = targetObject.transform.position;
             // To use if the object has been interacted with such as if it was picked up for example.
             // Need to set a property in the object for this.
             // if (target.property)

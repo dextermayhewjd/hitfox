@@ -64,10 +64,18 @@ MonoBehaviour:
     - {fileID: 8840149073308605829, guid: 8a85006438c21789a85bcaff4a57d80c, type: 3}
     - {fileID: 8486783653839049495, guid: 249c99ffd0566f833afa740c72762986, type: 3}
     spawnLocations: []
+  - objectiveId: hedgehogTaxi
+    objectsToSpawn:
+    - {fileID: 1167724864849416357, guid: 21953f63a4b9f98a5a58a3d301fc986c, type: 3}
+    spawnLocations: []
   startingObjectsList:
   - id: bucket
     numObjectsToSpawn: 10
     objectToSpawn: {fileID: 0}
+    spawnLocations: []
+  - id: bucket
+    numObjectsToSpawn: 10
+    objectToSpawn: {fileID: 1167724864849416357, guid: 21953f63a4b9f98a5a58a3d301fc986c, type: 3}
     spawnLocations: []
 --- !u!114 &2880457043809172450
 MonoBehaviour:
@@ -82,7 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
-  defaultWaypointMarker: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
+  defaultWaypointMarker: {fileID: 2626917578217483014, guid: 5a37426177a620441a6d279dbf2976a2, type: 3}
   objectiveWaypointInfoList:
   - objectiveId: fire
     header: Fire
@@ -91,6 +99,14 @@ MonoBehaviour:
   - objectiveId: trash
     header: Rubbish
     subHeader: Throw the Rubbish In The Bin
+    waypointMarker: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
+  - objectiveId: hedgehogTaxi
+    header: Hedgehog Home
+    subHeader: 
+    waypointMarker: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
+  - objectiveId: empty
+    header: 
+    subHeader: 
     waypointMarker: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
 --- !u!114 &7187319587734717210
 MonoBehaviour:

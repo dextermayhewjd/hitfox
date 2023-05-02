@@ -104,7 +104,8 @@ public class ObjectivesController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G))
         {
             // SpawnFire();
-            SpawnTrash(2);
+            // SpawnTrash(2);
+            HedgehogTaxi();
         }
         if (Input.GetKeyDown(KeyCode.H))
         {
@@ -231,7 +232,7 @@ public class ObjectivesController : MonoBehaviour
 
         if (numActiveObjectives < maxActiveObjectives)
         {
-            int randNum = Random.Range(0, 2);
+            int randNum = Random.Range(0, 3);
             switch (randNum)
             {
                 case 0:
@@ -260,6 +261,59 @@ public class ObjectivesController : MonoBehaviour
     public void SpawnFire(string locationId = "")
     {
         SpawnObjective("fire", 1, locationId);
+    }
+
+    public void HedgehogTaxi(int numHedgehog = 2, string locationId = "")
+    {
+        string objectiveId = "hedgehogTaxi";
+
+        ObjectiveInfo objective;
+
+        if (!objectiveInfoTable.TryGetValue(objectiveId, out objective))
+        {
+            Debug.Log("Objective Of ID(" + objectiveId + ") Not Set");
+            return;
+        }
+
+        if (objective.objectsToSpawn.Length == 0)
+        {
+            Debug.Log("No Objects To Spawn");
+            return;
+        }
+
+        GameObject objectToSpawn = objective.objectsToSpawn[0];
+
+        List<int> spawnedObjectsId = new List<int>();
+
+        for (int i = 0; i < numHedgehog; i++)
+        {
+            SpawnLocation spawnLocationArea = objective.spawnLocations[Random.Range(0, objective.spawnLocations.Length)];
+            Vector3 spawnLocation = spawnLocationArea.GetRandomPoint();
+            GameObject spawnedObject = PhotonNetwork.InstantiateRoomObject(objectToSpawn.name, spawnLocation, Quaternion.identity);
+            int viewID = spawnedObject.GetComponent<PhotonView>().ViewID;
+            spawnedObjectsId.Add(viewID);
+            Vector3 waypointMarkerLocation = spawnLocation;
+            waypointMarkerLocation.y += 0;
+            pv.RPC("ObjectiveWaypointMarker", RpcTarget.All, viewID, waypointMarkerLocation, "empty");
+        }
+
+        // Spawn an Objective to track that objective.
+        object[] instanceData = new object[3];
+        instanceData[0] = objective.objectiveId;
+        instanceData[1] = spawnedObjectsId.ToArray();
+        instanceData[2] = "";
+
+        GameObject spawnedObjective = PhotonNetwork.InstantiateRoomObject(objectiveObject.name, new Vector3(0, 0, 0), Quaternion.identity, 0, instanceData);
+        int objectiveViewId = spawnedObjective.GetComponent<PhotonView>().ViewID;
+
+        // Display An Alert Of The Objective.
+        pv.RPC("AddObjectiveAlert", RpcTarget.All, objective.objectiveId, "");
+
+        foreach (var go in GameObject.FindGameObjectsWithTag("HedgehogHome"))
+        {
+            Vector3 waypointMarkerLocation = go.transform.position;
+            pv.RPC("ObjectiveWaypointMarker", RpcTarget.All, objectiveViewId, waypointMarkerLocation, objective.objectiveId);
+        }
     }
 
     public void SpawnLumberJack(string location = "")
@@ -295,6 +349,7 @@ public class ObjectivesController : MonoBehaviour
         {
             GameObject objectToSpawn = objective.objectsToSpawn[Random.Range(0, objective.objectsToSpawn.Length)];
             objectsToSpawn.Add(objectToSpawn);
+            
         }
 
         if (objective.spawnLocations.Length == 0)
