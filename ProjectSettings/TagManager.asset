@@ -9,7 +9,6 @@ TagManager:
   - Dog
   - DogChase
   - Fire
-  - BlueNPC
   - Canvas
   - Bucket
   - Tree
@@ -18,10 +17,11 @@ TagManager:
   - Forklift
   - Bin
   - Trash
-  - Bush
   - NPCFactory
+  - Bush
+  - PicnicSpot
+  - NPC
   - UICanvas
-  - PointsController
   layers:
   - Default
   - TransparentFX

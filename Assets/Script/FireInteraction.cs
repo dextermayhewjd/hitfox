@@ -8,7 +8,7 @@ public class FireInteraction : MonoBehaviourPun
 {
     public Slider progressBar;
     public float health = 1f;
-    public float recoverSpeed = 0.025f;    
+    public float recoverSpeed = 0.015f;    
     // public GameObject QuestSystem = GameObject.Find("QuestManager");
     // for the fire it encounter 
     private BucketFill BucketFillInteraction;

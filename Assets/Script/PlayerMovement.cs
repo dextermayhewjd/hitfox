@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
 
     public void Catch()
     {
-        Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
+        Vector3 cagePosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
         this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
     }
@@ -68,6 +68,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     {
         PhotonView player = PhotonView.Find(playerID);
         player.GetComponent<PlayerMovement>().captured = true;
+        player.GetComponent<CharacterController>().detectCollisions = false;
         player.gameObject.transform.Find("Collider").gameObject.SetActive(false);
         PhotonView.Find(cageID).GetComponent<CageScript>().ownerId = playerID;
     }

@@ -29,5 +29,13 @@ public class ObjectInteraction : OnTriggerPickUp
                 objectInMouth.GetComponent<PickUpObject>().Interact(this.GetComponent<PhotonView>());
             }
         }
+        if (objectInMouth != null && Input.GetKeyDown(KeyCode.Q)) {
+               
+               if (Camera.main != null) 
+               {
+                objectInMouth.GetComponent<PickUpObject>().Throw(this.GetComponent<PhotonView>());
+                objectInMouth = null;
+               }
+        }
     }
 }

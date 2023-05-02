@@ -1,0 +1,11 @@
+Model Information:
+* title:	Low Poly Hedgehog
+* source:	https://sketchfab.com/3d-models/low-poly-hedgehog-ccfa9628f4304e988cce6cb4b3470775
+* author:	trashart (https://sketchfab.com/trash-art)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Low Poly Hedgehog" (https://sketchfab.com/3d-models/low-poly-hedgehog-ccfa9628f4304e988cce6cb4b3470775) by trashart (https://sketchfab.com/trash-art) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
