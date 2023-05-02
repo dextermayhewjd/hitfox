@@ -5,11 +5,12 @@ using UnityEngine;
 public class OutOfBounds : MonoBehaviour
 {   
     
-    public gameObject Text;
+    public GameObject Text;
 
     // Start is called before the first frame update
     void Start()
     {
+        Text = GameObject.Find("OutOfBounds");
         Text.SetActive(false);
     }
 
