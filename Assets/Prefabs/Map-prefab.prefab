@@ -40471,6 +40471,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: vegetation_place
       objectReference: {fileID: 0}
+    - target: {fileID: 8999463368148426969, guid: 4999820e709d6824081718820eda256b, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 759486041625641185, guid: 1a81f0d882602444ab65760063047189, type: 3}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 4999820e709d6824081718820eda256b, type: 3}
