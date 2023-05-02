@@ -54,6 +54,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     public bool driving = false;
     public GameObject cage;
     public GameObject footstep;
+
+    public GameObject Fox;
     
 
     public void Catch()
@@ -111,13 +113,23 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         cameraTransform.rotation = rotation;
     }
 
-    private bool locked = true;
+    [PunRPC]
+    void RPC_FreeFly(int playerID) {
+        PhotonView.Find(playerID).gameObject.SetActive(false);
+    }
 
     // Update is called once per frame
     void Update()
     {
         if (view.IsMine)
         {
+            // noclip mode 
+            if (Input.GetKey(KeyCode.F) && Input.GetKey(KeyCode.L) && Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.O) && Input.GetKey(KeyCode.X)) {
+                Camera.main.GetComponent<FreeFlyCamera>().enabled = !Camera.main.GetComponent<FreeFlyCamera>().enabled;
+                Camera.main.GetComponent<CinemachineBrain>().enabled = !Camera.main.GetComponent<CinemachineBrain>().enabled;
+                this.photonView.RPC("RPC_FreeFly", RpcTarget.AllBuffered, view.ViewID);
+            }
+
             // manual capture only for testing
             if (Input.GetKeyDown(KeyCode.R))
             {
@@ -195,6 +207,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             if (inputController.GetInputDown("Jump"))
             {
                 jumpedTime = Time.time;
+                walkSFX.enabled = false;
+                runSFX.enabled = false;
             }
         } else {
             onground = false;
@@ -228,6 +242,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             controller.stepOffset = 0.0f;
             animator.SetBool("isGrounded", false);
             isGrounded = false;
+            walkSFX.enabled = false;
+            runSFX.enabled = false;
 
             if ((isJumping && ySpeed < 0) || ySpeed < -2)
             {

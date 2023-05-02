@@ -13,43 +13,58 @@ public class PingMarkerController : MonoBehaviour
     // - Add audio.
     // - Add animations.
 
-    // Ping prefabs.
-    [SerializeField] private GameObject pingMarkerGround;
-    [SerializeField] private GameObject pingMarkerObject;
+    [Header("Main Canvas")]
+    [SerializeField] private GameObject canvas;
 
-    // Ping audio. Can have multiple audio for different types of pings.
+    [Header("Waypoint Marker Prefabs")]
+    [SerializeField] private GameObject waypointMarkerGround;
+    [SerializeField] private GameObject waypointMarkerObject;
+
     [Header("Ping Audio")]
     [SerializeField] private AudioClip audioWarning;
     [SerializeField] private AudioClip audioNeutral;
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        if (canvas == null)
+        {
+            canvas = GameObject.FindGameObjectWithTag("UICanvas");
+        }
+    }
+
     // Ground markers get placed relative to the ground.
     [PunRPC]
-    void PlaceGroundMarker(Vector3 pos, float timer, string message, PhotonMessageInfo info)
+    void PingGroundMarker(Vector3 pos, float timer, string message, PhotonMessageInfo info)
     {
-        Ping pingComponent = pingMarkerGround.GetComponent<Ping>();
+        GameObject waypointMarker = Instantiate(this.waypointMarkerGround, new Vector3(0, 0, 0), Quaternion.identity, canvas.transform);
+        Waypoint waypoint = waypointMarker.GetComponent<Waypoint>();
 
-        pingComponent.useTimer = true;
-        pingComponent.timer = timer;
-        pingComponent.message = message;
-        pingComponent.userName = info.Sender.NickName;
+        waypoint.useTimer = true;
+        waypoint.timer = timer;
 
-        Instantiate(pingMarkerGround, pos, Quaternion.identity);
+        waypoint.targetPos = pos;
+
+        waypoint.header = info.Sender.NickName;
+        waypoint.subHeader = message;
+
     }
 
     // Object markers attatches itself to the object.
     [PunRPC]
-    void PlaceObjectMarker(int objectViewId, float timer, string message, PhotonMessageInfo info)
+    void PingObjectMarker(int objectViewId, float timer, string message, PhotonMessageInfo info)
     {
-        Ping pingComponent = pingMarkerObject.GetComponent<Ping>();
+        GameObject waypointMarker = Instantiate(this.waypointMarkerObject, new Vector3(0, 0, 0), Quaternion.identity, canvas.transform);
+        Waypoint waypoint = waypointMarker.GetComponent<Waypoint>();
 
-        pingComponent.useTimer = true;
-        pingComponent.timer = timer;
-        pingComponent.message = message;
-        pingComponent.userName = info.Sender.NickName;
+        waypoint.useTimer = true;
+        waypoint.timer = timer;
+
+        waypoint.header = info.Sender.NickName;
+        waypoint.subHeader = message;
 
         GameObject target = PhotonView.Find(objectViewId).gameObject;
-        pingComponent.target = target;
+        waypoint.targetObject = target;
 
-        Instantiate(pingMarkerObject, target.transform.position, Quaternion.identity);
     }
 }

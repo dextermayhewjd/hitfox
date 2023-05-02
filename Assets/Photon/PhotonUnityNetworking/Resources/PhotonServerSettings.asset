@@ -79,6 +79,16 @@ MonoBehaviour:
   - RPC_ThrowBucket
   - RPC_InteractWithLumberjack
   - RPC_UpdateLumberjack
+  - AddObjectiveAlert
+  - AddToQuest
+  - ObjectiveWaypointMarker
+  - PingGroundMarker
+  - PingObjectMarker
+  - RPC_AddFire
+  - RPC_FiresPutOut
+  - RPC_RemoveFire
+  - UpdateTimeSinceObjectiveStart
+  - RPC_FreeFly
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

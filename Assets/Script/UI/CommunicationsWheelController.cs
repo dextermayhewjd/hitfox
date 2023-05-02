@@ -230,7 +230,7 @@ public class CommunicationsWheelController : MonoBehaviour
         if (currLayer == layerGround)
         {
             pingPos.y += groundYOffset;
-            pv.RPC("PlaceGroundMarker", RpcTarget.All, pingPos, 8f, ping.message);
+            pv.RPC("PingGroundMarker", RpcTarget.All, pingPos, 8f, ping.message);
         }
         // Object Layer.
         else if (currLayer == layerObject || currLayer == layerPickableObjects)
@@ -238,7 +238,7 @@ public class CommunicationsWheelController : MonoBehaviour
             PhotonView objectPV = hit.transform.gameObject.GetComponent<PhotonView>();
             if (objectPV != null)
             {
-                pv.RPC("PlaceObjectMarker", RpcTarget.All, objectPV.ViewID, 8f, ping.message);
+                pv.RPC("PingObjectMarker", RpcTarget.All, objectPV.ViewID, 8f, ping.message);
             }
             else
             {
@@ -248,7 +248,7 @@ public class CommunicationsWheelController : MonoBehaviour
         // Place the ping on top of the player if a ground or object is not being looked at.
         else
         {
-            pv.RPC("PlaceGroundMarker", RpcTarget.All, playerPos, 8f, ping.message);
+            pv.RPC("PingGroundMarker", RpcTarget.All, playerPos, 8f, ping.message);
         }
     }
 

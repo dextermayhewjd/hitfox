@@ -10036,7 +10036,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 147eb454206e90e56a786650cd9b1701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireSource: {fileID: 0}
+  fireSourceID: 0
   distanceX: 2.6
   distanceY: 2.6
 --- !u!114 &242148597828090374

@@ -5,6 +5,8 @@ using Photon.Pun;
 
 public class FireSource : MonoBehaviour
 {
+    PhotonView pv;
+
     [SerializeField] public GameObject fireObject;
     [SerializeField] private float fireSourceSpreadRate;
 
@@ -13,17 +15,22 @@ public class FireSource : MonoBehaviour
 
     [HideInInspector] public float fireSpreadRate;
 
-    public List<GameObject> fires;
+    public List<int> fires;
 
+    void Awake()
+    {
+        fires = new List<int>();
+    }
     // Start is called before the first frame update
     void Start()
     {
+        pv = GetComponent<PhotonView>();
+
         if (maxFires <= 0)
         {
             maxFires = 1;
         }
 
-        fires = new List<GameObject>();        
         StartFire(this.transform.position);
     }
 
@@ -39,8 +46,9 @@ public class FireSource : MonoBehaviour
             }
 
             UpdateFireList();
-            UpdateFireSpreadRate();
         }
+
+        UpdateFireSpreadRate();
     }
 
     // Increase fire spread rate if there are more fires.
@@ -60,9 +68,9 @@ public class FireSource : MonoBehaviour
     {
         for (int i = 0; i < fires.Count; i++)
         {
-            if (fires[i] == null)
+            if (PhotonView.Find(fires[i]) == null)
             {
-                fires.RemoveAt(i);
+                RemoveFire(i);
                 break;
             }
         }
@@ -83,19 +91,43 @@ public class FireSource : MonoBehaviour
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            GameObject fire = PhotonNetwork.InstantiateRoomObject(fireObject.name, location, Quaternion.identity);
-            fire.GetComponent<FireSpread>().fireSource = this;
-            fires.Add(fire);
+            object[] instanceData = new object[1];
+            instanceData[0] = pv.ViewID;
+            GameObject fire = PhotonNetwork.InstantiateRoomObject(fireObject.name, location, Quaternion.identity, 0, instanceData);
+            AddFire(fire.GetComponent<PhotonView>().ViewID);
         }
     }
 
-    public void AddFire(GameObject fire)
+    public void AddFire(int fireID)
     {
-        fires.Add(fire);
+        pv.RPC("RPC_AddFire", RpcTarget.All, fireID);
+    }
+
+    [PunRPC]
+    public void RPC_AddFire(int fireID)
+    {
+        fires.Add(fireID);
+    }
+
+    public void RemoveFire(int index)
+    {
+        pv.RPC("RPC_RemoveFire", RpcTarget.All, index);
+    }
+
+    [PunRPC]
+    public void RPC_RemoveFire(int index)
+    {
+        fires.RemoveAt(index);
     }
 
     private void FiresPutOut()
     {
-        PhotonNetwork.Destroy(this.gameObject);
+        pv.RPC("RPC_FiresPutOut", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void RPC_FiresPutOut()
+    {
+        Destroy(this.gameObject);
     }
 }
