@@ -75,6 +75,7 @@ MonoBehaviour:
   driving: 0
   cage: {fileID: 2487970835940965391, guid: 4f150d83092446224a2f3280417f6c22, type: 3}
   footstep: {fileID: 8057309156042801675}
+  Fox: {fileID: 199324029112467782}
 --- !u!143 &5849248995649383711
 CharacterController:
   m_ObjectHideFlags: 0

@@ -88,6 +88,7 @@ MonoBehaviour:
   - RPC_FiresPutOut
   - RPC_RemoveFire
   - UpdateTimeSinceObjectiveStart
+  - RPC_FreeFly
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
