@@ -15,7 +15,7 @@ public class PickUpObject : MonoBehaviourPun
     void Start()
     {
         pickedUp = false;
-        throwForce = 2500f;
+        throwForce = 500f;
         rigidbody = GetComponent<Rigidbody>();
         rigidbodyView = GetComponent<PhotonRigidbodyView>();
     }
@@ -40,6 +40,7 @@ public class PickUpObject : MonoBehaviourPun
         {
             if(pickedUp)
             {
+                this.photonView.RPC("RPC_DropObject", RpcTarget.AllBuffered, pv.ViewID);
                 this.photonView.RPC("RPC_ThrowBucket", RpcTarget.AllBuffered, Camera.main.transform.forward);
             }
         }
@@ -75,10 +76,6 @@ public class PickUpObject : MonoBehaviourPun
     
     [PunRPC]
     void RPC_ThrowBucket(Vector3 direction){
-        pickedUp = false;
-        rigidbody.transform.SetParent(null);
-        rigidbody.isKinematic = false; // unfreeze the rigidbody
-        rigidbody.detectCollisions = true;
         rigidbody.AddForce(direction * throwForce);
     }
 }

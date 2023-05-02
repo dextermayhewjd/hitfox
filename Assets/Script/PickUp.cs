@@ -4,7 +4,7 @@
 // using Photon.Pun;
 
 
-// DONT USE THIS CRIPT ANYMORE, USE PickUpObject.cs
+// // DONT USE THIS CRIPT ANYMORE, USE PickUpObject.cs
 
 // public class PickUp : OnTrigger
 // {
@@ -44,7 +44,7 @@
 //         if (playerView.IsMine && pickedUp && Input.GetKeyDown(KeyCode.Q)) {
 //             Transform mouthTransform = playerView.gameObject.transform.Find("Mouth");
 //             if (Camera.main != null) {
-//                 photonView.RPC("ThrowBucket", RpcTarget.AllViaServer, Camera.main.transform.forward);
+//                 photonView.RPC("ThrowBucket", RpcTarget.AllBuffered, Camera.main.transform.forward);
 //             }
 //         }
 //     }
