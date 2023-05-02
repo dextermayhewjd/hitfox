@@ -69,6 +69,10 @@ MonoBehaviour:
     objectsToSpawn:
     - {fileID: 1167724864849416357, guid: 21953f63a4b9f98a5a58a3d301fc986c, type: 3}
     spawnLocations: []
+  - objectiveId: lumberjack
+    objectsToSpawn:
+    - {fileID: 6626836856569015522, guid: cd7bd6c004b30ef8cb041d8f8933366f, type: 3}
+    spawnLocations: []
   startingObjectsList:
   - id: bucket
     numObjectsToSpawn: 10

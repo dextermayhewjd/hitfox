@@ -430,6 +430,19 @@ public class ObjectivesController : MonoBehaviour
 
     public void LumberjackObjective(string location = "")
     {
+        string objectiveId = "lumberjack";
+
+        ObjectiveInfo objective = GetObjective(objectiveId);
+
+        if (objective == null)
+        {
+            return;
+        }
+
+        GameObject objectToSpawn = objective.objectsToSpawn[0];
+        SpawnLocation spawnLocationArea = objective.spawnLocations[Random.Range(0, objective.spawnLocations.Length)];
+        Vector3 spawnLocation = spawnLocationArea.GetRandomPoint();
+        GameObject spawnedObject = PhotonNetwork.InstantiateRoomObject(objectToSpawn.name, spawnLocation, Quaternion.identity);
     }
 
     public void FoxCaptured(int viewID)
