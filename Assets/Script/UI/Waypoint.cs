@@ -31,6 +31,8 @@ public class Waypoint : MonoBehaviour
     private float distance;
 
     public bool trackObject = false;
+    public bool trackObjectPos = false;
+    public bool trackDistance = true;
 
     // Start is called before the first frame update
     void Start()
@@ -60,7 +62,10 @@ public class Waypoint : MonoBehaviour
         }
         if (targetObject != null)
         {
-            // targetPos = targetObject.transform.position;
+            if (trackObjectPos)
+            {
+                targetPos = targetObject.transform.position;
+            }
             // To use if the object has been interacted with such as if it was picked up for example.
             // Need to set a property in the object for this.
             // if (target.property)
@@ -69,8 +74,15 @@ public class Waypoint : MonoBehaviour
             // }
         }
 
-        distance = Distance(origin.transform.position, targetPos);
-        distanceTextField.text = distance.ToString() + distanceUnit;
+        if (trackDistance)
+        {
+            distance = Distance(origin.transform.position, targetPos);
+            distanceTextField.text = distance.ToString() + distanceUnit;
+        }
+        else
+        {
+            distanceTextField.text = "";
+        }
 
         float minX = img.GetPixelAdjustedRect().width / 2;
         float maxX = Screen.width - minX;

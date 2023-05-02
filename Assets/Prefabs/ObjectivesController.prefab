@@ -49,6 +49,7 @@ MonoBehaviour:
   pointsControllerObject: {fileID: 8820391973687013429, guid: 3e1f168220742f147a3dafa6b19b13a5, type: 3}
   objectiveObject: {fileID: 8831651902553531394, guid: c933735c65e933548ad8a4abfa03ee2e, type: 3}
   objectivesAlert: {fileID: 0}
+  dynamicObjectives: 0
   startDelay: 10
   maxActiveObjectives: 5
   objectiveRate: 40
@@ -64,18 +65,18 @@ MonoBehaviour:
     - {fileID: 8840149073308605829, guid: 8a85006438c21789a85bcaff4a57d80c, type: 3}
     - {fileID: 8486783653839049495, guid: 249c99ffd0566f833afa740c72762986, type: 3}
     spawnLocations: []
-  - objectiveId: hedgehogTaxi
+  - objectiveId: hedgedogTaxi
     objectsToSpawn:
     - {fileID: 1167724864849416357, guid: 21953f63a4b9f98a5a58a3d301fc986c, type: 3}
     spawnLocations: []
   startingObjectsList:
   - id: bucket
     numObjectsToSpawn: 10
-    objectToSpawn: {fileID: 0}
+    objectToSpawn: {fileID: 4993735558651106425, guid: 84a379138fff12d19a5464ca0a2f82fe, type: 3}
     spawnLocations: []
-  - id: bucket
-    numObjectsToSpawn: 10
-    objectToSpawn: {fileID: 1167724864849416357, guid: 21953f63a4b9f98a5a58a3d301fc986c, type: 3}
+  - id: forklift
+    numObjectsToSpawn: 2
+    objectToSpawn: {fileID: 2932343578486992406, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
     spawnLocations: []
 --- !u!114 &2880457043809172450
 MonoBehaviour:
@@ -90,7 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
-  defaultWaypointMarker: {fileID: 2626917578217483014, guid: 5a37426177a620441a6d279dbf2976a2, type: 3}
+  defaultWaypointMarker: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
   objectiveWaypointInfoList:
   - objectiveId: fire
     header: Fire
@@ -100,14 +101,14 @@ MonoBehaviour:
     header: Rubbish
     subHeader: Throw the Rubbish In The Bin
     waypointMarker: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
-  - objectiveId: hedgehogTaxi
+  - objectiveId: hedgedogTaxi
     header: Hedgehog Home
-    subHeader: 
+    subHeader: Drive Hedgehogs Back To Their Home
     waypointMarker: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
-  - objectiveId: empty
+  - objectiveId: hedgedog
     header: 
     subHeader: 
-    waypointMarker: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
+    waypointMarker: {fileID: 5160421297504850508, guid: 0718d93a7021d5b44a5268435b8fcd21, type: 3}
 --- !u!114 &7187319587734717210
 MonoBehaviour:
   m_ObjectHideFlags: 0
