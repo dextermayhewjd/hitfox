@@ -85,9 +85,9 @@ public class PosterTreeToTree : MonoBehaviour
     // Swap treewithposter back to the default tree prefab
     void SwapToTree()
     {
-        GameObject objectives = GameObject.Find("Timer+point");
+/*        GameObject objectives = GameObject.Find("Timer+point");
         Debug.Log("Poster taken down get 5 points");
-        objectives.GetComponent<Timer>().IncreaseScore(5);
+        objectives.GetComponent<Timer>().IncreaseScore(5);*/
         poster.SetActive(false);
     }
 }

@@ -27,6 +27,7 @@ public class RagdollOn : MonoBehaviour
 
         //Ray ray = new Ray(characterPosition, direction);
         //RaycastHit hit; //then if hit then ...
+        agent.enabled = true;
         agent.SetDestination(targetPosition);
     }
     private void OnCollisionEnter(Collision collision)
