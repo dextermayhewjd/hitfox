@@ -52,7 +52,7 @@ Transform:
   - {fileID: 1396813403949742668}
   - {fileID: 1399912612854271515}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1399912612478492054
 GameObject:
@@ -4684,6 +4684,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 859e0ea97621b1e40afc49045c819481, type: 3}
       propertyPath: m_Name
       value: physics_box3 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 859e0ea97621b1e40afc49045c819481, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 859e0ea97621b1e40afc49045c819481, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
