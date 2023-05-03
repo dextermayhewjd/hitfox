@@ -10,6 +10,7 @@ public class NPC_Behaviour : MonoBehaviour{
     public Canvas activeSign;
     public Canvas angrySign;
     public Canvas happySign;
+    public Canvas questionSign;
 
     Canvas[] emotions;
 
@@ -18,26 +19,34 @@ public class NPC_Behaviour : MonoBehaviour{
     PhotonView view;
     float recallTimer = 0;
     float emoteTimer = 0;
+    float talkTimer = 0;
     public float sitTimer;
-    
+    public GameObject npcTalkingWith;
+    struct ConvoParams {
+        public GameObject npc;
+        public bool rpc;
+    }
 
-    public enum State { 
+    public enum State {
         WALK,
-        SIT
+        SIT,
+        CONVERSATION
     }
     public enum Emotion {
         HAPPY,
-        ANGRY
+        ANGRY,
+        QUESTION
     }
-    Dictionary<GameObject, Emotion> relationships = new Dictionary<GameObject, Emotion>();
+    Dictionary<GameObject, float> relationships = new Dictionary<GameObject, float>();
 
     // Start is called before the first frame update
-    void Start(){
+    void Start() {
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         view = GetComponent<PhotonView>();
-        emotions = new Canvas[]{ happySign, angrySign };
+        emotions = new Canvas[] { happySign, angrySign, questionSign };
         happySign.enabled = false;
         angrySign.enabled = false;
+        questionSign.enabled = false;
     }
 
     // Update is called once per frame
@@ -46,7 +55,8 @@ public class NPC_Behaviour : MonoBehaviour{
             emoteTimer -= Time.deltaTime;
             if (emoteTimer < 0) this.view.RPC("RPC_HideSign", RpcTarget.AllBuffered);
             switch (state) {
-                case State.WALK: agent.destination = goTo.transform.position;
+                case State.WALK:
+                    agent.destination = goTo.transform.position;
                     if (Vector3.Distance(transform.position, goTo.transform.position) < 1) {
                         if (goTo.tag == "NPCFactory") {
                             if (dog != null) {
@@ -82,36 +92,74 @@ public class NPC_Behaviour : MonoBehaviour{
                         state = State.WALK;
                     }
                     break;
+                case State.CONVERSATION:
+                    agent.destination = transform.position;
+                    talkTimer -= Time.deltaTime;
+                    if (talkTimer < 0) {
+                        npcTalkingWith.BroadcastMessage("endConversation", false);
+                        state = State.WALK;
+                    }
+                    if (activeSign.enabled == false) {
+                        int i = Random.Range(0, emotions.Length);
+                        this.view.RPC("RPC_ShowSign", RpcTarget.AllBuffered, (Emotion)i);
+                    }
+                    break;
             }
         }
     }
     private void OnTriggerEnter(Collider other) {
         GameObject o = other.gameObject;
         if (view.IsMine) {
-            if (o.tag == "NPC") {
-                if (relationships.ContainsKey(o)) this.view.RPC("RPC_ShowSign", RpcTarget.AllBuffered, relationships[o]);
-                else {
-                    int i = Random.Range(0, emotions.Length);
-                    this.view.RPC("RPC_ShowSign", RpcTarget.AllBuffered, (Emotion)i);
-                    relationships.Add(o, (Emotion)i);
+            if (o.tag == "NPC" && state != State.CONVERSATION) {
+                if (relationships.ContainsKey(o)) {
+                    int i = Random.Range(0, 100);
+                    if (i < relationships[o]) {
+                        ConvoParams param;
+                        param.npc = gameObject;
+                        param.rpc = false;
+                        o.BroadcastMessage("initiateConversation");
+                        transform.LookAt(o.transform);
+                    }
+                } else {
+                    int i = Random.Range(0, 100);
+                    relationships.Add(o, i);
+                    int j = Random.Range(0, 100);
+                    if (j < i) {
+                        ConvoParams param;
+                        param.npc = gameObject;
+                        param.rpc = false;
+                        o.BroadcastMessage("initiateConversation");
+                        transform.LookAt(o.transform);
+                    }
                 }
-            }
-            else if(o.tag == "Player") this.view.RPC("RPC_ShowSign", RpcTarget.AllBuffered, Emotion.ANGRY);
+            } else if (o.tag == "Player") this.view.RPC("RPC_ShowSign", RpcTarget.AllBuffered, Emotion.QUESTION);
         }
     }
 
     [PunRPC]
     void RPC_ShowSign(Emotion e) {
         activeSign.enabled = false;
-        Canvas c = emotions[(int)e];
-        c.enabled = true;
-        activeSign = c;
-        emoteTimer = 5;
-    }
-    [PunRPC]
-    void RPC_HideSign() {
-        activeSign.enabled = false;
     }
 
+    void initiateConversation(ConvoParams p) {
+        if (!p.rpc) {
+            p.rpc = true;
+            view.RPC("initiateConversation", RpcTarget.AllBuffered, p);
+        }
+        if (view.IsMine && state != State.CONVERSATION) {
+            state = State.CONVERSATION;
+            transform.LookAt(p.npc.transform);
+            talkTimer = relationships[p.npc];
+            npcTalkingWith = p.npc;
+        }
+    }
 
+    void endConversation(bool rpc) {
+        if (!rpc) {
+            view.RPC("endConversation", RpcTarget.AllBuffered, true);
+        }
+        if (view.IsMine) {
+            state = State.WALK;
+        }
+    }
 }
