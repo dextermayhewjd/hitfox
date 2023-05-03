@@ -77,6 +77,7 @@ MonoBehaviour:
   cage: {fileID: 2487970835940965391, guid: 4f150d83092446224a2f3280417f6c22, type: 3}
   footstep: {fileID: 8057309156042801675}
   Fox: {fileID: 199324029112467782}
+  cheatCode: 
 --- !u!143 &5849248995649383711
 CharacterController:
   m_ObjectHideFlags: 0
@@ -349,9 +350,9 @@ GameObject:
   - component: {fileID: 6075148825976632414}
   - component: {fileID: 2904997934169772955}
   - component: {fileID: 4725970250936767859}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Collider
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
