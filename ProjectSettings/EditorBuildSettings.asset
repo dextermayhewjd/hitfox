@@ -9,9 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/QuickStartDemo.unity
     guid: b9506a29fff474f5ca4dd60c867da5f4
   - enabled: 0
-    path: Assets/Scenes/video.unity
-    guid: 900c215454d42f73295858442a399531
-  - enabled: 1
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
     path: Assets/Scenes/RFG-map.unity
     guid: da45f5302f1654341b861fba277639d7
+  - enabled: 1
+    path: Assets/Scenes/video.unity
+    guid: 48893224875c702e3ad23c75c1b69d11
   m_configObjects: {}
