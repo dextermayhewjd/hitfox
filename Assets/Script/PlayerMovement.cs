@@ -126,24 +126,12 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         if (view.IsMine)
         {
             foreach (char c in Input.inputString) {
-                if (c == '\b') // has backspace/delete been pressed?
-                {
-                    if (cheatCode.Length != 0)
-                    {
-                        cheatCode = cheatCode.Substring(0, cheatCode.Length - 1);
-                    }
-                }
-                else if ((c == '\n') || (c == '\r')) // enter/return
-                {
-                    if (cheatCode == "flyfox") {
-                        Camera.main.GetComponent<FreeFlyCamera>().enabled = !Camera.main.GetComponent<FreeFlyCamera>().enabled;
-                        Camera.main.GetComponent<CinemachineBrain>().enabled = !Camera.main.GetComponent<CinemachineBrain>().enabled;
-                        this.photonView.RPC("RPC_FreeFly", RpcTarget.AllBuffered, view.ViewID);
-                    }
-                }
-                else
-                {
-                    cheatCode += c;
+                cheatCode += c;
+                if (cheatCode.Contains("flyfox")) {
+                    Camera.main.GetComponent<FreeFlyCamera>().enabled = !Camera.main.GetComponent<FreeFlyCamera>().enabled;
+                    Camera.main.GetComponent<CinemachineBrain>().enabled = !Camera.main.GetComponent<CinemachineBrain>().enabled;
+                    this.photonView.RPC("RPC_FreeFly", RpcTarget.AllBuffered, view.ViewID);
+                    cheatCode = "";
                 }
             }
 
