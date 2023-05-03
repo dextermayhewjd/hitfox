@@ -24,4 +24,10 @@ public class OnTrigger : MonoBehaviourPun
             colliders.Remove(col);
         }
     }
+
+    void Update() {
+        if (colliders.Count > 0) {
+            colliders.RemoveAll(item => item == null);
+        } 
+    }
 }

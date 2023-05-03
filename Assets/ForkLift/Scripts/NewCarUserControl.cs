@@ -55,7 +55,7 @@ public class NewCarUserControl : OnTrigger
             }
             else
             {
-                if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null) 
+                if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null && !colliders.Find(x => x.GetComponent<PlayerMovement>().hidden)) 
                 {
                     // if (acceleratePlayerView.IsMine)
                     // {
@@ -74,10 +74,13 @@ public class NewCarUserControl : OnTrigger
     void RPC_ExitAccPlayer()
     {
         Debug.Log("Player left vehicle");
+        acceleratePlayerView.transform.position += Camera.main.transform.forward;
         acceleratePlayerView.transform.SetParent(null);
+        acceleratePlayerView.GetComponent<PlayerMovement>().driving = false;
         acceleratePlayerView.GetComponent<CharacterController>().enabled = true;
         acceleratePlayerView.GetComponent<PlayerInteraction>().enabled = true;
         acceleratePlayerView.GetComponent<PlayerMovement>().enabled = true;
+        colliders.RemoveAll(item => item.gameObject.GetComponent<PhotonView>().ViewID == acceleratePlayerView.ViewID);
         // acceleratePlayerView.gameObject.SetActive(true);
         acceleratePlayerView = null;
         driving = false;
@@ -93,6 +96,7 @@ public class NewCarUserControl : OnTrigger
         // acceleratePlayerView.gameObject.SetActive(false);
         acceleratePlayerView.transform.localPosition = Vector3.zero;
         acceleratePlayerView.transform.localRotation = Quaternion.identity;
+        acceleratePlayerView.GetComponent<PlayerMovement>().driving = true;
         acceleratePlayerView.GetComponent<CharacterController>().enabled = false;
         acceleratePlayerView.GetComponent<PlayerInteraction>().enabled = false;
         acceleratePlayerView.GetComponent<PlayerMovement>().enabled = false;
