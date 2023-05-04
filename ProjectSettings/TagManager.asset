@@ -22,6 +22,7 @@ TagManager:
   - PicnicSpot
   - NPC
   - UICanvas
+  - Hedgehog
   layers:
   - Default
   - TransparentFX
@@ -36,7 +37,7 @@ TagManager:
   - PickableObjects
   - Vehicle
   - Bush
-  - 
+  - NPC
   - 
   - 
   - 

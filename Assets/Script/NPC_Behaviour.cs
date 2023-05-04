@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor.Animations;
 using Photon.Pun;
+
 
 public class NPC_Behaviour : MonoBehaviour{
 
@@ -16,21 +18,27 @@ public class NPC_Behaviour : MonoBehaviour{
 
     public State state;
     UnityEngine.AI.NavMeshAgent agent;
+    Animator anim;
     PhotonView view;
     float recallTimer = 0;
     float emoteTimer = 0;
     float talkTimer = 0;
+    float invincTimer;
+    float angry;
+    float fov = 100;
+    float loseDistance = 10;
     public float sitTimer;
-    public GameObject npcTalkingWith;
-    struct ConvoParams {
-        public GameObject npc;
-        public bool rpc;
-    }
+    public List<GameObject> npcsTalkingWith = new List<GameObject>();
+    public GameObject playerChasing;
+
+
+    
 
     public enum State {
         WALK,
         SIT,
-        CONVERSATION
+        CONVERSATION,
+        CHASE
     }
     public enum Emotion {
         HAPPY,
@@ -47,37 +55,46 @@ public class NPC_Behaviour : MonoBehaviour{
         happySign.enabled = false;
         angrySign.enabled = false;
         questionSign.enabled = false;
+        anim = GetComponentInChildren<Animator>();
+        anim.SetTrigger("WalkTrigger");
+        angry = Random.Range(0, 25);
+  
     }
 
     // Update is called once per frame
     void Update(){
         if (view.IsMine) {
             emoteTimer -= Time.deltaTime;
+            invincTimer -= Time.deltaTime;
             if (emoteTimer < 0) this.view.RPC("RPC_HideSign", RpcTarget.AllBuffered);
             switch (state) {
                 case State.WALK:
+                    
                     agent.destination = goTo.transform.position;
-                    if (Vector3.Distance(transform.position, goTo.transform.position) < 1) {
+                    if (Vector3.Distance(transform.position, goTo.transform.position) < 2) {
                         if (goTo.tag == "NPCFactory") {
                             if (dog != null) {
                                 if (Vector3.Distance(transform.position, dog.transform.position) < 2) {
-                                    Destroy(dog);
-                                    Destroy(gameObject);
+                                    PhotonNetwork.Destroy(dog);
+                                    PhotonNetwork.Destroy(gameObject);
                                 }
 
                                 if (recallTimer <= 0) {
-                                    dog.BroadcastMessage("recall");
+                                    dog.GetComponent<PhotonView>().RPC("recall",RpcTarget.AllBuffered);
                                     recallTimer = 5;
                                 }
                                 recallTimer -= Time.deltaTime;
-                            } else Destroy(gameObject);
+                            } else PhotonNetwork.Destroy(gameObject);
                         } else {
                             state = State.SIT;
                             sitTimer = Random.Range(60, 180);
+                            anim.ResetTrigger("WalkTrigger");
+                            anim.SetTrigger("SitTrigger");
                         }
                     }
                     break;
                 case State.SIT:
+                    
                     sitTimer -= Time.deltaTime;
                     if (sitTimer < 0) {
                         PicnicNPCHolder picnic = goTo.GetComponent<PicnicNPCHolder>();
@@ -90,18 +107,42 @@ public class NPC_Behaviour : MonoBehaviour{
                             dogBehaviour.destination = factories[i];
                         }
                         state = State.WALK;
+                        anim.ResetTrigger("SitTrigger");
+                        anim.SetTrigger("WalkTrigger");
                     }
                     break;
                 case State.CONVERSATION:
-                    agent.destination = transform.position;
-                    talkTimer -= Time.deltaTime;
-                    if (talkTimer < 0) {
-                        npcTalkingWith.BroadcastMessage("endConversation", false);
+                    if (talkTimer < 0 || npcsTalkingWith.Count == 0) {
+                        npcsTalkingWith.ForEach((x)=>x.GetComponent<PhotonView>().RPC("endConversation", RpcTarget.All,view.ViewID));
+                        npcsTalkingWith.Clear();
+                        anim.ResetTrigger("SitTrigger");
+                        anim.SetTrigger("WalkTrigger");
                         state = State.WALK;
                     }
+
+                    if (dog != null) {
+                        if (Vector3.Distance(dog.transform.position, transform.position) > 8) {
+                            dog.GetComponent<PhotonView>().RPC("recall", RpcTarget.AllBuffered);
+                        }
+                    }
+
+                    agent.destination = transform.position;
+                    talkTimer -= Time.deltaTime;
+                    Vector3 pos = Vector3.zero;
+                    npcsTalkingWith.ForEach((x)=>pos+=x.transform.position);
+                    pos /= npcsTalkingWith.Count;
+                    transform.LookAt(pos);
+                    
                     if (activeSign.enabled == false) {
                         int i = Random.Range(0, emotions.Length);
                         this.view.RPC("RPC_ShowSign", RpcTarget.AllBuffered, (Emotion)i);
+                    }
+                    break;
+                case State.CHASE:
+                    agent.destination = playerChasing.transform.position;
+                    if (!CanSee(playerChasing, loseDistance)) {
+                        Debug.Log("Player Lost");
+                        state = State.WALK;
                     }
                     break;
             }
@@ -112,54 +153,124 @@ public class NPC_Behaviour : MonoBehaviour{
         if (view.IsMine) {
             if (o.tag == "NPC" && state != State.CONVERSATION) {
                 if (relationships.ContainsKey(o)) {
-                    int i = Random.Range(0, 100);
+                    int i = Random.Range(25, 100);
                     if (i < relationships[o]) {
-                        ConvoParams param;
-                        param.npc = gameObject;
-                        param.rpc = false;
-                        o.BroadcastMessage("initiateConversation");
-                        transform.LookAt(o.transform);
+                        o.GetComponent<PhotonView>().RPC("initiateConversation", RpcTarget.All, view.ViewID);
+                        state = State.CONVERSATION;
+                        npcsTalkingWith.Add(o);
+                        talkTimer = relationships[o];
+                        anim.ResetTrigger("SitTrigger");
+                        anim.ResetTrigger("WalkTrigger");
+                        anim.SetTrigger("StopTrigger");
                     }
                 } else {
                     int i = Random.Range(0, 100);
                     relationships.Add(o, i);
-                    int j = Random.Range(0, 100);
+                    int j = Random.Range(26, 100);
                     if (j < i) {
-                        ConvoParams param;
-                        param.npc = gameObject;
-                        param.rpc = false;
-                        o.BroadcastMessage("initiateConversation");
-                        transform.LookAt(o.transform);
+                        o.GetComponent<PhotonView>().RPC("initiateConversation", RpcTarget.All, view.ViewID);
+                        state = State.CONVERSATION;
+                        npcsTalkingWith.Add(o);
+                        talkTimer = i;
+                        anim.ResetTrigger("SitTrigger");
+                        anim.ResetTrigger("WalkTrigger");
+                        anim.SetTrigger("StopTrigger");
                     }
                 }
-            } else if (o.tag == "Player") this.view.RPC("RPC_ShowSign", RpcTarget.AllBuffered, Emotion.QUESTION);
+            } else if (o.tag == "Player") {
+                if (state != State.CHASE) {
+                    if (angry > 20) {
+                        this.view.RPC("RPC_ShowSign", RpcTarget.AllBuffered, Emotion.ANGRY);
+                        if (state != State.CONVERSATION) {
+                            playerChasing = o;
+                            invincTimer = 2;
+                            state = State.CHASE;
+                            Debug.Log("Chasing");
+                        }
+                    } else {
+                        this.view.RPC("RPC_ShowSign", RpcTarget.AllBuffered, Emotion.QUESTION);
+                        angry += Random.Range(0, 5);
+                    }
+                } 
+
+                //o.GetComponent<PlayerMovement>().Catch();
+            }
         }
+    }
+
+    public void OnTriggerStay(Collider other) {
+        if(other.tag == "Player" && state == State.CHASE && invincTimer <0) {
+            other.GetComponent<PlayerMovement>().Catch();
+        }
+    }
+
+    public void OnCollisionEnter(Collision collision) {
+        GameObject o = collision.gameObject;
+        Debug.Log("Player Touching");
+        if (o.tag == "Player") this.view.RPC("RPC_ShowSign", RpcTarget.AllBuffered, Emotion.ANGRY);
     }
 
     [PunRPC]
     void RPC_ShowSign(Emotion e) {
         activeSign.enabled = false;
+        Canvas c = emotions[(int)e];
+        c.enabled = true;
+        activeSign = c;
+        emoteTimer = 2;
     }
 
-    void initiateConversation(ConvoParams p) {
-        if (!p.rpc) {
-            p.rpc = true;
-            view.RPC("initiateConversation", RpcTarget.AllBuffered, p);
-        }
-        if (view.IsMine && state != State.CONVERSATION) {
-            state = State.CONVERSATION;
-            transform.LookAt(p.npc.transform);
-            talkTimer = relationships[p.npc];
-            npcTalkingWith = p.npc;
-        }
+    [PunRPC]
+    void RPC_HideSign() {
+        activeSign.enabled = false;
     }
 
-    void endConversation(bool rpc) {
-        if (!rpc) {
-            view.RPC("endConversation", RpcTarget.AllBuffered, true);
-        }
+    [PunRPC]
+    void initiateConversation(int npcID) {
+       
         if (view.IsMine) {
-            state = State.WALK;
+            anim.ResetTrigger("SitTrigger");
+            anim.ResetTrigger("WalkTrigger");
+            anim.SetTrigger("StopTrigger");
+            state = State.CONVERSATION;
+            GameObject npc = PhotonView.Find(npcID).gameObject;
+            transform.LookAt(npc.transform);
+            if(relationships.ContainsKey(npc))talkTimer = relationships[npc];
+            npcsTalkingWith.Add(npc);
         }
+    }
+
+    [PunRPC]
+    void endConversation(int npcID) {
+        
+        if (view.IsMine) {
+            GameObject npc = PhotonView.Find(npcID).gameObject;
+            npcsTalkingWith.Remove(npc);
+            if (npcsTalkingWith.Count == 0) {
+                state = State.WALK;
+                anim.ResetTrigger("SitTrigger");
+                anim.ResetTrigger("StopTrigger");
+                anim.SetTrigger("WalkTrigger");
+            }
+            
+        }
+        
+        
+    }
+    bool CanSee(GameObject o, float distance) {
+        float angle = Vector3.Angle(Vector3.Normalize(o.transform.position - transform.position), transform.forward);
+
+        if (Mathf.Abs(angle) < fov) {
+            int layerMask = ~LayerMask.GetMask("NPC");
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.Normalize(o.transform.position - transform.position), out hit, distance, layerMask)) {
+                if (hit.collider.transform.parent != null) {
+
+                    return hit.collider.transform.parent.gameObject.GetInstanceID() == o.GetInstanceID();
+                }
+                return hit.collider.gameObject.GetInstanceID() == o.GetInstanceID();
+
+            }
+        }
+        return false;
     }
 }
