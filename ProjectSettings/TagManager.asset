@@ -23,6 +23,7 @@ TagManager:
   - NPC
   - UICanvas
   - Hedgehog
+  - HedgehogHome
   layers:
   - Default
   - TransparentFX
@@ -35,9 +36,10 @@ TagManager:
   - Ground
   - Object
   - PickableObjects
-  - Vehicle
+  - Forklift
   - Bush
   - NPC
+  - ForkliftOuterLayer
   - 
   - 
   - 

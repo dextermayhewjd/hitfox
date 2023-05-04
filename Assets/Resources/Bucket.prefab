@@ -504,7 +504,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pickedUp: 0
   throwForce: 2500
-  addPoints: 1
+  hasBeenDeleted: 0
 --- !u!114 &1736635566750056013
 MonoBehaviour:
   m_ObjectHideFlags: 0
