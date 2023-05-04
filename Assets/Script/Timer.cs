@@ -4,19 +4,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Timer : MonoBehaviourPun
 {
-    public Text timerText;
+    public TextMeshProUGUI timerText;
     private float startTime;
     // private float maxtime = 300f;//5 minutes
     public float playtime;// for testing 
-    public Text victoryText;
-    public Text failedText;
+    public Image victoryText;
+    public Image failedText;
     public int currentPoints;
     public int requiredPoints;
     bool wait2sec = false;
     float tsectimer = 0f;
+    bool gameOver = false;
 
     // Start is called before the first frame update
     void Start()
@@ -45,7 +47,7 @@ public class Timer : MonoBehaviourPun
                 return;
             }
 
-            if (rem <= 0)
+            else if (rem <= 0)
             {
                 this.photonView.RPC("RPC_Lose", RpcTarget.AllBuffered);
                 return;
@@ -68,7 +70,9 @@ public class Timer : MonoBehaviourPun
 
     public void IncreaseScore(int amount)
     {
-        this.GetComponent<PhotonView>().RPC("RPC_IncreaseScore", RpcTarget.MasterClient, amount);
+        if (!gameOver) {
+            this.GetComponent<PhotonView>().RPC("RPC_IncreaseScore", RpcTarget.MasterClient, amount);
+        }
     }
 
     [PunRPC]
@@ -92,13 +96,14 @@ public class Timer : MonoBehaviourPun
     [PunRPC]
     void RPC_Victory()
     {
+        gameOver = true;
         victoryText.gameObject.SetActive(true);
     }
 
     [PunRPC]
     void RPC_Lose()
     {
-        timerText.text = "Time's up!";
+        gameOver = true;
         failedText.gameObject.SetActive(true);
     }
 }

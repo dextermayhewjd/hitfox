@@ -64,6 +64,7 @@ MonoBehaviour:
     - {fileID: 7092083984586214436, guid: 3ff40d4a5096215958ce82846ba1f507, type: 3}
     - {fileID: 8840149073308605829, guid: 8a85006438c21789a85bcaff4a57d80c, type: 3}
     - {fileID: 8486783653839049495, guid: 249c99ffd0566f833afa740c72762986, type: 3}
+    - {fileID: 6890684332192537949, guid: 8f435af4556fb47459690b4ff7a9cb19, type: 3}
     spawnLocations: []
   - objectiveId: hedgedogTaxi
     objectsToSpawn:

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 public class PickUpObject : MonoBehaviourPun
 {
@@ -11,6 +12,7 @@ public class PickUpObject : MonoBehaviourPun
     private Rigidbody rigidbody;
     private PhotonRigidbodyView rigidbodyView;
     public bool hasBeenDeleted = false;
+    public GameObject hud;
 
     void Start()
     {
@@ -18,6 +20,7 @@ public class PickUpObject : MonoBehaviourPun
         throwForce = 500f;
         rigidbody = GetComponent<Rigidbody>();
         rigidbodyView = GetComponent<PhotonRigidbodyView>();
+        hud = GameObject.Find("HUD");
     }
 
     public void Interact(PhotonView pv)
@@ -27,9 +30,12 @@ public class PickUpObject : MonoBehaviourPun
             if (!pickedUp)
             {
                 // base.photonView.RequestOwnership();
-                this.photonView.RPC("RPC_PickUpObject", RpcTarget.AllBuffered, pv.ViewID);
+                // hud.transform.Find("InteractButton").gameObject.SetActive(false); // hide button
+                // hud.transform.Find("ThrowButton").gameObject.SetActive(false); // hide button
+                this.photonView.RPC("RPC_PickUpObject", RpcTarget.AllBuffered, pv.ViewID); // pick up object
             } else {
-                this.photonView.RPC("RPC_DropObject", RpcTarget.AllBuffered, pv.ViewID);
+                
+                this.photonView.RPC("RPC_DropObject", RpcTarget.AllBuffered, pv.ViewID); // drop object
             }
         }
     }
@@ -38,10 +44,13 @@ public class PickUpObject : MonoBehaviourPun
     {
         if (pv.IsMine)
         {
+            // if we are holding something
             if(pickedUp)
             {
-                this.photonView.RPC("RPC_DropObject", RpcTarget.AllBuffered, pv.ViewID);
-                this.photonView.RPC("RPC_ThrowBucket", RpcTarget.AllBuffered, Camera.main.transform.forward);
+                // hud.transform.Find("InteractButton").gameObject.SetActive(false); // hide button
+                // hud.transform.Find("ThrowButton").gameObject.SetActive(false); // hide button
+                this.photonView.RPC("RPC_DropObject", RpcTarget.AllBuffered, pv.ViewID); // drop object
+                this.photonView.RPC("RPC_ThrowBucket", RpcTarget.AllBuffered, Camera.main.transform.forward); // throw object
             }
         }
     }
