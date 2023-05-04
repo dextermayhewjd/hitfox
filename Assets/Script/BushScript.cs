@@ -30,7 +30,8 @@ public class BushScript : OnTrigger
                 
             }
 
-            else if (!inUse && colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null) 
+            else if (!inUse && colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null && 
+                !colliders.Find(x => x.GetComponent<PlayerMovement>().driving)) 
             {
                 this.photonView.RPC("RPC_PlaySound", RpcTarget.AllBuffered);
                 this.photonView.RPC("RPC_HidePlayer", RpcTarget.AllBuffered, colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>().ViewID);
@@ -52,6 +53,7 @@ public class BushScript : OnTrigger
         playerInBush.transform.SetParent(null);
         playerInBush.gameObject.SetActive(true);
         playerInBush.gameObject.GetComponent<PlayerMovement>().hidden = false;
+        colliders.RemoveAll(item => item.gameObject.GetComponent<PhotonView>().ViewID == playerInBush.ViewID);
         playerInBush = null;
         inUse = false;
     }

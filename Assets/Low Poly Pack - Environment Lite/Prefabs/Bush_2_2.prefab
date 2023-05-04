@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -2866899149718589492}
   - component: {fileID: 618294793995394907}
   - component: {fileID: 8182366303524447066}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Bush_2_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,11 +97,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344178769122004}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.3704166, y: 1.3539205, z: 2.3487287}
-  m_Center: {x: 0, y: 0.465284, z: -0.000000059604645}
+  m_Size: {x: 3.5, y: 2.5814173, z: 3.5}
+  m_Center: {x: 0, y: 0.50992036, z: -8.520999e-16}
 --- !u!114 &1563589018883858187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,11 +244,11 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344178769122004}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.8
-  m_Center: {x: 0, y: 0.1, z: 0}
+  m_Radius: 1.2314172
+  m_Center: {x: -0.004859686, y: 0, z: 2.3653395e-17}
 --- !u!1 &3771095810186437104
 GameObject:
   m_ObjectHideFlags: 0
