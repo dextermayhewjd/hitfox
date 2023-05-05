@@ -64,7 +64,7 @@ public class ObjectiveWaypoint : MonoBehaviour
                 foreach (var hedgedogId in objective.spawnedObjectsId)
                 {
                     Vector3 hedgedogPos = PhotonView.Find(hedgedogId).gameObject.transform.position;
-                    hedgedogPos.y += 2f;
+                    hedgedogPos.y += 1f;
                     ObjectiveWaypointMarker(hedgedogId, hedgedogPos, ObjectiveWaypointId.Hedgedog, false);
                 }
             }

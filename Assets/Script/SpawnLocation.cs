@@ -11,6 +11,10 @@ public enum AreaId
     IvyGateBuilding,
     MirrorMaze,
     RFGMainEntrance,
+    UniversityWalk,
+    RoyalFortHouse,
+    BiomedBuilding,
+    LifeSciencesBuilding,
 }
 
 public class SpawnLocation : MonoBehaviour
