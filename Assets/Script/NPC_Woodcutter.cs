@@ -76,6 +76,7 @@ public class NPC_Woodcutter : OnTrigger {
         catchDistance = 2.0f;
         calming = false;
         angrySign.enabled = false;
+        anim = GetComponentInChildren<Animator>();
 
         if (treeToCut == null) {
             treeToCut = GameObject.FindGameObjectWithTag("Tree");
@@ -90,6 +91,7 @@ public class NPC_Woodcutter : OnTrigger {
     }
 
     public IEnumerator Interact(int secs) {
+        anim.SetTrigger("AngryTrigger");
         Debug.Log("Interacted with NPC");
         chasedPlayer = FindClosestTarget("Player");
         agent.speed = 0;
@@ -148,6 +150,7 @@ public class NPC_Woodcutter : OnTrigger {
 
                         switch (state) {
                             case WoodcutterState.SEEKINGTREE:
+                                anim.SetTrigger("WalkTrigger");
                                 agent.destination = treeToCut.transform.position;
 
                                 if (distanceToTree < cutDistance) {
@@ -159,6 +162,8 @@ public class NPC_Woodcutter : OnTrigger {
                             
                             case WoodcutterState.CUTTING:
                                 // TODO: cutting sound and animation
+                                anim.SetTrigger("ChopTrigger");
+                                // Debug.Log("CutTrigger Active");
                                 if(!isCutting) StartCoroutine(CutTree(3, treeToCut)); // secs to cut a tree
                                 isCutting = true;
                                 break;
@@ -166,6 +171,8 @@ public class NPC_Woodcutter : OnTrigger {
                             case WoodcutterState.CHASE:
                                 // TODO: sound and animation
                                 // Debug.Log("chasing 1");
+                                anim.SetTrigger("ChaseTrigger");
+                                anim.ResetTrigger("AngryTrigger");
                                 treeToCut = null;
                                 chaseAudio.enabled = true;
                                 themeAudio.enabled = false; 
@@ -243,6 +250,7 @@ public class NPC_Woodcutter : OnTrigger {
             state = WoodcutterState.SEEKINGTREE;
         }
         isCutting = false;
+        anim.ResetTrigger("ChopTrigger");
     }
 
     private IEnumerator CalmDown(int secs) {
