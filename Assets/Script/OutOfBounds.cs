@@ -4,23 +4,31 @@ using UnityEngine;
 
 public class OutOfBounds : MonoBehaviour
 {   
-    
     public GameObject Text;
 
     // Start is called before the first frame update
     void Start()
     {
         Text = GameObject.Find("OutOfBounds");
-        Text.SetActive(false);
+        if (Text != null)
+        {
+          Text.SetActive(false);
+        }
     }
 
    void OnTriggerEnter()
    {
-        Text.SetActive(true);
+        if (Text != null)
+        {
+          Text.SetActive(true);
+        }
    }
 
    void OnTriggerExit()
    {
-        Text.SetActive(false);
+        if (Text != null)
+        {
+          Text.SetActive(false);
+        }
    }
 }
