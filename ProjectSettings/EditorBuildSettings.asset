@@ -11,10 +11,13 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Scenes/RFG-map.unity
+  - enabled: 0
+    path: Assets/Scenes/RoyalFortGardens.unity
     guid: da45f5302f1654341b861fba277639d7
   - enabled: 0
     path: Assets/Scenes/video.unity
     guid: 48893224875c702e3ad23c75c1b69d11
+  - enabled: 1
+    path: Assets/Scenes/HUD-test.unity
+    guid: 073464b99886f3550a91e659aeff3da1
   m_configObjects: {}

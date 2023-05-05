@@ -11,7 +11,7 @@ public class OnTriggerPickUp : MonoBehaviourPun
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<PickUpObject>() != null)
+        if (other.gameObject.GetComponentInParent<PickUpObject>() != null)
         {
             hud.transform.Find("InteractButton").gameObject.SetActive(true); // show button
             hud.transform.Find("InteractButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Pick Up"; // change text of action
@@ -21,7 +21,7 @@ public class OnTriggerPickUp : MonoBehaviourPun
 
     public void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.GetComponent<PickUpObject>() != null)
+        if (other.gameObject.GetComponentInParent<PickUpObject>() != null)
         {
             hud.transform.Find("InteractButton").gameObject.SetActive(true); // show button
             hud.transform.Find("InteractButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Pick Up"; // change text of action
@@ -31,7 +31,7 @@ public class OnTriggerPickUp : MonoBehaviourPun
  
     public void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.GetComponent<PickUpObject>() != null)
+        if (other.gameObject.GetComponentInParent<PickUpObject>() != null)
         {
             hud.transform.Find("InteractButton").gameObject.SetActive(false); // hide button
             objectsToPickUp.Remove(other);

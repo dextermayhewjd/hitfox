@@ -76,10 +76,10 @@ GameObject:
   - component: {fileID: 1560757844534269898}
   - component: {fileID: 1643660698390562835}
   - component: {fileID: 633539360064110244}
-  - component: {fileID: 3859731644528922754}
+  - component: {fileID: 3887784228600297127}
   m_Layer: 10
   m_Name: Cylinder_0
-  m_TagString: Untagged
+  m_TagString: Trash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,7 +149,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3859731644528922754
+--- !u!64 &3887784228600297127
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -363,10 +363,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 3.56274
-  m_Height: 12.008076
+  m_Radius: 4.531719
+  m_Height: 14.9150305
   m_Direction: 1
-  m_Center: {x: 0, y: 0.37245953, z: 0}
+  m_Center: {x: 0, y: -0.43502453, z: 0.1614968}
 --- !u!1 &8909741203989414460
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,7 +378,6 @@ GameObject:
   - component: {fileID: 3129857007117476661}
   - component: {fileID: 6224572426845083126}
   - component: {fileID: 5519125775745631626}
-  - component: {fileID: 6415208551519676764}
   m_Layer: 10
   m_Name: Plane_0
   m_TagString: Untagged
@@ -451,17 +450,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6415208551519676764
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8909741203989414460}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: bc717cad0d5fbd1b48803c2026527ab4, type: 2}
