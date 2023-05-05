@@ -533,3 +533,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pickedUp: 0
   throwForce: 0
+  hasBeenDeleted: 0
+  hud: {fileID: 0}

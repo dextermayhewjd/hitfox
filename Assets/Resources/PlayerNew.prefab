@@ -193,6 +193,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectsToPickUp: []
+  hud: {fileID: 0}
   objectInMouth: {fileID: 0}
 --- !u!114 &6579930911262663904
 MonoBehaviour:
