@@ -475,8 +475,8 @@ public class ObjectivesController : MonoBehaviour
             GameObject spawnedObject = PhotonNetwork.InstantiateRoomObject(objectToSpawn.name, spawnLocation, Quaternion.identity);
             int spawnedObjectviewID = spawnedObject.GetComponent<PhotonView>().ViewID;
             spawnedObjectsId.Add(spawnedObjectviewID);
-            Vector3 waypointMarkerLocation = spawnLocation;
-            waypointMarkerLocation.y += 2;
+            Vector3 waypointMarkerLocation = spawnedObject.transform.position;
+            waypointMarkerLocation.y += 0f;
             pv.RPC("ObjectiveWaypointMarker", RpcTarget.All, spawnedObjectviewID, waypointMarkerLocation, ObjectiveWaypointId.Hedgedog, false);
         }
 
