@@ -6,15 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/QuickStartDemo.unity
-    guid: b9506a29fff474f5ca4dd60c867da5f4
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
+    path: Assets/Scenes/StartMenu.unity
+    guid: 2ce392c4d2685f83ab5fc74e35a4a137
   - enabled: 1
-    path: Assets/Scenes/RFG-map.unity
-    guid: da45f5302f1654341b861fba277639d7
-  - enabled: 0
-    path: Assets/Scenes/video.unity
-    guid: 48893224875c702e3ad23c75c1b69d11
+    path: Assets/Scenes/HUD-test.unity
+    guid: 073464b99886f3550a91e659aeff3da1
   m_configObjects: {}
