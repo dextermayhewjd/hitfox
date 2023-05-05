@@ -4,6 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 
+public enum ObjectiveWaypointId
+{
+    None,
+    Fire,
+    Trash,
+    HedgedogHome,
+    Hedgedog,
+    Lumberjack,
+}
+
 public class ObjectiveWaypoint : MonoBehaviour
 {
     [Header("Main Canvas")]
@@ -15,14 +25,14 @@ public class ObjectiveWaypoint : MonoBehaviour
     [System.Serializable]
     private class ObjectiveWaypointInfo
     {
-        public string objectiveId;
+        public ObjectiveWaypointId objectiveWaypointId;
         [TextArea] public string header;
         [TextArea] public string subHeader;
         [SerializeField] public GameObject waypointMarker;
     }
 
     [SerializeField] private ObjectiveWaypointInfo[] objectiveWaypointInfoList;
-    private Dictionary<string, ObjectiveWaypointInfo> objectiveWaypointInfoTable;
+    private Dictionary<ObjectiveWaypointId, ObjectiveWaypointInfo> objectiveWaypointInfoTable;
 
     // Start is called before the first frame update
     void Start()
@@ -32,20 +42,45 @@ public class ObjectiveWaypoint : MonoBehaviour
             canvas = GameObject.FindGameObjectWithTag("UICanvas");
         }        
 
-        objectiveWaypointInfoTable = new Dictionary<string, ObjectiveWaypointInfo>();
+        objectiveWaypointInfoTable = new Dictionary<ObjectiveWaypointId, ObjectiveWaypointInfo>();
 
         foreach (var objectiveWaypointInfo in objectiveWaypointInfoList)
         {
-            this.objectiveWaypointInfoTable[objectiveWaypointInfo.objectiveId] = objectiveWaypointInfo;
+            this.objectiveWaypointInfoTable[objectiveWaypointInfo.objectiveWaypointId] = objectiveWaypointInfo;
+        }
+
+        foreach (var objectiveObj in GameObject.FindGameObjectsWithTag("Objective"))
+        {
+            Objective objective = objectiveObj.GetComponent<Objective>();
+
+            if (objective.objectiveId == ObjectiveId.HedgedogTaxi)
+            {
+                foreach (var go in GameObject.FindGameObjectsWithTag("HedgehogHome"))
+                {
+                    Vector3 waypointMarkerLocation = go.transform.position;
+                    ObjectiveWaypointMarker(objective.viewId,  go.transform.position, ObjectiveWaypointId.HedgedogHome, true);
+                }
+
+                foreach (var hedgedogId in objective.spawnedObjectsId)
+                {
+                    Vector3 hedgedogPos = PhotonView.Find(hedgedogId).gameObject.transform.position;
+                    hedgedogPos.y += 2f;
+                    ObjectiveWaypointMarker(hedgedogId, hedgedogPos, ObjectiveWaypointId.Hedgedog, false);
+                }
+            }
+            else
+            {
+                ObjectiveWaypointMarker(objective.viewId, objective.objectiveWaypointPos, objective.objectiveWaypointId, true);
+            }
         }
     }
 
     [PunRPC]
-    void ObjectiveWaypointMarker(int objectiveViewId, Vector3 pos, string objectiveId)
+    void ObjectiveWaypointMarker(int objectiveViewId, Vector3 pos, ObjectiveWaypointId objectiveWaypointId, bool trackDistance)
     {
         ObjectiveWaypointInfo objectiveWaypointInfo;
 
-        if (!objectiveWaypointInfoTable.TryGetValue(objectiveId, out objectiveWaypointInfo))
+        if (!objectiveWaypointInfoTable.TryGetValue(objectiveWaypointId, out objectiveWaypointInfo))
         {
             return;
         }
@@ -69,5 +104,6 @@ public class ObjectiveWaypoint : MonoBehaviour
         waypoint.subHeader = objectiveWaypointInfo.subHeader;
         waypoint.targetObject = PhotonView.Find(objectiveViewId).gameObject;
         waypoint.trackObject = true;
+        waypoint.trackDistance = trackDistance;
     }
 }
