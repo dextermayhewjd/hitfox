@@ -69,19 +69,19 @@ MonoBehaviour:
   body: {fileID: 4611479366965636097}
   objectiveAlertDuration: 5
   objectiveAlertList:
-  - objectiveId: fire
+  - objectiveId: 1
     location: 
     header: FIRE!!!
     subHeader: 
     body: 
-  - objectiveId: trash
+  - objectiveId: 2
     location: 
     header: Students Are Littering Again
     subHeader: 
     body: 'Pick Up Trash With [E]
 
       Throw In the Bin'
-  - objectiveId: hedgedogTaxi
+  - objectiveId: 3
     location: 
     header: Lost Hogs
     subHeader: Hedgedogs have wandered off again from their home

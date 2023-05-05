@@ -15,13 +15,13 @@ public class ObjectivesAlert : MonoBehaviour
     [System.Serializable]
     private class ObjectiveAlert 
     {
-        public string objectiveId;
+        public ObjectiveId objectiveId;
         [HideInInspector] public string location;
         [TextArea] public string header;
         [TextArea] public string subHeader;
         [TextArea] public string body;
 
-        public ObjectiveAlert(string objectiveId, string location)
+        public ObjectiveAlert(ObjectiveId objectiveId, string location)
         {
             this.objectiveId = objectiveId;
             this.location = location;
@@ -33,7 +33,7 @@ public class ObjectivesAlert : MonoBehaviour
 
     [Header("Objectives Info")]
     [SerializeField] private ObjectiveAlert[] objectiveAlertList;
-    private Dictionary<string, ObjectiveAlert> objectiveAlertTable;
+    private Dictionary<ObjectiveId, ObjectiveAlert> objectiveAlertTable;
 
 
     private List<ObjectiveAlert> objectiveAlertBuffer;
@@ -44,7 +44,7 @@ public class ObjectivesAlert : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        objectiveAlertTable = new Dictionary<string, ObjectiveAlert>();
+        objectiveAlertTable = new Dictionary<ObjectiveId, ObjectiveAlert>();
 
         foreach (var objectiveAlert in objectiveAlertList)
         {
@@ -91,7 +91,7 @@ public class ObjectivesAlert : MonoBehaviour
         }
     }
 
-    public void AddObjectiveAlertToBuffer(string objectiveId, string location)
+    public void AddObjectiveAlertToBuffer(ObjectiveId objectiveId, string location)
     {
         objectiveAlertBuffer.Add(new ObjectiveAlert(objectiveId, location));
     }
