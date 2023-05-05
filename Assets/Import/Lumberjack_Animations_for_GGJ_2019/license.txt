@@ -1,0 +1,11 @@
+Model Information:
+* title:	Lumberjack Animations for GGJ 2019
+* source:	https://sketchfab.com/3d-models/lumberjack-animations-for-ggj-2019-65eba29eeba745638a33dc1db0fbd586
+* author:	rrVillegas (https://sketchfab.com/rrVillegas)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Lumberjack Animations for GGJ 2019" (https://sketchfab.com/3d-models/lumberjack-animations-for-ggj-2019-65eba29eeba745638a33dc1db0fbd586) by rrVillegas (https://sketchfab.com/rrVillegas) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
