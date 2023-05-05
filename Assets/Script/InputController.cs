@@ -8,14 +8,14 @@ public class InputController : MonoBehaviour
     Dictionary<string, bool> buttons;
 
     private bool movementKeysLocked;
+
     public GameObject maincam;
     public GameObject cam1;
     public GameObject cam2;
     public GameObject cam3;
 
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         movementKeysLocked = false;
 
@@ -25,58 +25,25 @@ public class InputController : MonoBehaviour
         buttons["Jump"] = true;
         buttons["Escape"] = true;
         buttons["Sprint"] = true;
-        keys[KeyCode.Escape] = true;
-        keys[KeyCode.Tab] = true;
 
-        //as should only use maincam by default 
-        maincam.SetActive(true);
-        cam1.SetActive(false);
-        cam2.SetActive(false);
-        cam3.SetActive(false);
+        SetKeyCodes();
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
     }
 
     // Update is called once per frame
     void Update()
     {
+    }
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+    private void SetKeyCodes()
+    {
+        foreach (KeyCode keycode in System.Enum.GetValues(typeof(KeyCode)))
         {
-            Debug.Log("Main camera");
-            // Add your code here for what happens when key 1 is pressed
-            maincam.SetActive(true);
-            cam1.SetActive(false);
-            cam2.SetActive(false);
-            cam3.SetActive(false);
+            keys[keycode] = true;
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            Debug.Log("Camera 1");
-            // Add your code here for what happens when key 2 is pressed
-            maincam.SetActive(false);
-            cam1.SetActive(true);
-            cam2.SetActive(false);
-            cam3.SetActive(false);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            Debug.Log("Camera 2");
-            // Add your code here for what happens when key 3 is pressed
-            maincam.SetActive(false);
-            cam1.SetActive(false);
-            cam2.SetActive(true);
-            cam3.SetActive(false);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            Debug.Log("Camera 3");
-            // Add your code here for what happens when key 4 is pressed
-            maincam.SetActive(false);
-            cam1.SetActive(false);
-            cam2.SetActive(false);
-            cam3.SetActive(true);
-        }
-
-
     }
 
     public void LockMovementKeys()
@@ -96,11 +63,35 @@ public class InputController : MonoBehaviour
     public void LockInteractKeys()
     {
         keys[KeyCode.Tab] = false;
+
+        GameObject cameraSwitcherObj = GameObject.Find("CameraSwitcher");
+
+        if (cameraSwitcherObj != null)
+        {
+            CameraSwitcher cameraSwitcher = cameraSwitcherObj.GetComponent<CameraSwitcher>();
+
+            foreach (KeyCode keycode in cameraSwitcher.keybinds)
+            {
+                keys[keycode] = false;
+            }
+        }
     }
 
     public void UnlockInteractKeys()
     {
         keys[KeyCode.Tab] = true;
+
+        GameObject cameraSwitcherObj = GameObject.Find("CameraSwitcher");
+
+        if (cameraSwitcherObj != null)
+        {
+            CameraSwitcher cameraSwitcher = cameraSwitcherObj.GetComponent<CameraSwitcher>();
+
+            foreach (KeyCode keycode in cameraSwitcher.keybinds)
+            {
+                keys[keycode] = true;
+            }
+        }
     }
 
     // Get Button Input.

@@ -1258,10 +1258,10 @@ RectTransform:
   m_LocalScale: {x: 0.9219689, y: 0.9219689, z: 0.9219689}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1021906618}
   - {fileID: 82953584}
   - {fileID: 1696218135}
   - {fileID: 2102269165}
-  - {fileID: 1021906618}
   m_Father: {fileID: 1126798968}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1287,7 +1287,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_Spacing: 10
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -2076,7 +2076,7 @@ MonoBehaviour:
     m_Right: 10
     m_Top: 10
     m_Bottom: 10
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_Spacing: 10
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
@@ -3927,7 +3927,7 @@ MonoBehaviour:
     m_Right: 10
     m_Top: 10
     m_Bottom: 10
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_Spacing: 10
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
