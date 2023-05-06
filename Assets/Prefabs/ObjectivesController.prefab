@@ -49,16 +49,17 @@ MonoBehaviour:
   pointsControllerObject: {fileID: 8820391973687013429, guid: 3e1f168220742f147a3dafa6b19b13a5, type: 3}
   objectiveObject: {fileID: 8831651902553531394, guid: c933735c65e933548ad8a4abfa03ee2e, type: 3}
   objectivesAlert: {fileID: 0}
-  dynamicObjectives: 0
+  dynamicObjectives: 1
   startDelay: 10
-  maxActiveObjectives: 5
+  maxActiveObjectives: 10
   objectiveRate: 40
   objectiveInfoList:
-  - objectiveId: fire
+  - objectiveId: 1
     objectsToSpawn:
     - {fileID: 3236137045476491398, guid: acc85975b897be144a5db2f719eecc5c, type: 3}
     spawnLocations: []
-  - objectiveId: trash
+    maxActiveObjectives: 5
+  - objectiveId: 2
     objectsToSpawn:
     - {fileID: 5174316512915270022, guid: 465d826a68f2e45419e11e437734a324, type: 3}
     - {fileID: 7092083984586214436, guid: 3ff40d4a5096215958ce82846ba1f507, type: 3}
@@ -66,20 +67,23 @@ MonoBehaviour:
     - {fileID: 8486783653839049495, guid: 249c99ffd0566f833afa740c72762986, type: 3}
     - {fileID: 6890684332192537949, guid: 8f435af4556fb47459690b4ff7a9cb19, type: 3}
     spawnLocations: []
-  - objectiveId: hedgedogTaxi
+    maxActiveObjectives: 5
+  - objectiveId: 3
     objectsToSpawn:
     - {fileID: 1167724864849416357, guid: 21953f63a4b9f98a5a58a3d301fc986c, type: 3}
     spawnLocations: []
-  - objectiveId: lumberjack
+    maxActiveObjectives: 1
+  - objectiveId: 4
     objectsToSpawn:
     - {fileID: 6626836856569015522, guid: cd7bd6c004b30ef8cb041d8f8933366f, type: 3}
     spawnLocations: []
+    maxActiveObjectives: 1
   startingObjectsList:
-  - id: bucket
+  - id: 0
     numObjectsToSpawn: 10
     objectToSpawn: {fileID: 4993735558651106425, guid: 84a379138fff12d19a5464ca0a2f82fe, type: 3}
     spawnLocations: []
-  - id: forklift
+  - id: 1
     numObjectsToSpawn: 2
     objectToSpawn: {fileID: 2932343578486992406, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
     spawnLocations: []
@@ -96,24 +100,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
-  defaultWaypointMarker: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
+  defaultWaypointMarker: {fileID: 2626917578217483014, guid: 5a37426177a620441a6d279dbf2976a2, type: 3}
   objectiveWaypointInfoList:
-  - objectiveId: fire
+  - objectiveWaypointId: 1
     header: Fire
     subHeader: Use Bucket To Put Out Fire
-    waypointMarker: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
-  - objectiveId: trash
+    waypointMarker: {fileID: 5273127145533691587, guid: 0a6a230e65c086044924d2cf19844640, type: 3}
+  - objectiveWaypointId: 2
     header: Rubbish
     subHeader: Throw the Rubbish In The Bin
-    waypointMarker: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
-  - objectiveId: hedgedogTaxi
+    waypointMarker: {fileID: 6493166292708792754, guid: d7b2090ccb4cff84189a06000fddead9, type: 3}
+  - objectiveWaypointId: 3
     header: Hedgehog Home
     subHeader: Drive Hedgehogs Back To Their Home
-    waypointMarker: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
-  - objectiveId: hedgedog
+    waypointMarker: {fileID: 7492816467208135289, guid: 7e347ec27ec522a45890e899ba03bcde, type: 3}
+  - objectiveWaypointId: 4
     header: 
     subHeader: 
-    waypointMarker: {fileID: 5160421297504850508, guid: 0718d93a7021d5b44a5268435b8fcd21, type: 3}
+    waypointMarker: {fileID: 7777117702791711035, guid: 0718d93a7021d5b44a5268435b8fcd21, type: 3}
 --- !u!114 &7187319587734717210
 MonoBehaviour:
   m_ObjectHideFlags: 0
