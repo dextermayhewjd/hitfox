@@ -51,7 +51,7 @@ MonoBehaviour:
   objectivesAlert: {fileID: 0}
   dynamicObjectives: 1
   startDelay: 10
-  maxActiveObjectives: 5
+  maxActiveObjectives: 10
   objectiveRate: 40
   objectiveInfoList:
   - objectiveId: 1
@@ -100,24 +100,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
-  defaultWaypointMarker: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
+  defaultWaypointMarker: {fileID: 2626917578217483014, guid: 5a37426177a620441a6d279dbf2976a2, type: 3}
   objectiveWaypointInfoList:
   - objectiveWaypointId: 1
     header: Fire
     subHeader: Use Bucket To Put Out Fire
-    waypointMarker: {fileID: 4000883928580194233, guid: 0a6a230e65c086044924d2cf19844640, type: 3}
+    waypointMarker: {fileID: 5273127145533691587, guid: 0a6a230e65c086044924d2cf19844640, type: 3}
   - objectiveWaypointId: 2
     header: Rubbish
     subHeader: Throw the Rubbish In The Bin
-    waypointMarker: {fileID: 7424463402469530392, guid: d7b2090ccb4cff84189a06000fddead9, type: 3}
+    waypointMarker: {fileID: 6493166292708792754, guid: d7b2090ccb4cff84189a06000fddead9, type: 3}
   - objectiveWaypointId: 3
     header: Hedgehog Home
     subHeader: Drive Hedgehogs Back To Their Home
-    waypointMarker: {fileID: 7840582079722976317, guid: 7e347ec27ec522a45890e899ba03bcde, type: 3}
+    waypointMarker: {fileID: 7492816467208135289, guid: 7e347ec27ec522a45890e899ba03bcde, type: 3}
   - objectiveWaypointId: 4
     header: 
     subHeader: 
-    waypointMarker: {fileID: 5160421297504850508, guid: 0718d93a7021d5b44a5268435b8fcd21, type: 3}
+    waypointMarker: {fileID: 7777117702791711035, guid: 0718d93a7021d5b44a5268435b8fcd21, type: 3}
 --- !u!114 &7187319587734717210
 MonoBehaviour:
   m_ObjectHideFlags: 0
