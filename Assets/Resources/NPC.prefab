@@ -320,7 +320,8 @@ MonoBehaviour:
   questionSign: {fileID: 1891509960730610570}
   state: 0
   sitTimer: 0
-  npcTalkingWith: {fileID: 0}
+  npcsTalkingWith: []
+  playerChasing: {fileID: 0}
 --- !u!195 &7673335023333238916
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1223,14 +1224,14 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: WalkTrigger
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: StopTrigger
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: SitTrigger
   m_SynchronizeLayers:
-  - SynchronizeType: 0
+  - SynchronizeType: 2
     LayerIndex: 0

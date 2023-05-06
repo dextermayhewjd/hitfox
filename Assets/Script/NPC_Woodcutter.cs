@@ -91,7 +91,9 @@ public class NPC_Woodcutter : OnTrigger {
     }
 
     public IEnumerator Interact(int secs) {
-        anim.SetTrigger("AngryTrigger");
+        // view.RPC("RPC_trigger", RpcTarget.AllBuffered, "RunAngry");
+        anim.SetBool("RunAngry", true);
+        Debug.Log("Angry Trigger");
         Debug.Log("Interacted with NPC");
         chasedPlayer = FindClosestTarget("Player");
         agent.speed = 0;
@@ -99,16 +101,21 @@ public class NPC_Woodcutter : OnTrigger {
         this.photonView.RPC("RPC_ShowAngrySign", RpcTarget.AllBuffered);
         if (axe != null) {
             this.photonView.RPC("RPC_DropAxe", RpcTarget.AllBuffered);
-        }
+        }   
         yield return new WaitForSeconds(secs);
-        anim.SetTrigger("ChaseTrigger");
+        // view.RPC("RPC_trigger", RpcTarget.AllBuffered, "AngryChase");
+        anim.SetBool("AngryChase", true);
         state = WoodcutterState.CHASE;
         isStunned = false;
         agent.speed = speed * 2;
     }
 
     public IEnumerator PauseAfterCatch(int secs)
-    {
+    {   
+        // view.RPC("RPC_trigger", RpcTarget.AllBuffered, "ChaseAngry");
+        anim.SetBool("ChaseAngry", true);
+        anim.SetBool("AngryChase", false);
+        Debug.Log("Angry Trigger");
         agent.speed = 0;
         // disable collisions otherwise he pushes the player out of the cage
         transform.Find("Collision").gameObject.SetActive(false);
@@ -116,8 +123,11 @@ public class NPC_Woodcutter : OnTrigger {
         agent.speed = speed;
         this.photonView.RPC("RPC_HideAngrySign", RpcTarget.AllBuffered);
         state = WoodcutterState.SEEKINGTREE;
+        // view.RPC("RPC_trigger", RpcTarget.AllBuffered, "AngryRun");
+        anim.SetBool("AngryRun", true);
+        anim.SetBool("RunAngry", false);
         yield return new WaitForSeconds(secs);
-        transform.Find("Collision").gameObject.SetActive(true);
+        transform.Find("Collision").gameObject.SetActive(true); 
     }
 
     // Update is called once per frame
@@ -151,19 +161,19 @@ public class NPC_Woodcutter : OnTrigger {
 
                         switch (state) {
                             case WoodcutterState.SEEKINGTREE:
-                                anim.SetTrigger("WalkTrigger");
                                 agent.destination = treeToCut.transform.position;
 
                                 if (distanceToTree < cutDistance) {
                                     Debug.Log("should be cutting!");
                                     state = WoodcutterState.CUTTING;
+                                    // view.RPC("RPC_trigger", RpcTarget.AllBuffered, "RunChop");
+                                    anim.SetBool("RunChop", true);
                                     goto case WoodcutterState.CUTTING;
                                 }
                                 break;
                             
                             case WoodcutterState.CUTTING:
                                 // TODO: cutting sound and animation
-                                anim.SetTrigger("ChopTrigger");
                                 // Debug.Log("CutTrigger Active");
                                 if(!isCutting) StartCoroutine(CutTree(3, treeToCut)); // secs to cut a tree
                                 isCutting = true;
@@ -172,7 +182,6 @@ public class NPC_Woodcutter : OnTrigger {
                             case WoodcutterState.CHASE:
                                 // TODO: sound and animation
                                 // Debug.Log("chasing 1");
-                                // anim.SetTrigger("ChaseTrigger");
                                 treeToCut = null;
                                 // chaseAudio.enabled = true;
                                 // themeAudio.enabled = false; 
@@ -227,7 +236,6 @@ public class NPC_Woodcutter : OnTrigger {
     }
 
     private IEnumerator CutTree(int secs, GameObject tree) {
-        anim.SetTrigger("ChopTrigger");
         yield return new WaitForSeconds(secs);
         tree.tag = "CutTree";
         //tree.GetComponent<Animator>().enabled = true;
@@ -237,6 +245,8 @@ public class NPC_Woodcutter : OnTrigger {
             Debug.Log("Animator detected!");
             treeAnimator.enabled = true;
             treeAnimator.Play("TreeFalling");
+            anim.SetBool("ChopRun", true);
+            anim.SetBool("RunChop", false);
             yield return new WaitForSeconds(1);
             treeAnimator.enabled = false;
 
@@ -248,6 +258,8 @@ public class NPC_Woodcutter : OnTrigger {
         Debug.Log("cut a tree");
         if (state != WoodcutterState.CHASE)
         {
+            // view.RPC("RPC_trigger", RpcTarget.AllBuffered, "ChopRun");
+            anim.SetBool("ChopRun", true);
             state = WoodcutterState.SEEKINGTREE;
         }
         isCutting = false;
@@ -336,5 +348,11 @@ public class NPC_Woodcutter : OnTrigger {
         // this.transform.position = playerView.transform.Find("Mouth").position;
         // this.transform.rotation = playerView.transform.Find("Mouth").rotation;
         axe.GetComponent<PhotonRigidbodyView>().enabled = true;
+    }
+
+    [PunRPC]
+    void RPC_trigger(string triggerName)
+    {
+        anim.SetTrigger(triggerName);
     }
 }
