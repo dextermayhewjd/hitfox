@@ -101,6 +101,7 @@ public class NPC_Woodcutter : OnTrigger {
             this.photonView.RPC("RPC_DropAxe", RpcTarget.AllBuffered);
         }
         yield return new WaitForSeconds(secs);
+        anim.SetTrigger("ChaseTrigger");
         state = WoodcutterState.CHASE;
         isStunned = false;
         agent.speed = speed * 2;
@@ -171,11 +172,10 @@ public class NPC_Woodcutter : OnTrigger {
                             case WoodcutterState.CHASE:
                                 // TODO: sound and animation
                                 // Debug.Log("chasing 1");
-                                anim.SetTrigger("ChaseTrigger");
-                                anim.ResetTrigger("AngryTrigger");
+                                // anim.SetTrigger("ChaseTrigger");
                                 treeToCut = null;
-                                chaseAudio.enabled = true;
-                                themeAudio.enabled = false; 
+                                // chaseAudio.enabled = true;
+                                // themeAudio.enabled = false; 
                                 
                                 if(chasedPlayer == null) {
                                     chasedPlayer = FindClosestTarget("Player");
@@ -227,6 +227,7 @@ public class NPC_Woodcutter : OnTrigger {
     }
 
     private IEnumerator CutTree(int secs, GameObject tree) {
+        anim.SetTrigger("ChopTrigger");
         yield return new WaitForSeconds(secs);
         tree.tag = "CutTree";
         //tree.GetComponent<Animator>().enabled = true;
@@ -250,7 +251,6 @@ public class NPC_Woodcutter : OnTrigger {
             state = WoodcutterState.SEEKINGTREE;
         }
         isCutting = false;
-        anim.ResetTrigger("ChopTrigger");
     }
 
     private IEnumerator CalmDown(int secs) {
