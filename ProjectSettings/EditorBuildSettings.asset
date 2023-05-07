@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/QuickStartDemo.unity
     guid: b9506a29fff474f5ca4dd60c867da5f4
   - enabled: 1
-    path: Assets/Scenes/map-build-wall-ai.unity
+    path: Assets/Scenes/map-build-wall-ai2.unity
     guid: da45f5302f1654341b861fba277639d7
   m_configObjects: {}

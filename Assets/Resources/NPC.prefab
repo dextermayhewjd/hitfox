@@ -320,7 +320,8 @@ MonoBehaviour:
   questionSign: {fileID: 1891509960730610570}
   state: 0
   sitTimer: 0
-  npcTalkingWith: {fileID: 0}
+  npcsTalkingWith: []
+  playerChasing: {fileID: 0}
 --- !u!195 &7673335023333238916
 NavMeshAgent:
   m_ObjectHideFlags: 0
