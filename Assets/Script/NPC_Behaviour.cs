@@ -80,7 +80,7 @@ public class NPC_Behaviour : MonoBehaviour{
                                 }
 
                                 if (recallTimer <= 0) {
-                                    dog.GetComponent<PhotonView>().RPC("recall",RpcTarget.All;
+                                    dog.GetComponent<PhotonView>().RPC("recall",RpcTarget.All);
                                     recallTimer = 5;
                                 }
                                 recallTimer -= Time.deltaTime;
