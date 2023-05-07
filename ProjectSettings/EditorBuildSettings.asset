@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/QuickStartDemo.unity
     guid: b9506a29fff474f5ca4dd60c867da5f4
   - enabled: 0
+    path: Assets/Scenes/map-build-wall-ai2.unity
+    guid: f7761dd4418beec43a3214873a72ef97
+  - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
@@ -30,6 +33,6 @@ EditorBuildSettings:
     path: Assets/Scenes/HUD-test.unity
     guid: 073464b99886f3550a91e659aeff3da1
   - enabled: 1
-    path: Assets/Scenes/map-build-with ai.unity
-    guid: 3c4852e0e3b5e7c4a84820fc3b7c9eb2
+    path: Assets/Scenes/RoyalFortGardens.unity
+    guid: cd9fb5ccebf30424e84c0c41d06ddd88
   m_configObjects: {}
