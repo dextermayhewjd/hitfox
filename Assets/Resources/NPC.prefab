@@ -1223,15 +1223,15 @@ MonoBehaviour:
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
   m_SynchronizeParameters:
-  - Type: 9
+  - Type: 4
     SynchronizeType: 2
-    Name: WalkTrigger
-  - Type: 9
+    Name: Sitting
+  - Type: 4
     SynchronizeType: 2
-    Name: StopTrigger
-  - Type: 9
+    Name: Standing
+  - Type: 4
     SynchronizeType: 2
-    Name: SitTrigger
+    Name: Walking
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
