@@ -53,6 +53,8 @@ public class NPC_Woodcutter : OnTrigger {
     public bool isStunned;
     public Canvas angrySign;
     public GameObject axe;
+    public AudioSource chopping;
+    public AudioSource grunt;
 
 
     GameObject FindClosestTarget(string trgt) {
@@ -182,6 +184,7 @@ public class NPC_Woodcutter : OnTrigger {
                             case WoodcutterState.CHASE:
                                 // TODO: sound and animation
                                 // Debug.Log("chasing 1");
+                                grunt.enabled = true;
                                 treeToCut = null;
                                 // chaseAudio.enabled = true;
                                 // themeAudio.enabled = false; 
@@ -209,6 +212,7 @@ public class NPC_Woodcutter : OnTrigger {
                                 }
                             
                                 chaseAudio.enabled = false;
+                                grunt.enabled = false;
                                 themeAudio.enabled = true;
                                 break;
                             
@@ -223,6 +227,7 @@ public class NPC_Woodcutter : OnTrigger {
                                 foreach (GameObject player in players) {
                                     float pdistance = Vector3.Distance(player.transform.position, transform.position);
                                     if(pdistance < chaseDistance && CanSee(player, pdistance)) {
+
                                         state = WoodcutterState.CHASE;
                                     }
                                 }
@@ -238,6 +243,7 @@ public class NPC_Woodcutter : OnTrigger {
     private IEnumerator CutTree(int secs, GameObject tree) {
         yield return new WaitForSeconds(secs);
         tree.tag = "CutTree";
+        chopping.enabled = true;
         //tree.GetComponent<Animator>().enabled = true;
         treeAnimator = tree.GetComponent<Animator>();
         if (treeAnimator != null)
@@ -262,6 +268,7 @@ public class NPC_Woodcutter : OnTrigger {
             anim.SetBool("ChopRun", true);
             state = WoodcutterState.SEEKINGTREE;
         }
+        chopping.enabled = false;
         isCutting = false;
     }
 
