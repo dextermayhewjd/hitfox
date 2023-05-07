@@ -11,6 +11,7 @@ public class NewCarUserControl : MonoBehaviourPun
 {
     private NewCarController m_Car; // the car controller we want to use
     public bool driving = false;
+    public AudioSource Forktheme;
     public PhotonView driver = null;
     public float h = 0f, v = 0f, handbrake = 1;
     public GameObject hud;
@@ -91,6 +92,7 @@ public class NewCarUserControl : MonoBehaviourPun
     void RPC_ExitAccPlayer()
     {
         Debug.Log("Player left vehicle");
+        Forktheme.enabled = false;
         driver.transform.position += Camera.main.transform.forward;
         driver.transform.SetParent(null);
         driver.GetComponent<PlayerMovement>().driving = false;
@@ -107,6 +109,7 @@ public class NewCarUserControl : MonoBehaviourPun
     void RPC_EnterAccPlayer(int player)
     {
         Debug.Log("Player entered vehicle");
+        Forktheme.enabled = true;
         driving = true;
         driver = PhotonView.Find(player);
         driver.transform.SetParent(this.transform.Find("AccelerateSeat"));
