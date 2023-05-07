@@ -66,7 +66,7 @@ public class NPC_Behaviour : MonoBehaviour{
         if (view.IsMine) {
             emoteTimer -= Time.deltaTime;
             invincTimer -= Time.deltaTime;
-            if (emoteTimer < 0) this.view.RPC("RPC_HideSign", RpcTarget.AllBuffered);
+            if (emoteTimer < 0) this.view.RPC("RPC_HideSign", RpcTarget.All);
             switch (state) {
                 case State.WALK:
                     
@@ -80,7 +80,7 @@ public class NPC_Behaviour : MonoBehaviour{
                                 }
 
                                 if (recallTimer <= 0) {
-                                    dog.GetComponent<PhotonView>().RPC("recall",RpcTarget.AllBuffered);
+                                    dog.GetComponent<PhotonView>().RPC("recall",RpcTarget.All;
                                     recallTimer = 5;
                                 }
                                 recallTimer -= Time.deltaTime;
@@ -122,7 +122,7 @@ public class NPC_Behaviour : MonoBehaviour{
 
                     if (dog != null) {
                         if (Vector3.Distance(dog.transform.position, transform.position) > 8) {
-                            dog.GetComponent<PhotonView>().RPC("recall", RpcTarget.AllBuffered);
+                            dog.GetComponent<PhotonView>().RPC("recall", RpcTarget.All);
                         }
                     }
 
@@ -135,7 +135,7 @@ public class NPC_Behaviour : MonoBehaviour{
                     
                     if (activeSign.enabled == false) {
                         int i = Random.Range(0, emotions.Length);
-                        this.view.RPC("RPC_ShowSign", RpcTarget.AllBuffered, (Emotion)i);
+                        this.view.RPC("RPC_ShowSign", RpcTarget.All, (Emotion)i);
                     }
                     break;
                 case State.CHASE:
@@ -207,7 +207,7 @@ public class NPC_Behaviour : MonoBehaviour{
     public void OnCollisionEnter(Collision collision) {
         GameObject o = collision.gameObject;
         Debug.Log("Player Touching");
-        if (o.tag == "Player") this.view.RPC("RPC_ShowSign", RpcTarget.AllBuffered, Emotion.ANGRY);
+        if (o.tag == "Player") this.view.RPC("RPC_ShowSign", RpcTarget.All, Emotion.ANGRY);
     }
 
     [PunRPC]
