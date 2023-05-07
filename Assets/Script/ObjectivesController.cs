@@ -517,6 +517,9 @@ public class ObjectivesController : MonoBehaviour
         SpawnLocation spawnLocationArea = objective.spawnLocations[Random.Range(0, objective.spawnLocations.Length)];
         Vector3 spawnLocation = spawnLocationArea.GetRandomPoint();
         GameObject spawnedObject = PhotonNetwork.InstantiateRoomObject(objectToSpawn.name, spawnLocation, Quaternion.identity);
+
+        // Display An Alert Of The Objective.
+        pv.RPC("AddObjectiveAlert", RpcTarget.All, objective.objectiveId, "");
     }
 
     public void FoxCaptured(int viewID)
