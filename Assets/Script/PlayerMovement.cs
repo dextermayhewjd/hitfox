@@ -64,6 +64,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     {
         Vector3 cagePosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
+        ObjectivesController objectivesController = GameObject.Find("ObjectivesController").GetComponent<ObjectivesController>();
+        objectivesController.FoxCaptured(newCage.GetComponent<PhotonView>().ViewID);
         this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
     }
 

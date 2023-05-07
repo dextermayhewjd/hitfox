@@ -12,6 +12,7 @@ public enum ObjectiveWaypointId
     HedgedogHome,
     Hedgedog,
     Lumberjack,
+    Cage,
 }
 
 public class ObjectiveWaypoint : MonoBehaviour

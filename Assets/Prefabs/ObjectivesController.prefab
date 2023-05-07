@@ -52,7 +52,7 @@ MonoBehaviour:
   dynamicObjectives: 1
   startDelay: 10
   maxActiveObjectives: 10
-  objectiveRate: 40
+  objectiveRate: 30
   objectiveInfoList:
   - objectiveId: 1
     objectsToSpawn:
@@ -77,7 +77,7 @@ MonoBehaviour:
     objectsToSpawn:
     - {fileID: 6626836856569015522, guid: cd7bd6c004b30ef8cb041d8f8933366f, type: 3}
     spawnLocations: []
-    maxActiveObjectives: 1
+    maxActiveObjectives: 5
   startingObjectsList:
   - id: 0
     numObjectsToSpawn: 10
@@ -117,6 +117,10 @@ MonoBehaviour:
   - objectiveWaypointId: 4
     header: 
     subHeader: 
+    waypointMarker: {fileID: 7777117702791711035, guid: 0718d93a7021d5b44a5268435b8fcd21, type: 3}
+  - objectiveWaypointId: 6
+    header: Fox Captured
+    subHeader: Free The Fox
     waypointMarker: {fileID: 7777117702791711035, guid: 0718d93a7021d5b44a5268435b8fcd21, type: 3}
 --- !u!114 &7187319587734717210
 MonoBehaviour:

@@ -10,6 +10,7 @@ public enum ObjectiveId
     Trash,
     HedgedogTaxi,
     Lumberjack,
+    Lampost,
 }
 
 public enum StartingObjectId
@@ -70,7 +71,7 @@ public class ObjectivesController : MonoBehaviour
                     return ObjectsToSpawnMultipler(5, numPlayers);
                     break;
                 case ObjectiveId.HedgedogTaxi:
-                    return ObjectsToSpawnMultipler(2, numPlayers);
+                    return ObjectsToSpawnMultipler(5, numPlayers);
             }
 
             return 1;
@@ -167,11 +168,16 @@ public class ObjectivesController : MonoBehaviour
 
         // =====
 
-        // UpdateObjectiveRates();
+        UpdateObjectiveRates();
         if (dynamicObjectives)
         {
             HandleObjectiveEvents();
         }
+    }
+
+    private void UpdateObjectiveRates()
+    {
+
     }
 
     [PunRPC]
@@ -513,28 +519,54 @@ public class ObjectivesController : MonoBehaviour
             return;
         }
 
+        List<int> spawnedObjectsId = new List<int>();
+
         GameObject objectToSpawn = objective.objectsToSpawn[0];
         SpawnLocation spawnLocationArea = objective.spawnLocations[Random.Range(0, objective.spawnLocations.Length)];
         Vector3 spawnLocation = spawnLocationArea.GetRandomPoint();
         GameObject spawnedObject = PhotonNetwork.InstantiateRoomObject(objectToSpawn.name, spawnLocation, Quaternion.identity);
+        int spawnedObjectviewID = spawnedObject.GetComponent<PhotonView>().ViewID;
+        spawnedObjectsId.Add(spawnedObjectviewID);
+
+        // Spawn an Objective to track that objective.
+        object[] instanceData = new object[6];
+        instanceData[0] = objective.objectiveId;
+        instanceData[1] = spawnedObjectsId.ToArray();
+        instanceData[2] = AreaId.None;
+        instanceData[3] = 0;
+        instanceData[4] = ObjectiveWaypointId.None;
+        instanceData[5] = new Vector3(0, 0, 0);
+
+        GameObject spawnedObjective = PhotonNetwork.InstantiateRoomObject(objectiveObject.name, new Vector3(0, 0, 0), Quaternion.identity, 0, instanceData);
 
         // Display An Alert Of The Objective.
         pv.RPC("AddObjectiveAlert", RpcTarget.All, objective.objectiveId, "");
     }
 
+    public void LampostObjective()
+    {
+        ObjectiveId objectiveId = ObjectiveId.Lampost;
+        pv.RPC("AddObjectiveAlert", RpcTarget.All, objectiveId, "");
+    }
+
     public void FoxCaptured(int viewID)
     {
-        // Objective capturedFoxObjective;
+        GameObject cage;
 
-        // if (!objectives.TryGetValue("FoxCaptured", out capturedFoxObjective))
-        // {
-        //     Debug.Log("Fox Captured Objective not Set");
-        //     return;
-        // }
+        if (PhotonView.Find(viewID) != null)
+        {
+            cage = PhotonView.Find(viewID).gameObject;
+        }
+        else
+        {
+            Debug.Log("Cage Of ViewID: " + viewID + " Not Found");
+            return;
+        }
 
-        // activeObjectives.Add(new Objective(capturedFoxObjective.id, Time.time, capturedFox, capturedFox.transform.position));
-
-        // Add Marker at captured fox transform position of add to quest.
+        // Add Marker at captured fox transform position.
+        Vector3 waypointMarkerLocation = cage.transform.position;
+        waypointMarkerLocation.y += 1f;
+        pv.RPC("ObjectiveWaypointMarker", RpcTarget.All, viewID, waypointMarkerLocation, ObjectiveWaypointId.Cage, true);
     }
 
     private ObjectiveInfo GetObjective(ObjectiveId objectiveId)
