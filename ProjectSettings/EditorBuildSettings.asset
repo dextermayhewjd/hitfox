@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/StartMenu.unity
     guid: 2ce392c4d2685f83ab5fc74e35a4a137
   - enabled: 0
+    path: Assets/Scenes/map-build-wall-ai2.unity
+    guid: f7761dd4418beec43a3214873a72ef97
+  - enabled: 0
     path: Assets/Scenes/RFG-azmil.unity
     guid: da45f5302f1654341b861fba277639d7
   - enabled: 0

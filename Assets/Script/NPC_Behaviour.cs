@@ -56,7 +56,6 @@ public class NPC_Behaviour : MonoBehaviour{
         angrySign.enabled = false;
         questionSign.enabled = false;
         anim = GetComponentInChildren<Animator>();
-        anim.SetTrigger("WalkTrigger");
         angry = Random.Range(0, 25);
   
     }
@@ -88,8 +87,8 @@ public class NPC_Behaviour : MonoBehaviour{
                         } else {
                             state = State.SIT;
                             sitTimer = Random.Range(60, 180);
-                            anim.ResetTrigger("WalkTrigger");
-                            anim.SetTrigger("SitTrigger");
+                            anim.SetBool("Walking",false);
+                            anim.SetBool("Sitting",true);
                         }
                     }
                     break;
@@ -107,16 +106,16 @@ public class NPC_Behaviour : MonoBehaviour{
                             dogBehaviour.destination = factories[i];
                         }
                         state = State.WALK;
-                        anim.ResetTrigger("SitTrigger");
-                        anim.SetTrigger("WalkTrigger");
+                        anim.SetBool("Sitting",false);
+                        anim.SetBool("Walking",true);
                     }
                     break;
                 case State.CONVERSATION:
                     if (talkTimer < 0 || npcsTalkingWith.Count == 0) {
                         npcsTalkingWith.ForEach((x)=>x.GetComponent<PhotonView>().RPC("endConversation", RpcTarget.All,view.ViewID));
                         npcsTalkingWith.Clear();
-                        anim.ResetTrigger("SitTrigger");
-                        anim.SetTrigger("WalkTrigger");
+                        anim.SetBool("Sitting",false);
+                        anim.SetBool("Walking",false);
                         state = State.WALK;
                     }
 
@@ -159,9 +158,9 @@ public class NPC_Behaviour : MonoBehaviour{
                         state = State.CONVERSATION;
                         npcsTalkingWith.Add(o);
                         talkTimer = relationships[o];
-                        anim.ResetTrigger("SitTrigger");
-                        anim.ResetTrigger("WalkTrigger");
-                        anim.SetTrigger("StopTrigger");
+                        anim.SetBool("Sitting",false);
+                        anim.SetBool("Walking",false);
+                        anim.SetBool("Standing",true);
                     }
                 } else {
                     int i = Random.Range(0, 100);
@@ -172,9 +171,9 @@ public class NPC_Behaviour : MonoBehaviour{
                         state = State.CONVERSATION;
                         npcsTalkingWith.Add(o);
                         talkTimer = i;
-                        anim.ResetTrigger("SitTrigger");
-                        anim.ResetTrigger("WalkTrigger");
-                        anim.SetTrigger("StopTrigger");
+                        anim.SetBool("Sitting",false);
+                        anim.SetBool("Walking",false);
+                        anim.SetBool("Standing",true);
                     }
                 }
             } else if (o.tag == "Player") {
@@ -199,7 +198,7 @@ public class NPC_Behaviour : MonoBehaviour{
     }
 
     public void OnTriggerStay(Collider other) {
-        if(other.tag == "Player" && state == State.CHASE && invincTimer <0) {
+        if(view.IsMine && other.tag == "Player" && state == State.CHASE && invincTimer <0) {
             other.GetComponent<PlayerMovement>().Catch();
         }
     }
@@ -228,9 +227,9 @@ public class NPC_Behaviour : MonoBehaviour{
     void initiateConversation(int npcID) {
        
         if (view.IsMine) {
-            anim.ResetTrigger("SitTrigger");
-            anim.ResetTrigger("WalkTrigger");
-            anim.SetTrigger("StopTrigger");
+            anim.SetBool("Sitting",false);
+            anim.SetBool("Walking",false);
+            anim.SetBool("Standing",true);
             state = State.CONVERSATION;
             GameObject npc = PhotonView.Find(npcID).gameObject;
             transform.LookAt(npc.transform);
@@ -247,9 +246,9 @@ public class NPC_Behaviour : MonoBehaviour{
             npcsTalkingWith.Remove(npc);
             if (npcsTalkingWith.Count == 0) {
                 state = State.WALK;
-                anim.ResetTrigger("SitTrigger");
-                anim.ResetTrigger("StopTrigger");
-                anim.SetTrigger("WalkTrigger");
+                anim.SetBool("Sitting",false);
+                anim.SetBool("Standing",false);
+                anim.SetBool("Walking",false);
             }
             
         }
