@@ -94,6 +94,8 @@ MonoBehaviour:
   - initiateConversation
   - recall
   - RPC_trigger
+  - RPC_TurnLightOff
+  - RPC_TurnLightOn
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
