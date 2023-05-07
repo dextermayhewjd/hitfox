@@ -9,6 +9,12 @@ public class OutOfBounds : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+
+        if (meshRenderer != null)
+        {
+            meshRenderer.enabled = false;
+        }
         Text = GameObject.Find("OutOfBounds");
         if (Text != null)
         {
