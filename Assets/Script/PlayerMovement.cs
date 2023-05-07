@@ -226,7 +226,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
 
         if (Time.time - lastGroundedTime <= jumpGracePeriod) {
             controller.stepOffset = stepOffset;
-            ySpeed = -0.5f;
+            ySpeed = -1.5f;
 
             animator.SetBool("isGrounded", true);
             isGrounded = true;
