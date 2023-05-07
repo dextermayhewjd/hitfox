@@ -28,7 +28,7 @@ public class SaveHedgehog : MonoBehaviourPun
     void OnTriggerStay(Collider other) {
         if (other.CompareTag("Forklift") && other.gameObject.GetComponent<Taxi>().hedgehog.activeSelf) {
             other.gameObject.GetComponent<Taxi>().drop();
-            GetComponent<PhotonView>().RPC("RPC_SaveHedgehog", RpcTarget.AllBuffered);
+            GetComponent<PhotonView>().RPC("RPC_SaveHedgehog", RpcTarget.All);
         }
     }
 

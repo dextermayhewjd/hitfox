@@ -73,7 +73,9 @@ MonoBehaviour:
     location: 
     header: FIRE!!!
     subHeader: 
-    body: 
+    body: 'Fill A Bucket With Water
+
+      Use The Bucket To Put Out The Fire'
   - objectiveId: 2
     location: 
     header: Students Are Littering Again
@@ -88,6 +90,16 @@ MonoBehaviour:
     body: 'Find a Forklift
 
       Drive Hedgedogs Back To Their Home'
+  - objectiveId: 4
+    location: 
+    header: Save The Trees!!
+    subHeader: A Lumberjack Have Begun Cutting Trees
+    body: 'Drive Them Over With A Forklift
+
+      Steal Their Axe
+
+      Don''t Get
+      Captured'
 --- !u!1 &2872178481444073242
 GameObject:
   m_ObjectHideFlags: 0
