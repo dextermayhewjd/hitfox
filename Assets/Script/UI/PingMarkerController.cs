@@ -37,6 +37,10 @@ public class PingMarkerController : MonoBehaviour
     [PunRPC]
     void PingGroundMarker(Vector3 pos, float timer, string message, PhotonMessageInfo info)
     {
+        if (this.waypointMarkerGround == null)
+        {
+            return;
+        }
         GameObject waypointMarker = Instantiate(this.waypointMarkerGround, new Vector3(0, 0, 0), Quaternion.identity, canvas.transform);
         Waypoint waypoint = waypointMarker.GetComponent<Waypoint>();
 
@@ -54,6 +58,10 @@ public class PingMarkerController : MonoBehaviour
     [PunRPC]
     void PingObjectMarker(int objectViewId, float timer, string message, PhotonMessageInfo info)
     {
+        if (this.waypointMarkerObject == null)
+        {
+            return;
+        }
         GameObject waypointMarker = Instantiate(this.waypointMarkerObject, new Vector3(0, 0, 0), Quaternion.identity, canvas.transform);
         Waypoint waypoint = waypointMarker.GetComponent<Waypoint>();
 
@@ -64,6 +72,8 @@ public class PingMarkerController : MonoBehaviour
         waypoint.subHeader = message;
 
         GameObject target = PhotonView.Find(objectViewId).gameObject;
+        waypoint.trackObject = true;
+        waypoint.trackObjectPos = true;
         waypoint.targetObject = target;
 
     }
