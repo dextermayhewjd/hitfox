@@ -2,10 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum AreaId
+{
+    None,
+    Pond,
+    QueensBuilding,
+    PhysicsBuilding,
+    IvyGateBuilding,
+    MirrorMaze,
+    RFGMainEntrance,
+    UniversityWalk,
+    RoyalFortHouse,
+    BiomedBuilding,
+    LifeSciencesBuilding,
+}
+
 public class SpawnLocation : MonoBehaviour
 {
-    public string areaId;
-    public string id;
+    public AreaId areaId;
     public string name;
     public string description;
 

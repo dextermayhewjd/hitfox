@@ -1,0 +1,11 @@
+Model Information:
+* title:	Dopplegang - 3D Mock-up Scene
+* source:	https://sketchfab.com/3d-models/dopplegang-3d-mock-up-scene-98e3877fcd264552aff3b27640fcf3c5
+* author:	MMKH (https://sketchfab.com/mmkh)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Dopplegang - 3D Mock-up Scene" (https://sketchfab.com/3d-models/dopplegang-3d-mock-up-scene-98e3877fcd264552aff3b27640fcf3c5) by MMKH (https://sketchfab.com/mmkh) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

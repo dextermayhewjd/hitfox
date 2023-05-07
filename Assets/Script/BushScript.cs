@@ -3,36 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using Photon.Pun;
+using TMPro;
 
 public class BushScript : OnTrigger
 {
     public bool inUse = false;
     public PhotonView playerInBush = null;
     public Canvas inUseSign;
+    public GameObject hud;
 
     private void Start() {
         inUseSign.enabled = false;
+        hud = GameObject.Find("HUD");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Interact"))
+        if (inUse && playerInBush.IsMine)
         {
-            if (inUse && playerInBush.IsMine)
-            {
+            hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
+            hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Stop Hiding"; // change text of action
+            if (Input.GetButtonDown("Enter")) {
+                hud.transform.Find("EnterButton").gameObject.SetActive(false); // show button
                 CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
                 cam.LookAt = playerInBush.transform;
                 cam.Follow = playerInBush.transform;
                 this.photonView.RPC("RPC_PlaySound", RpcTarget.AllBuffered);
                 this.photonView.RPC("RPC_UnhidePlayer", RpcTarget.AllBuffered);
                 this.photonView.RPC("RPC_HideSign", RpcTarget.OthersBuffered);
-                
             }
+            
+        }
 
-            else if (!inUse && colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null && 
-                !colliders.Find(x => x.GetComponent<PlayerMovement>().driving)) 
-            {
+        else if (!inUse && colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null && 
+            !colliders.Find(x => x.GetComponent<PlayerMovement>().driving)) 
+        {
+            hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
+            hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Hide"; // change text of action
+            if (Input.GetButtonDown("Enter")) {
+                hud.transform.Find("InteractButton").gameObject.SetActive(false); // hide button
                 this.photonView.RPC("RPC_PlaySound", RpcTarget.AllBuffered);
                 this.photonView.RPC("RPC_HidePlayer", RpcTarget.AllBuffered, colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PhotonView>().ViewID);
                 this.photonView.RPC("RPC_ShowSign", RpcTarget.OthersBuffered);
@@ -44,6 +54,7 @@ public class BushScript : OnTrigger
                 }
             }
         }
+        
     }
 
     [PunRPC]

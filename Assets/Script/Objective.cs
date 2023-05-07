@@ -8,10 +8,13 @@ public class Objective : MonoBehaviour
     private PhotonView pv;
 
     public int viewId;
-    public string objectiveId;
+    public ObjectiveId objectiveId;
     public float startTime;
     public int[] spawnedObjectsId;
-    public string spawnLocationDescription;
+    public AreaId spawnLocationAreaId;
+    public int spawnLocationIndex;
+    public ObjectiveWaypointId objectiveWaypointId;
+    public Vector3 objectiveWaypointPos;
 
     // Start is called before the first frame update
     void Start()
@@ -19,9 +22,12 @@ public class Objective : MonoBehaviour
         pv = GetComponent<PhotonView>();
         object[] instanceData = pv.InstantiationData;
         viewId = pv.ViewID;
-        objectiveId = (string)instanceData[0];
+        objectiveId = (ObjectiveId)instanceData[0];
         spawnedObjectsId = (int[])instanceData[1];
-        spawnLocationDescription = (string)instanceData[2];
+        spawnLocationAreaId = (AreaId)instanceData[2];
+        spawnLocationIndex = (int)instanceData[3];
+        objectiveWaypointId = (ObjectiveWaypointId)instanceData[4];
+        objectiveWaypointPos = (Vector3)instanceData[5];
         startTime = Time.time;    
     }
 
@@ -43,7 +49,7 @@ public class Objective : MonoBehaviour
 
     public int NumObjectsSpawned()
     {
-        if (objectiveId == "fire")
+        if (objectiveId == ObjectiveId.Fire)
         {
             return PhotonView.Find(spawnedObjectsId[0]).GetComponent<FireSource>().NumFires();
         }

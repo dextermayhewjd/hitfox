@@ -3,6 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
+public enum ObjectiveId
+{
+    None,
+    Fire,
+    Trash,
+    HedgedogTaxi,
+    Lumberjack,
+}
+
+public enum StartingObjectId
+{
+    None,
+    Bucket,
+    Forklift,
+}
+
 public class ObjectivesController : MonoBehaviour
 {
     private PhotonView pv;
@@ -16,15 +32,16 @@ public class ObjectivesController : MonoBehaviour
     [System.Serializable]
     private class ObjectiveInfo
     {
-        [SerializeField] public string objectiveId;
+        [SerializeField] public ObjectiveId objectiveId;
         [SerializeField] public GameObject[] objectsToSpawn;
         [SerializeField] public SpawnLocation[] spawnLocations;
+        [SerializeField] public int maxActiveObjectives;
     }
 
     [System.Serializable]
     private class StartingObjects
     {
-        [SerializeField] public string id;
+        [SerializeField] public StartingObjectId id;
         [SerializeField] public int numObjectsToSpawn;
         [SerializeField] public GameObject objectToSpawn;
         [SerializeField] public SpawnLocation[] spawnLocations;
@@ -32,21 +49,50 @@ public class ObjectivesController : MonoBehaviour
 
     private class ObjectiveSetup
     {
-        public string objectiveId;
-        public string locationId;
+        public ObjectiveId objectiveId;
+        public int spawnLocationIndex;
         public int numObjectsToSpawn;
 
-        public ObjectiveSetup(string objectiveId, int numObjectsToSpawn = 1)
+        public ObjectiveSetup(ObjectiveId objectiveId, int spawnLocationIndex = -1)
         {
             this.objectiveId = objectiveId;
-            this.numObjectsToSpawn = numObjectsToSpawn;
+            this.numObjectsToSpawn = DecideNumObjectsToSpawn();
+            this.spawnLocationIndex = spawnLocationIndex;
         }
 
-        public ObjectiveSetup(string objectiveId, string locationId, int numObjectsToSpawn = 1)
+        private int DecideNumObjectsToSpawn()
+        {
+            int numPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
+
+            switch(this.objectiveId)
+            {
+                case ObjectiveId.Trash:
+                    return ObjectsToSpawnMultipler(5, numPlayers);
+                    break;
+                case ObjectiveId.HedgedogTaxi:
+                    return ObjectsToSpawnMultipler(2, numPlayers);
+            }
+
+            return 1;
+        }
+
+        private int ObjectsToSpawnMultipler(int initialNumber, int numPlayers)
+        {
+            return (int)Mathf.Round((float)initialNumber * (1f + (Mathf.Log((float)numPlayers) / 2)));
+        }
+    }
+
+    private class ActiveObjectiveInfo
+    {
+        public ObjectiveId objectiveId;
+        public int numActiveObjectives;
+        public List<int> usedSpawnLocationIndex;
+
+        public ActiveObjectiveInfo(ObjectiveId objectiveId)
         {
             this.objectiveId = objectiveId;
-            this.locationId = locationId;
-            this.numObjectsToSpawn = numObjectsToSpawn;
+            this.numActiveObjectives = 0;
+            this.usedSpawnLocationIndex = new List<int>();
         }
     }
 
@@ -62,7 +108,7 @@ public class ObjectivesController : MonoBehaviour
     [Header("Objects To Spawn At The Start")]
     [SerializeField] private StartingObjects[] startingObjectsList;
 
-    private Dictionary<string, ObjectiveInfo> objectiveInfoTable;
+    private Dictionary<ObjectiveId, ObjectiveInfo> objectiveInfoTable;
 
     private float timeSinceObjectiveStart;
 
@@ -81,7 +127,7 @@ public class ObjectivesController : MonoBehaviour
             objectivesAlert = GameObject.Find("ObjectivesAlertDisplay").GetComponent<ObjectivesAlert>();
         }
 
-        objectiveInfoTable = new Dictionary<string, ObjectiveInfo>();
+        objectiveInfoTable = new Dictionary<ObjectiveId, ObjectiveInfo>();
 
         foreach (var objectiveInfo in objectiveInfoList)
         {
@@ -102,7 +148,6 @@ public class ObjectivesController : MonoBehaviour
 
         // Development Purposes.
         // =====
-        // Fire Objective
         if (Input.GetKeyDown(KeyCode.G))
         {
             FireObjective();
@@ -181,26 +226,29 @@ public class ObjectivesController : MonoBehaviour
             return;
         }
 
-        StartObjective(objectiveSetup.objectiveId, objectiveSetup.numObjectsToSpawn, objectiveSetup.locationId);
+        StartObjective(objectiveSetup.objectiveId, objectiveSetup.numObjectsToSpawn, objectiveSetup.spawnLocationIndex);
     }
 
     private ObjectiveSetup DecideObjective()
     {
         int numActiveObjectives = 0;
-        int numFireObjectives = 0;
-        int numTrashObjectives = 0;
+        Dictionary<ObjectiveId, ActiveObjectiveInfo> activeObjectivesInfo = new Dictionary<ObjectiveId, ActiveObjectiveInfo>();
+
+        foreach (ObjectiveId objectiveId in objectiveInfoTable.Keys)
+        {
+            activeObjectivesInfo[objectiveId] = new ActiveObjectiveInfo(objectiveId);
+        }
 
         foreach (var objectiveObject in GameObject.FindGameObjectsWithTag("Objective"))
         {
             Objective objective = objectiveObject.GetComponent<Objective>();
-            switch (objective.objectiveId)
+
+            ObjectiveId objectiveId = objective.objectiveId;
+
+            if (activeObjectivesInfo.ContainsKey(objectiveId))
             {
-                case "fire":
-                    numFireObjectives++;
-                    break;
-                case "trash":
-                    numTrashObjectives++;
-                    break;
+                activeObjectivesInfo[objectiveId].numActiveObjectives++;
+                activeObjectivesInfo[objectiveId].usedSpawnLocationIndex.Add(objective.spawnLocationIndex);
             }
 
             numActiveObjectives++;
@@ -210,71 +258,93 @@ public class ObjectivesController : MonoBehaviour
         {
             return null;
         }
-
-        if (numActiveObjectives == 0)
+        else
         {
-            int randNum = Random.Range(0, 2);
-            switch (randNum)
+            ObjectiveId objectiveToStart =  ObjectiveRandomizer(activeObjectivesInfo);
+
+            if (objectiveToStart == ObjectiveId.None)
             {
-                case 0:
-                    return new ObjectiveSetup("fire");
-                    break;
-                case 1:
-                    return new ObjectiveSetup("trash", 5);
-                    break;
+                return null;
+            }
+            else
+            {
+                return new ObjectiveSetup(objectiveToStart, DecideSpawnLocation(objectiveToStart, activeObjectivesInfo[objectiveToStart].usedSpawnLocationIndex));
             }
         }
-
-        if (numFireObjectives == 0)
-        {
-            return new ObjectiveSetup("fire");
-        }
-
-        if (numTrashObjectives == 0)
-        {
-            return new ObjectiveSetup("trash", 5);
-        }
-
-        if (numActiveObjectives < maxActiveObjectives)
-        {
-            int randNum = Random.Range(0, 3);
-            switch (randNum)
-            {
-                case 0:
-                    return new ObjectiveSetup("fire");
-                    break;
-                case 1:
-                    return new ObjectiveSetup("trash", 5);
-                    break;
-            }
-        }
-
-        return null;
     }
 
-    private void StartObjective(string objectiveId, int numObjectsToSpawn, string locationId = "")
+    private ObjectiveId ObjectiveRandomizer(Dictionary<ObjectiveId, ActiveObjectiveInfo> activeObjectivesInfo)
+    {
+        List<ObjectiveId> availableObjectives = new List<ObjectiveId>();
+
+        foreach(KeyValuePair<ObjectiveId, ActiveObjectiveInfo> activeObjectiveInfo in activeObjectivesInfo)
+        {
+            if (activeObjectiveInfo.Value.numActiveObjectives < objectiveInfoTable[activeObjectiveInfo.Key].maxActiveObjectives)
+            {
+                availableObjectives.Add(activeObjectiveInfo.Key);
+            }
+        }
+
+        if (availableObjectives.Count == 0)
+        {
+            return ObjectiveId.None;
+        }
+
+        return availableObjectives[Random.Range(0, availableObjectives.Count)];
+    }
+
+    private int DecideSpawnLocation(ObjectiveId objectiveId, List<int> usedSpawnLocationIndex)
+    {
+        ObjectiveInfo objectiveInfo = GetObjective(objectiveId);
+
+        if (usedSpawnLocationIndex.Count == 0)
+        {
+            return Random.Range(0, objectiveInfo.spawnLocations.Length);
+        }
+
+        List<int> unusedSpawnLocationIndex = new List<int>();
+
+        for (int i = 0; i < objectiveInfo.spawnLocations.Length; i++)
+        {
+            if (!usedSpawnLocationIndex.Contains(i))
+            {
+                unusedSpawnLocationIndex.Add(i);
+            }
+        }
+
+        if (unusedSpawnLocationIndex.Count == 0)
+        {
+            return -1;
+        }
+        else
+        {
+            return unusedSpawnLocationIndex[Random.Range(0, unusedSpawnLocationIndex.Count)];
+        }
+    }
+
+    private void StartObjective(ObjectiveId objectiveId, int numObjectsToSpawn, int spawnLocationIndex = -1)
     {
         pv.RPC("UpdateTimeSinceObjectiveStart", RpcTarget.All, Time.time);
         switch(objectiveId)
         {
-            case "fire":
-                FireObjective();
+            case ObjectiveId.Fire:
+                FireObjective(spawnLocationIndex);
                 break;
-            case "trash":
-                TrashObjective(numObjectsToSpawn);
+            case ObjectiveId.Trash:
+                TrashObjective(numObjectsToSpawn, spawnLocationIndex);
                 break;
-            case "hedgedogTaxi":
-                HedgedogTaxiObjective();
+            case ObjectiveId.HedgedogTaxi:
+                HedgedogTaxiObjective(numObjectsToSpawn, spawnLocationIndex);
                 break;
-            case "lumberjack":
-                LumberjackObjective();
+            case ObjectiveId.Lumberjack:
+                LumberjackObjective(numObjectsToSpawn, spawnLocationIndex);
                 break;
         }
     }
 
-    public void TrashObjective(int numTrash = 5, string locationId = "")
+    public void TrashObjective(int numTrash = 5, int spawnLocationIndex = -1)
     {
-        string objectiveId = "trash";
+        ObjectiveId objectiveId = ObjectiveId.Trash;
 
         ObjectiveInfo objective = GetObjective(objectiveId);
 
@@ -291,18 +361,12 @@ public class ObjectivesController : MonoBehaviour
             
         }
 
-        SpawnLocation spawnLocationArea = objective.spawnLocations[Random.Range(0, objective.spawnLocations.Length)];
-
-        if (locationId != "")
+        if (spawnLocationIndex == -1)
         {
-            foreach (var spawnLocation in objective.spawnLocations)
-            {
-                if (spawnLocation.id == locationId)
-                {
-                    spawnLocationArea = spawnLocation;
-                }
-            }
+            spawnLocationIndex = Random.Range(0, objective.spawnLocations.Length);
         }
+
+        SpawnLocation spawnLocationArea = objective.spawnLocations[spawnLocationIndex];
 
         List<int> spawnedObjectsId = new List<int>();
 
@@ -313,11 +377,17 @@ public class ObjectivesController : MonoBehaviour
             spawnedObjectsId.Add(spawnedObject.GetComponent<PhotonView>().ViewID);
         }
 
+        Vector3 waypointMarkerLocation = spawnLocationArea.centre;
+        waypointMarkerLocation.y += 5f;
+
         // Spawn an Objective to track that objective.
-        object[] instanceData = new object[3];
+        object[] instanceData = new object[6];
         instanceData[0] = objective.objectiveId;
         instanceData[1] = spawnedObjectsId.ToArray();
-        instanceData[2] = spawnLocationArea.description;
+        instanceData[2] = spawnLocationArea.areaId;
+        instanceData[3] = spawnLocationIndex;
+        instanceData[4] = ObjectiveWaypointId.Trash;
+        instanceData[5] = waypointMarkerLocation;
 
         GameObject spawnedObjective = PhotonNetwork.InstantiateRoomObject(objectiveObject.name, spawnLocationArea.centre, Quaternion.identity, 0, instanceData);
         int objectiveViewId = spawnedObjective.GetComponent<PhotonView>().ViewID;
@@ -326,14 +396,12 @@ public class ObjectivesController : MonoBehaviour
         pv.RPC("AddObjectiveAlert", RpcTarget.All, objective.objectiveId, spawnLocationArea.description);
 
         // Add Waypoint Marker To Objective.
-        Vector3 waypointMarkerLocation = spawnLocationArea.centre;
-        waypointMarkerLocation.y += 5f;
-        pv.RPC("ObjectiveWaypointMarker", RpcTarget.All, objectiveViewId, waypointMarkerLocation, objective.objectiveId);
+        pv.RPC("ObjectiveWaypointMarker", RpcTarget.All, objectiveViewId, waypointMarkerLocation, ObjectiveWaypointId.Trash, true);
     }
 
-    public void FireObjective(string locationId = "")
+    public void FireObjective(int spawnLocationIndex = -1)
     {
-        string objectiveId = "fire";
+        ObjectiveId objectiveId = ObjectiveId.Fire;
 
         ObjectiveInfo objective = GetObjective(objectiveId);
 
@@ -342,18 +410,12 @@ public class ObjectivesController : MonoBehaviour
             return;
         }
 
-        SpawnLocation spawnLocationArea = objective.spawnLocations[Random.Range(0, objective.spawnLocations.Length)];
-
-        if (locationId != "")
+        if (spawnLocationIndex == -1)
         {
-            foreach (var spawnLocation in objective.spawnLocations)
-            {
-                if (spawnLocation.id == locationId)
-                {
-                    spawnLocationArea = spawnLocation;
-                }
-            }
+            spawnLocationIndex = Random.Range(0, objective.spawnLocations.Length);
         }
+
+        SpawnLocation spawnLocationArea = objective.spawnLocations[spawnLocationIndex];
 
         GameObject objectToSpawn = objective.objectsToSpawn[0];
 
@@ -364,11 +426,17 @@ public class ObjectivesController : MonoBehaviour
         int spawnedObjectviewID = spawnedObject.GetComponent<PhotonView>().ViewID;
         spawnedObjectsId.Add(spawnedObjectviewID);
 
+        Vector3 waypointMarkerLocation = spawnLocationArea.centre;
+        waypointMarkerLocation.y += 5f;
+
         // Spawn an Objective to track that objective.
-        object[] instanceData = new object[3];
+        object[] instanceData = new object[6];
         instanceData[0] = objective.objectiveId;
         instanceData[1] = spawnedObjectsId.ToArray();
-        instanceData[2] = spawnLocationArea.description;
+        instanceData[2] = spawnLocationArea.areaId;
+        instanceData[3] = spawnLocationIndex;
+        instanceData[4] = ObjectiveWaypointId.Fire;
+        instanceData[5] = waypointMarkerLocation;
 
         GameObject spawnedObjective = PhotonNetwork.InstantiateRoomObject(objectiveObject.name, spawnLocationArea.centre, Quaternion.identity, 0, instanceData);
         int objectiveViewId = spawnedObjective.GetComponent<PhotonView>().ViewID;
@@ -377,14 +445,12 @@ public class ObjectivesController : MonoBehaviour
         pv.RPC("AddObjectiveAlert", RpcTarget.All, objective.objectiveId, spawnLocationArea.description);
 
         // Add Waypoint Marker To Objective.
-        Vector3 waypointMarkerLocation = spawnLocationArea.centre;
-        waypointMarkerLocation.y += 5f;
-        pv.RPC("ObjectiveWaypointMarker", RpcTarget.All, objectiveViewId, waypointMarkerLocation, objective.objectiveId);
+        pv.RPC("ObjectiveWaypointMarker", RpcTarget.All, objectiveViewId, waypointMarkerLocation, ObjectiveWaypointId.Fire, true);
     }
 
-    public void HedgedogTaxiObjective(int numHedgehog = 2, string locationId = "")
+    public void HedgedogTaxiObjective(int numHedgehog = 2, int spawnLocationIndex = -1)
     {
-        string objectiveId = "hedgedogTaxi";
+        ObjectiveId objectiveId = ObjectiveId.HedgedogTaxi;
 
         ObjectiveInfo objective = GetObjective(objectiveId);
 
@@ -399,21 +465,29 @@ public class ObjectivesController : MonoBehaviour
 
         for (int i = 0; i < numHedgehog; i++)
         {
-            SpawnLocation spawnLocationArea = objective.spawnLocations[Random.Range(0, objective.spawnLocations.Length)];
+            if (spawnLocationIndex == -1)
+            {
+                spawnLocationIndex = Random.Range(0, objective.spawnLocations.Length);
+            }
+
+            SpawnLocation spawnLocationArea = objective.spawnLocations[spawnLocationIndex];
             Vector3 spawnLocation = spawnLocationArea.GetRandomPoint();
             GameObject spawnedObject = PhotonNetwork.InstantiateRoomObject(objectToSpawn.name, spawnLocation, Quaternion.identity);
             int spawnedObjectviewID = spawnedObject.GetComponent<PhotonView>().ViewID;
             spawnedObjectsId.Add(spawnedObjectviewID);
-            Vector3 waypointMarkerLocation = spawnLocation;
-            waypointMarkerLocation.y += 0;
-            pv.RPC("ObjectiveWaypointMarker", RpcTarget.All, spawnedObjectviewID, waypointMarkerLocation, "hedgedog");
+            Vector3 waypointMarkerLocation = spawnedObject.transform.position;
+            waypointMarkerLocation.y += 0f;
+            pv.RPC("ObjectiveWaypointMarker", RpcTarget.All, spawnedObjectviewID, waypointMarkerLocation, ObjectiveWaypointId.Hedgedog, false);
         }
 
         // Spawn an Objective to track that objective.
-        object[] instanceData = new object[3];
+        object[] instanceData = new object[6];
         instanceData[0] = objective.objectiveId;
         instanceData[1] = spawnedObjectsId.ToArray();
-        instanceData[2] = "";
+        instanceData[2] = AreaId.None;
+        instanceData[3] = 0;
+        instanceData[4] = ObjectiveWaypointId.None;
+        instanceData[5] = new Vector3(0, 0, 0);
 
         GameObject spawnedObjective = PhotonNetwork.InstantiateRoomObject(objectiveObject.name, new Vector3(0, 0, 0), Quaternion.identity, 0, instanceData);
         int objectiveViewId = spawnedObjective.GetComponent<PhotonView>().ViewID;
@@ -424,13 +498,13 @@ public class ObjectivesController : MonoBehaviour
         foreach (var go in GameObject.FindGameObjectsWithTag("HedgehogHome"))
         {
             Vector3 waypointMarkerLocation = go.transform.position;
-            pv.RPC("ObjectiveWaypointMarker", RpcTarget.All, objectiveViewId, waypointMarkerLocation, objective.objectiveId);
+            pv.RPC("ObjectiveWaypointMarker", RpcTarget.All, objectiveViewId, waypointMarkerLocation, ObjectiveWaypointId.HedgedogHome, true);
         }
     }
 
-    public void LumberjackObjective(string location = "")
+    public void LumberjackObjective(int numLumberjacks = 1, int spawnLocationIndex = -1)
     {
-        string objectiveId = "lumberjack";
+        ObjectiveId objectiveId = ObjectiveId.Lumberjack;
 
         ObjectiveInfo objective = GetObjective(objectiveId);
 
@@ -460,7 +534,7 @@ public class ObjectivesController : MonoBehaviour
         // Add Marker at captured fox transform position of add to quest.
     }
 
-    private ObjectiveInfo GetObjective(string objectiveId)
+    private ObjectiveInfo GetObjective(ObjectiveId objectiveId)
     {
         ObjectiveInfo objective;
 
@@ -496,7 +570,7 @@ public class ObjectivesController : MonoBehaviour
     }
 
     [PunRPC]
-    public void AddObjectiveAlert(string objectiveId, string location)
+    public void AddObjectiveAlert(ObjectiveId objectiveId, string location)
     {
         objectivesAlert.AddObjectiveAlertToBuffer(objectiveId, location);
     }

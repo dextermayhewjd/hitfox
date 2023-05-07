@@ -6,7 +6,7 @@ using Photon.Pun;
 public class SpawnPlayers : MonoBehaviour
 {
     [SerializeField] private GameObject playerObject;
-    [SerializeField] public SpawnLocation spawnLocation;
+    [SerializeField] public SpawnLocation[] spawnLocations;
 
     private bool alreadySpawnedPlayer = false;
 
@@ -14,11 +14,11 @@ public class SpawnPlayers : MonoBehaviour
     {
         if (PhotonNetwork.IsMasterClient && !alreadySpawnedPlayer)
         {
-            PhotonNetwork.Instantiate(playerObject.name, spawnLocation.GetRandomPoint(), Quaternion.identity);
+            PhotonNetwork.Instantiate(playerObject.name, spawnLocations[Random.Range(0, spawnLocations.Length)].GetRandomPoint(), Quaternion.identity);
         }
         else
         {
-            PhotonNetwork.Instantiate(playerObject.name, spawnLocation.GetRandomPoint(), Quaternion.identity);
+            PhotonNetwork.Instantiate(playerObject.name, spawnLocations[Random.Range(0, spawnLocations.Length)].GetRandomPoint(), Quaternion.identity);
             alreadySpawnedPlayer = true;
         }
     }
