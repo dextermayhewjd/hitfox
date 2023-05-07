@@ -56,6 +56,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     public GameObject footstep;
 
     public GameObject Fox;
+    public string cheatCode;
     
 
     public void Catch()
@@ -117,17 +118,21 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     void RPC_FreeFly(int playerID) {
         PhotonView.Find(playerID).gameObject.SetActive(false);
     }
+    
 
     // Update is called once per frame
     void Update()
     {
         if (view.IsMine)
         {
-            // noclip mode 
-            if (Input.GetKey(KeyCode.F) && Input.GetKey(KeyCode.L) && Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.O) && Input.GetKey(KeyCode.X)) {
-                Camera.main.GetComponent<FreeFlyCamera>().enabled = !Camera.main.GetComponent<FreeFlyCamera>().enabled;
-                Camera.main.GetComponent<CinemachineBrain>().enabled = !Camera.main.GetComponent<CinemachineBrain>().enabled;
-                this.photonView.RPC("RPC_FreeFly", RpcTarget.AllBuffered, view.ViewID);
+            foreach (char c in Input.inputString) {
+                cheatCode += c;
+                if (cheatCode.Contains("flyfox")) {
+                    Camera.main.GetComponent<FreeFlyCamera>().enabled = !Camera.main.GetComponent<FreeFlyCamera>().enabled;
+                    Camera.main.GetComponent<CinemachineBrain>().enabled = !Camera.main.GetComponent<CinemachineBrain>().enabled;
+                    this.photonView.RPC("RPC_FreeFly", RpcTarget.AllBuffered, view.ViewID);
+                    cheatCode = "";
+                }
             }
 
             // manual capture only for testing
