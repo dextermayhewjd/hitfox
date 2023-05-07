@@ -57,6 +57,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
 
     public GameObject Fox;
     public string cheatCode;
+    public GameObject speedLines;
     
 
     public void Catch()
@@ -91,6 +92,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         // Input controller.
         inputController = GameObject.Find("InputController").GetComponent<InputController>();
 
+        speedLines.SetActive(false);
         footstep.SetActive(false);
         captured = false;
         hidden = false;
@@ -179,11 +181,12 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
 
                 if (inputController.GetInput("Sprint"))
                 {
+                    speedLines.SetActive(true);
                     Run();
                 }
                 else
                 {
-
+                    speedLines.SetActive(false);
                     Walk();
                 }
             }
