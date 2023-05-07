@@ -28,7 +28,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: eu
+  DevRegion: 
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -68,6 +68,34 @@ MonoBehaviour:
   - RPC_PickUpObject
   - ThrowBucket1
   - RPC_UpdateTimer
+  - RPC_IncreaseScore
+  - RPC_Lose
+  - RPC_Victory
+  - PlaceGroundMarker
+  - PlaceObjectMarker
+  - RPC_DropHedgehog
+  - RPC_PickUpHedgehog
+  - RPC_SaveHedgehog
+  - RPC_ThrowBucket
+  - RPC_InteractWithLumberjack
+  - RPC_UpdateLumberjack
+  - AddObjectiveAlert
+  - AddToQuest
+  - ObjectiveWaypointMarker
+  - PingGroundMarker
+  - PingObjectMarker
+  - RPC_AddFire
+  - RPC_FiresPutOut
+  - RPC_RemoveFire
+  - UpdateTimeSinceObjectiveStart
+  - RPC_FreeFly
+  - becomeChased
+  - endConversation
+  - initiateConversation
+  - recall
+  - RPC_trigger
+  - RPC_TurnLightOff
+  - RPC_TurnLightOn
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

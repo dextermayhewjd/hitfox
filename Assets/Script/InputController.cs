@@ -9,8 +9,13 @@ public class InputController : MonoBehaviour
 
     private bool movementKeysLocked;
 
-    // Start is called before the first frame update
-    void Start()
+    public GameObject maincam;
+    public GameObject cam1;
+    public GameObject cam2;
+    public GameObject cam3;
+
+
+    void Awake()
     {
         movementKeysLocked = false;
 
@@ -20,14 +25,25 @@ public class InputController : MonoBehaviour
         buttons["Jump"] = true;
         buttons["Escape"] = true;
         buttons["Sprint"] = true;
-        keys[KeyCode.Escape] = true;
-        keys[KeyCode.Tab] = true;
+
+        SetKeyCodes();
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
     }
 
     // Update is called once per frame
     void Update()
     {
+    }
 
+    private void SetKeyCodes()
+    {
+        foreach (KeyCode keycode in System.Enum.GetValues(typeof(KeyCode)))
+        {
+            keys[keycode] = true;
+        }
     }
 
     public void LockMovementKeys()
@@ -47,11 +63,35 @@ public class InputController : MonoBehaviour
     public void LockInteractKeys()
     {
         keys[KeyCode.Tab] = false;
+
+        GameObject cameraSwitcherObj = GameObject.Find("CameraSwitcher");
+
+        if (cameraSwitcherObj != null)
+        {
+            CameraSwitcher cameraSwitcher = cameraSwitcherObj.GetComponent<CameraSwitcher>();
+
+            foreach (KeyCode keycode in cameraSwitcher.keybinds)
+            {
+                keys[keycode] = false;
+            }
+        }
     }
 
     public void UnlockInteractKeys()
     {
         keys[KeyCode.Tab] = true;
+
+        GameObject cameraSwitcherObj = GameObject.Find("CameraSwitcher");
+
+        if (cameraSwitcherObj != null)
+        {
+            CameraSwitcher cameraSwitcher = cameraSwitcherObj.GetComponent<CameraSwitcher>();
+
+            foreach (KeyCode keycode in cameraSwitcher.keybinds)
+            {
+                keys[keycode] = true;
+            }
+        }
     }
 
     // Get Button Input.

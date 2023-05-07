@@ -16,13 +16,15 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     private CharacterController controller;
     private Animator animator;
 
+    [Header("Movement")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float walkSpeed;
     [SerializeField] private float sprintMultiplier;
+
+    [Header("Camera")]
     [SerializeField] private float rotationSpeed;
 
-    // Jumping / Falling
-    // To account for charging up the jump animiation.
+    [Header("Jumping")]
     [SerializeField] private float jumpDelay;
     [SerializeField] private float jumpHeight;
     [SerializeField] private float gravityMultiplier;
@@ -35,6 +37,11 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     private bool isFalling;
     private bool isGrounded;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource walkSFX;
+    [SerializeField] private AudioSource runSFX;
+    [SerializeField] private AudioSource jumpSFX;
+
     private Vector3 moveDirection;
     private Vector3 velocity;
 
@@ -42,17 +49,20 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     public bool hidden;
     public CinemachineFreeLook cam;
     public Transform cameraTransform;
-    [SerializeField] AudioSource jumpSFX;
     public PhotonView view;
     public static bool onground = false;
     public bool driving = false;
     public GameObject cage;
     public GameObject footstep;
+
+    public GameObject Fox;
+    public string cheatCode;
+    public GameObject speedLines;
     
 
     public void Catch()
     {
-        Vector3 cagePosition = new Vector3(transform.position.x , transform.position.y - 0.5f, transform.position.z);
+        Vector3 cagePosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
         this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
     }
@@ -62,6 +72,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     {
         PhotonView player = PhotonView.Find(playerID);
         player.GetComponent<PlayerMovement>().captured = true;
+        player.GetComponent<CharacterController>().detectCollisions = false;
         player.gameObject.transform.Find("Collider").gameObject.SetActive(false);
         PhotonView.Find(cageID).GetComponent<CageScript>().ownerId = playerID;
     }
@@ -81,6 +92,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         // Input controller.
         inputController = GameObject.Find("InputController").GetComponent<InputController>();
 
+        speedLines.SetActive(false);
         footstep.SetActive(false);
         captured = false;
         hidden = false;
@@ -104,13 +116,27 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
         cameraTransform.rotation = rotation;
     }
 
-    private bool locked = true;
+    [PunRPC]
+    void RPC_FreeFly(int playerID) {
+        PhotonView.Find(playerID).gameObject.SetActive(false);
+    }
+    
 
     // Update is called once per frame
     void Update()
     {
         if (view.IsMine)
         {
+            foreach (char c in Input.inputString) {
+                cheatCode += c;
+                if (cheatCode.Contains("flyfox")) {
+                    Camera.main.GetComponent<FreeFlyCamera>().enabled = !Camera.main.GetComponent<FreeFlyCamera>().enabled;
+                    Camera.main.GetComponent<CinemachineBrain>().enabled = !Camera.main.GetComponent<CinemachineBrain>().enabled;
+                    this.photonView.RPC("RPC_FreeFly", RpcTarget.AllBuffered, view.ViewID);
+                    cheatCode = "";
+                }
+            }
+
             // manual capture only for testing
             if (Input.GetKeyDown(KeyCode.R))
             {
@@ -127,6 +153,10 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             if (!driving)
             {
                 Movement();
+            }
+            else
+            {
+                Idle();
             }
         }
     }
@@ -151,11 +181,12 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
 
                 if (inputController.GetInput("Sprint"))
                 {
+                    speedLines.SetActive(true);
                     Run();
                 }
                 else
                 {
-
+                    speedLines.SetActive(false);
                     Walk();
                 }
             }
@@ -184,6 +215,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             if (inputController.GetInputDown("Jump"))
             {
                 jumpedTime = Time.time;
+                walkSFX.enabled = false;
+                runSFX.enabled = false;
             }
         } else {
             onground = false;
@@ -217,6 +250,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             controller.stepOffset = 0.0f;
             animator.SetBool("isGrounded", false);
             isGrounded = false;
+            walkSFX.enabled = false;
+            runSFX.enabled = false;
 
             if ((isJumping && ySpeed < 0) || ySpeed < -2)
             {
@@ -261,30 +296,22 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     {
         animator.SetFloat("Speed", 0, 0.1f, Time.deltaTime);
         animator.SetBool("isMoving", false);
-        StopFootsteps();
+        walkSFX.enabled = false;
+        runSFX.enabled = false;
     } 
 
     private void Walk() {
         moveSpeed = walkSpeed;
         animator.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);
-        // Need to sync with animation and move speed. Or replace how this is played.
+        walkSFX.enabled = true;
+        runSFX.enabled = false;
     }
 
     private void Run()
     {
         moveSpeed = walkSpeed * sprintMultiplier;
         animator.SetFloat("Speed", 1, 0.1f, Time.deltaTime);
-        // Need to speed up to sync with animation and move speed. Or replace how this is played.
-        Footsteps();
-    }
-
-    private void Footsteps()
-    {
-        footstep.SetActive(true);
-    }
-
-    private void StopFootsteps()
-    {
-        footstep.SetActive(false);
+        walkSFX.enabled = false;
+        runSFX.enabled = true;
     }
 }

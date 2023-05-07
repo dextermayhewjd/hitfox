@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 public class OnTrigger : MonoBehaviourPun
 {
@@ -23,5 +24,11 @@ public class OnTrigger : MonoBehaviourPun
             Debug.Log("Player left");
             colliders.Remove(col);
         }
+    }
+
+    void Update() {
+        if (colliders.Count > 0) {
+            colliders.RemoveAll(item => item == null);
+        } 
     }
 }

@@ -171,8 +171,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4745461761367367769}
-  - component: {fileID: 9197440616160129559}
   - component: {fileID: 4764620150563952582}
+  - component: {fileID: 6663287789656073282}
   m_Layer: 0
   m_Name: Bin1
   m_TagString: Bin
@@ -198,19 +198,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &9197440616160129559
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7828893272956380146}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 6, y: 9, z: 6}
-  m_Center: {x: 3, y: 3.5, z: 0}
 --- !u!114 &4764620150563952582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,6 +210,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1d4570afd816522fbb2bdea7fbb8174, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!136 &6663287789656073282
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7828893272956380146}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 6.668439
+  m_Height: 13.336878
+  m_Direction: 1
+  m_Center: {x: 3.0739748, y: 2.67362, z: 0}
 --- !u!1 &7832440173118318937
 GameObject:
   m_ObjectHideFlags: 0

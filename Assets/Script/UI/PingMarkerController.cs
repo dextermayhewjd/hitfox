@@ -8,96 +8,63 @@ using Photon.Pun;
 public class PingMarkerController : MonoBehaviour
 {
     // Todo
-    // - Make it so text always faces camera. Modify current billboard script or create new one so that 
+    //  - Modify current billboard script or create new one so that 
     //   it is always perpendicular to the horizontal axis.
     // - Add audio.
     // - Add animations.
 
-    // Ping prefabs.
-    [SerializeField] private GameObject pingMarkerGround;
-    [SerializeField] private GameObject pingMarkerObject;
+    [Header("Main Canvas")]
+    [SerializeField] private GameObject canvas;
 
-    // Ping audio. Can have multiple audio for different types of pings.
-    // [SerializeField] private AudioClip pingAudio;
+    [Header("Waypoint Marker Prefabs")]
+    [SerializeField] private GameObject waypointMarkerGround;
+    [SerializeField] private GameObject waypointMarkerObject;
+
+    [Header("Ping Audio")]
+    [SerializeField] private AudioClip audioWarning;
+    [SerializeField] private AudioClip audioNeutral;
 
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (canvas == null)
+        {
+            canvas = GameObject.FindGameObjectWithTag("UICanvas");
+        }
     }
 
     // Ground markers get placed relative to the ground.
-    public void PlaceGroundMarker(Vector3 pos, float timer, string message)
+    [PunRPC]
+    void PingGroundMarker(Vector3 pos, float timer, string message, PhotonMessageInfo info)
     {
-        Ping pingComponent = pingMarkerGround.GetComponent<Ping>();
+        GameObject waypointMarker = Instantiate(this.waypointMarkerGround, new Vector3(0, 0, 0), Quaternion.identity, canvas.transform);
+        Waypoint waypoint = waypointMarker.GetComponent<Waypoint>();
 
-        pingComponent.useTimer = true;
-        pingComponent.timer = timer;
-        pingComponent.message = message;
+        waypoint.useTimer = true;
+        waypoint.timer = timer;
 
-        try
-        {
-            foreach (GameObject fox in GameObject.FindGameObjectsWithTag("Player")) {
-                if(fox.GetComponent<PhotonView>().IsMine)
-                {
-                    pingComponent.origin = fox;
-                }
-            }
-        }
-        catch
-        {
+        waypoint.targetPos = pos;
 
-        }
+        waypoint.header = info.Sender.NickName;
+        waypoint.subHeader = message;
 
-        pingComponent.target = pingMarkerGround;
-
-        try
-        {
-            PhotonNetwork.Instantiate(pingMarkerGround.name, pos, Quaternion.identity);
-        } 
-        catch
-        {
-
-        }
     }
 
     // Object markers attatches itself to the object.
-    public void PlaceObjectMarker(GameObject targetObj, float timer, string message)
+    [PunRPC]
+    void PingObjectMarker(int objectViewId, float timer, string message, PhotonMessageInfo info)
     {
-        Ping pingComponent = pingMarkerObject.GetComponent<Ping>();
+        GameObject waypointMarker = Instantiate(this.waypointMarkerObject, new Vector3(0, 0, 0), Quaternion.identity, canvas.transform);
+        Waypoint waypoint = waypointMarker.GetComponent<Waypoint>();
 
-        pingComponent.useTimer = true;
-        pingComponent.timer = timer;
-        pingComponent.message = message;
+        waypoint.useTimer = true;
+        waypoint.timer = timer;
 
-        try
-        {
-            foreach (GameObject fox in GameObject.FindGameObjectsWithTag("Player")) {
-                if(fox.GetComponent<PhotonView>().IsMine)
-                {
-                    pingComponent.origin = fox;
-                }
-            }
-        }
-        catch
-        {
+        waypoint.header = info.Sender.NickName;
+        waypoint.subHeader = message;
 
-        }
-        pingComponent.target = targetObj;
+        GameObject target = PhotonView.Find(objectViewId).gameObject;
+        waypoint.targetObject = target;
 
-        try
-        {
-            PhotonNetwork.Instantiate(pingMarkerObject.name, targetObj.transform.position, Quaternion.identity);
-        }
-        catch
-        {
-
-        }
     }
 }

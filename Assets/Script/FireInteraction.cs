@@ -8,13 +8,35 @@ public class FireInteraction : MonoBehaviourPun
 {
     public Slider progressBar;
     public float health = 1f;
-    public float recoverSpeed = 0.025f;    
-
+    public float recoverSpeed = 0.015f;    
+    // public GameObject QuestSystem = GameObject.Find("QuestManager");
     // for the fire it encounter 
     private BucketFill BucketFillInteraction;
     
     void Update(){
-        this.photonView.RPC("RPC_UpdateBucket", RpcTarget.AllBuffered);
+        // if the fire is put out
+        if(health <= 0)
+        {
+            BucketFillInteraction.isPouring = false;
+            PhotonNetwork.Destroy(this.gameObject);
+            if (PhotonNetwork.IsMasterClient) {
+                BucketFillInteraction = null;
+                GameObject objectives = GameObject.Find("Timer+point");
+                Debug.Log("20 points for putting out fire");
+                objectives.GetComponent<Timer>().IncreaseScore(20);
+                // QuestSystem.GetComponent<Quest>().missionComplete("Fire");
+            }
+        }
+        else
+        {
+            if(health >=1f)
+            {
+                health = 1f;
+            }
+            health += recoverSpeed*Time.deltaTime;
+        }
+        progressBar.value = Mathf.Clamp(health,0f,1f);
+        // this.photonView.RPC("RPC_UpdateBucket", RpcTarget.AllBuffered);
     }
 
     void OnTriggerEnter(Collider collision)
@@ -37,26 +59,6 @@ public class FireInteraction : MonoBehaviourPun
     [PunRPC]
     void RPC_UpdateBucket()
     {
-        // if the fire is put out
-        if(health <= 0)
-        {
-            BucketFillInteraction.isPouring = false;
-            PhotonNetwork.Destroy(this.gameObject);
-        }
-        else
-        {
-            if(health >=1f)
-            {
-                health = 1f;
-            }
-            health += recoverSpeed*Time.deltaTime;
-        }
-        progressBar.value = Mathf.Clamp(health,0f,1f);
-    }
-
-    private void OnDestroy() {
-        GameObject objectives = GameObject.Find("ObjectivesTracker");
-        Debug.Log("20 points for putting out fire");
-        objectives.GetComponent<ObjectivesScript>().IncreaseScore(20);
+        
     }
 }

@@ -45,10 +45,7 @@ public class DoggoBehaviour : MonoBehaviour {
 
     }
 
-    struct ChaseParams {
-        public GameObject dog;
-        public float time;
-    }
+
 
     void Start() {
         /*if (interactingWith == null) {
@@ -76,7 +73,7 @@ public class DoggoBehaviour : MonoBehaviour {
             switch (state) {
 
                 case DoggoState.WALK:
-                    timer-=Time.deltaTime;
+                    timer -= Time.deltaTime;
                     agent.speed = walkSpeed;
                     agent.destination = destination.transform.position;
                     foreach (GameObject dog in dogs) {
@@ -87,7 +84,7 @@ public class DoggoBehaviour : MonoBehaviour {
                         }
                     }
                     foreach (GameObject player in players) {
-                        if(CanSee(player, reactivity)) {
+                        if (CanSee(player, reactivity)) {
                             interactingWith = player;
 
                             state = DoggoState.RUNTOWARD;
@@ -104,13 +101,14 @@ public class DoggoBehaviour : MonoBehaviour {
                         timer = 1;
                         //Debug.Log("Changing direction: "+ newPos + ", " + transform.position);
                     }*/
-                    
 
-                    Debug.DrawRay(transform.position, agent.destination-transform.position, Color.black, 0, false);
+
+                    //Debug.DrawRay(transform.position, agent.destination-transform.position, Color.black, 0, false);
                     break;
                 case DoggoState.RUNTOWARD:
                     agent.speed = speed;
                     if (interactingWith != null) {
+                        if (!CanSee(interactingWith, distance)) state = DoggoState.RECALL;
                         if (distance > Mathf.Lerp(2, 5, fearfulness / 100))
                             agent.destination = interactingWith.transform.position;
                         else if (interactingWith.tag == "Player") {
@@ -125,7 +123,10 @@ public class DoggoBehaviour : MonoBehaviour {
                 case DoggoState.BARK:
 
                     transform.LookAt(interactingWith.transform, Vector3.up);
-                    if (Random.Range(0, 100) < 0.001) PhotonNetwork.Instantiate(woof.name, transform.position,transform.rotation);
+                    if (Random.Range(0, 100) <= 2) {
+                        PhotonNetwork.Instantiate(woof.name, transform.position, transform.rotation);
+                        Debug.Log("Woof");
+                    }
                     if (timer > 5) {
 
                         if (distance > 3) state = DoggoState.SEARCH;
@@ -155,7 +156,7 @@ public class DoggoBehaviour : MonoBehaviour {
                     state = DoggoState.RUNTOWARD;
                     break;
                 case DoggoState.RUNAWAY:
-
+                    if (interactingWith == null) state = DoggoState.RECALL;
                     if (interactingWith.tag == "Dog") {
                         timer -= Time.deltaTime;
                         timer2 -= Time.deltaTime;
@@ -169,10 +170,10 @@ public class DoggoBehaviour : MonoBehaviour {
                             //Debug.Log("Chosen new position");
                         }
                         if (timer2 <= 0) {
-                            ChaseParams param = new ChaseParams();
-                            param.dog = gameObject;
-                            param.time = Random.Range(5, 10);
-                            interactingWith.BroadcastMessage("becomeChased", param);
+
+                            float time = Random.Range(5, 10);
+                            object[] param = { view.ViewID, time };
+                            view.RPC("becomeChased", RpcTarget.AllBuffered, param);
                             state = DoggoState.RUNTOWARD;
                         }
                         Debug.DrawRay(transform.position, agent.destination - transform.position, Color.black, 0, false);
@@ -187,10 +188,9 @@ public class DoggoBehaviour : MonoBehaviour {
                     agent.speed = speed;
                     agent.destination = interactingWith.transform.GetChild(2).position;
                     if (Vector3.Distance(transform.position, interactingWith.transform.position) < 2) {
-                        ChaseParams param = new ChaseParams();
-                        param.dog = gameObject;
-                        param.time = Random.Range(10, 20);
-                        interactingWith.BroadcastMessage("becomeChased", param);
+                        float time = Random.Range(10, 20);
+                        object[] param = { view.ViewID, time };
+                        view.RPC("becomeChased", RpcTarget.AllBuffered, param);
                         state = DoggoState.RUNTOWARD;
                     }
                     foreach (GameObject player in players) {
@@ -217,30 +217,33 @@ public class DoggoBehaviour : MonoBehaviour {
         float angle = Vector3.Angle(Vector3.Normalize(o.transform.position - transform.position), transform.forward);
 
         if (Mathf.Abs(angle) < fov) {
+            int layerMask = ~LayerMask.GetMask("NPC");
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, Vector3.Normalize(o.transform.position - transform.position), out hit, distance)) {
+            if (Physics.Raycast(transform.position, Vector3.Normalize(o.transform.position - transform.position), out hit, distance, layerMask)) {
                 if (hit.collider.transform.parent != null) {
 
                     return hit.collider.transform.parent.gameObject.GetInstanceID() == o.GetInstanceID();
                 }
+                return hit.collider.gameObject.GetInstanceID() == o.GetInstanceID();
 
-                return false;
             }
         }
         return false;
     }
 
+    [PunRPC]
+    void becomeChased(int dogID, float time) {
 
-    void becomeChased(ChaseParams param) {
-        if (interactingWith.tag != "Player" && (state == DoggoState.PLAY || state == DoggoState.RUNTOWARD)) {
-            interactingWith = param.dog;
+        if (view.IsMine && interactingWith.tag != "Player" && (state == DoggoState.PLAY || state == DoggoState.RUNTOWARD)) {
+            interactingWith = PhotonView.Find(dogID).gameObject;
             state = DoggoState.RUNAWAY;
-            timer2 = param.time;
+            timer2 = time;
         }
     }
 
+    [PunRPC]
     void recall() {
         
-        if(responsiveness > Random.Range(1,100))state = DoggoState.RECALL;
+        /*if(responsiveness > Random.Range(0,100))*/state = DoggoState.RECALL;
     }
 }

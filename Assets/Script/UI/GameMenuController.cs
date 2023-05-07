@@ -56,10 +56,10 @@ public class GameMenuController : MonoBehaviour
     {
         if (inputController.GetInputDown(KeyCode.Escape))
         {
-            menuOpen = !menuOpen;
-            if (menuOpen)
+            if (!menuOpen)
             {
                 Open();
+                
             }
             else
             {
@@ -70,6 +70,7 @@ public class GameMenuController : MonoBehaviour
 
     private void Open()
     {
+        menuOpen = true;
         if (gameMenuParent != null)
         {
             gameMenuParent.SetActive(true);
@@ -96,8 +97,9 @@ public class GameMenuController : MonoBehaviour
         uiController.UnlockCursor();
     }
 
-    private void Close()
+    public void Close()
     {
+        menuOpen = false;
         if (gameMenuParent != null)
         {
             gameMenuParent.SetActive(false);

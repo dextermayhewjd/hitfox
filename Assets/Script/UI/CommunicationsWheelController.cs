@@ -27,16 +27,6 @@ public class CommunicationsWheelController : MonoBehaviour
     // Crosshair object.
     [SerializeField] private GameObject crossHair;
 
-    // Screen Variables.
-    private int screenWidth;
-    private int screenHeight;
-    private Vector2 screenCentre;
-
-    // Wheel Dimensions.
-    private Vector2 wheelCentre;
-    private float wheelDiameter;
-    private float wheelRadius;
-
     // Layers;
     private int layerGround;
     private int layerObject;
@@ -97,9 +87,7 @@ public class CommunicationsWheelController : MonoBehaviour
 
         inputController = GameObject.Find("InputController").GetComponent<InputController>();
 
-        UpdateScreenVars();
-        UpdateWheelVars();
-        UpdateLayers();
+        SetLayers();
 
         if (wheelParent != null)
         {
@@ -118,6 +106,7 @@ public class CommunicationsWheelController : MonoBehaviour
         {
             CommunicationPing selectedPing = GetSelectedPing(currWheelList);
             if (selectedPing != null) {
+                Debug.Log(selectedPing.message);
                 StartPing(selectedPing);
             }
             CloseWheel();
@@ -143,21 +132,7 @@ public class CommunicationsWheelController : MonoBehaviour
         }
     }
 
-    private void UpdateScreenVars()
-    {
-        screenWidth = Screen.width;
-        screenHeight = Screen.height;
-        screenCentre = new Vector2(screenWidth / 2, screenHeight / 2);
-    }
-
-    private void UpdateWheelVars()
-    {
-        wheelCentre = screenCentre;
-        wheelDiameter = (screenWidth > screenHeight) ? screenHeight : screenWidth;
-        wheelRadius = wheelDiameter / 2;
-    }
-
-    private void UpdateLayers()
+    private void SetLayers()
     {
         layerGround = LayerMask.NameToLayer("Ground");
         layerObject = LayerMask.NameToLayer("Object");
@@ -175,11 +150,8 @@ public class CommunicationsWheelController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Missing Object Parent");
-            return;
+            Debug.Log("OpenWheel(): Wheel Parent Missing");
         }
-
-        // Add animations here to see part of the wheel is hovered.
     }
 
     private void CloseWheel()
@@ -191,15 +163,20 @@ public class CommunicationsWheelController : MonoBehaviour
             uiController.UnlockFreeLook();
             uiController.LockCursor();
         }
+        else
+        {
+            Debug.Log("CloseWheel(): Wheel Parent Missing");
+        }
     }
 
     private void CastRaysFromCrossHair()
     {
+        Vector2 screenCentre = new Vector2(Screen.width / 2, Screen.height / 2);
         Vector2 crossHairPos = screenCentre;
 
         ray = Camera.main.ScreenPointToRay(crossHairPos);
 
-        // So the ray ignores the player object. Change to ignore only the the player itself and not other players.
+        // So the ray ignores the player layer.
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~LayerMask.GetMask("Player")))
         {
             currLayer = hit.transform.gameObject.layer;
@@ -236,33 +213,42 @@ public class CommunicationsWheelController : MonoBehaviour
     } 
 
     private void StartPing(CommunicationPing ping) {
-        PingMarkerController pingController = GetComponent<PingMarkerController>();
+        PhotonView pv = GetComponent<PhotonView>();
 
         Vector3 pingPos = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+
+        Vector3 playerPos = new Vector3(0, 0, 0);
+
+        foreach (GameObject fox in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if(fox.GetComponent<PhotonView>().IsMine) {
+                playerPos = fox.transform.position;
+            }
+        }
 
         // Ground Layer.
         if (currLayer == layerGround)
         {
             pingPos.y += groundYOffset;
-            pingController.PlaceGroundMarker(pingPos, 8, ping.message);
+            pv.RPC("PingGroundMarker", RpcTarget.All, pingPos, 8f, ping.message);
         }
         // Object Layer.
         else if (currLayer == layerObject || currLayer == layerPickableObjects)
         {
-            pingController.PlaceObjectMarker(hit.transform.gameObject, 8, ping.message);
+            PhotonView objectPV = hit.transform.gameObject.GetComponent<PhotonView>();
+            if (objectPV != null)
+            {
+                pv.RPC("PingObjectMarker", RpcTarget.All, objectPV.ViewID, 8f, ping.message);
+            }
+            else
+            {
+                Debug.Log("Object does not have a photon view");
+            }
         }
         // Place the ping on top of the player if a ground or object is not being looked at.
         else
         {
-            Vector3 playerPos = new Vector3(0, 0, 0);
-
-            foreach (GameObject fox in GameObject.FindGameObjectsWithTag("Player"))
-            {
-                if(fox.GetComponent<PhotonView>().IsMine) {
-                    playerPos = fox.transform.position;
-                }
-            }
-            pingController.PlaceGroundMarker(playerPos, 8, ping.message);
+            pv.RPC("PingGroundMarker", RpcTarget.All, playerPos, 8f, ping.message);
         }
     }
 
@@ -333,6 +319,10 @@ public class CommunicationsWheelController : MonoBehaviour
     // @return {bool} Returns true if the point is within the sector, false otherwise.
     private bool WithinSector(float sectorStart, float sectorEnd, Vector2 point)
     {
+        Vector2 wheelCentre = new Vector2(Screen.width / 2, Screen.height / 2);
+        float wheelDiameter = (Screen.width > Screen.height) ? Screen.height : Screen.width;
+        float wheelRadius = wheelDiameter / 2;
+
         // Point relative to the circle centre.
         Vector2 relativePoint = new Vector2(point.x - wheelCentre.x, point.y - wheelCentre.y);
 

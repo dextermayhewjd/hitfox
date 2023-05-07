@@ -5,34 +5,34 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/QuickStartDemo.unity
     guid: b9506a29fff474f5ca4dd60c867da5f4
   - enabled: 0
-    path: Assets/Scenes/basic.unity
-    guid: 6d15a7e702aab4a36a3ea51fd008656b
-  - enabled: 0
-    path: Assets/infoGamerPhoton/Scene/MultiplayerScene.unity
-    guid: cc3cbe8d13d7b6e43a73262f756cc227
+    path: Assets/Scenes/map-build-wall-ai2.unity
+    guid: f7761dd4418beec43a3214873a72ef97
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: Assets/Scenes/multi_camera.unity
-    guid: a3d594e9d8e448fa3a7245554264cdf7
-  - enabled: 0
-    path: Assets/Scenes/Prototype2.unity
-    guid: 4cb69416f1e5827dd86b41650da66f84
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: Assets/Scenes/Hailey_Fire.unity
-    guid: 2a5c80381bf6c2fb98e6b1d1c2ddf5a3
-  - enabled: 0
-    path: Assets/Scenes/schoolsday-tuesday.unity
-    guid: 12cc932082d64684783dc65f65de81bd
   - enabled: 1
-    path: Assets/Scenes/map-build-1-azmil.unity
-    guid: c30f4eff38d6ebd7386d549de23b7d80
+    path: Assets/Scenes/StartMenu.unity
+    guid: 2ce392c4d2685f83ab5fc74e35a4a137
+  - enabled: 0
+    path: Assets/Scenes/map-build-wall-ai2.unity
+    guid: f7761dd4418beec43a3214873a72ef97
+  - enabled: 0
+    path: Assets/Scenes/RFG-azmil.unity
+    guid: da45f5302f1654341b861fba277639d7
+  - enabled: 0
+    path: Assets/Scenes/video.unity
+    guid: 48893224875c702e3ad23c75c1b69d11
+  - enabled: 0
+    path: Assets/Scenes/map-build-wallAB.unity
+    guid: 0f4e408da58c1a345b2d79cf84c9e0c8
+  - enabled: 0
+    path: Assets/Scenes/HUD-test.unity
+    guid: 073464b99886f3550a91e659aeff3da1
+  - enabled: 1
+    path: Assets/Scenes/RoyalFortGardens.unity
+    guid: cd9fb5ccebf30424e84c0c41d06ddd88
   m_configObjects: {}

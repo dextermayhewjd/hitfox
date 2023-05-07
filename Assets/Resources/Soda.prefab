@@ -295,6 +295,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pickedUp: 0
   throwForce: 0
+  hasBeenDeleted: 0
+  hud: {fileID: 0}
 --- !u!114 &8700103904630966835
 MonoBehaviour:
   m_ObjectHideFlags: 0
