@@ -11,6 +11,7 @@ public class NewCarUserControl : OnTrigger
     private NewCarController m_Car; // the car controller we want to use
     public bool driving = false;
     public PhotonView acceleratePlayerView = null;
+    public AudioSource Forktheme;
     public float h = 0f, v = 0f, handbrake = 1;
     private void Awake()
     {
@@ -74,6 +75,7 @@ public class NewCarUserControl : OnTrigger
     void RPC_ExitAccPlayer()
     {
         Debug.Log("Player left vehicle");
+        Forktheme.enabled = false;
         acceleratePlayerView.transform.position += Camera.main.transform.forward;
         acceleratePlayerView.transform.SetParent(null);
         acceleratePlayerView.GetComponent<PlayerMovement>().driving = false;
@@ -90,6 +92,7 @@ public class NewCarUserControl : OnTrigger
     void RPC_EnterAccPlayer(int player)
     {
         Debug.Log("Player entered vehicle");
+        Forktheme.enabled = true;
         driving = true;
         acceleratePlayerView = PhotonView.Find(player);
         acceleratePlayerView.transform.SetParent(this.transform.Find("AccelerateSeat"));

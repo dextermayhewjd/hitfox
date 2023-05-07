@@ -32,6 +32,7 @@ public class DoggoBehaviour : MonoBehaviour {
     PhotonView view;
 
     UnityEngine.AI.NavMeshAgent agent;
+    public AudioSource dogbark;
 
     public enum DoggoState {
         WALK,
@@ -112,6 +113,7 @@ public class DoggoBehaviour : MonoBehaviour {
                         if (distance > Mathf.Lerp(2, 5, fearfulness / 100))
                             agent.destination = interactingWith.transform.position;
                         else if (interactingWith.tag == "Player") {
+                            dogbark.enabled = true;
                             state = DoggoState.BARK;
                             agent.destination = transform.position;
                             timer = 0;
@@ -129,10 +131,14 @@ public class DoggoBehaviour : MonoBehaviour {
                     }
                     if (timer > 5) {
 
-                        if (distance > 3) state = DoggoState.SEARCH;
+                        if (distance > 3) {
+                            dogbark.enabled = false;
+                            state = DoggoState.SEARCH;
+                        } 
                         /*if (Random.Range(0, 100) < aggression)
                             state = DoggoState.ATTACK;*/
                         else if (Random.Range(0, 100) < fearfulness && interactingWith.tag == "Player") {
+                            dogbark.enabled = false;
                             state = DoggoState.RUNAWAY;
                             agent.destination = interactingWith.transform.position + Random.Range(5, 10) * Vector3.Normalize(transform.position - interactingWith.transform.position);
                         }
@@ -143,6 +149,7 @@ public class DoggoBehaviour : MonoBehaviour {
                     foreach (GameObject i in chasables) {
                         if (CanSee(i, distance)) {
                             interactingWith = i;
+                            dogbark.enabled = false;
                         }
                     }
 
