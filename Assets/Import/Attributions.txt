@@ -9,3 +9,6 @@ Rubbish Bin Icon
 
 Log Icon
 <a href="https://www.flaticon.com/free-icons/log" title="log icons">Log icons created by amoghdesign - Flaticon</a>
+
+Cage Icon
+<a href="https://www.flaticon.com/free-icons/cage" title="cage icons">Cage icons created by surang - Flaticon</a>

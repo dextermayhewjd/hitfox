@@ -10,8 +10,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2626917578217483014, guid: 5a37426177a620441a6d279dbf2976a2, type: 3}
       propertyPath: m_Name
-      value: WaypointMarker
+      value: WaypointMarkerCage
       objectReference: {fileID: 0}
+    - target: {fileID: 3537490973326463868, guid: 5a37426177a620441a6d279dbf2976a2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0e0084e83ad424249b70312559cc578a, type: 3}
     - target: {fileID: 5947207628532480954, guid: 5a37426177a620441a6d279dbf2976a2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
