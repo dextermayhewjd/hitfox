@@ -14,29 +14,34 @@ public class FireInteraction : MonoBehaviourPun
     private BucketFill BucketFillInteraction;
     
     void Update(){
-        // if the fire is put out
-        if(health <= 0)
-        {
-            BucketFillInteraction.isPouring = false;
-            PhotonNetwork.Destroy(this.gameObject);
-            if (PhotonNetwork.IsMasterClient) {
-                BucketFillInteraction = null;
-                GameObject objectives = GameObject.Find("Timer+point");
-                Debug.Log("20 points for putting out fire");
-                objectives.GetComponent<Timer>().IncreaseScore(20);
-                // QuestSystem.GetComponent<Quest>().missionComplete("Fire");
+        if (PhotonNetwork.IsMasterClient) {
+            // if the fire is put out
+            if(health <= 0) {
+                BucketFillInteraction.isPouring = false;
+                PhotonNetwork.Destroy(this.gameObject);
+                if (PhotonNetwork.IsMasterClient) {
+                    BucketFillInteraction = null;
+                    GameObject objectives = GameObject.Find("Timer+point");
+                    Debug.Log("20 points for putting out fire");
+                    objectives.GetComponent<Timer>().IncreaseScore(20);
+                    // QuestSystem.GetComponent<Quest>().missionComplete("Fire");
+                }
             }
-        }
-        else
-        {
-            if(health >=1f)
+            else
             {
-                health = 1f;
+                if(health >=1f)
+                {
+                    health = 1f;
+                }
+                health += recoverSpeed*Time.deltaTime;
             }
-            health += recoverSpeed*Time.deltaTime;
+            progressBar.value = Mathf.Clamp(health,0f,1f);
+            // this.photonView.RPC("RPC_UpdateBucket", RpcTarget.AllBuffered);
         }
-        progressBar.value = Mathf.Clamp(health,0f,1f);
-        // this.photonView.RPC("RPC_UpdateBucket", RpcTarget.AllBuffered);
+    }
+
+    void OnTriggerStay(Collider other) {
+        
     }
 
     void OnTriggerEnter(Collider collision)

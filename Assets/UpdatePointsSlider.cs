@@ -18,7 +18,6 @@ public class UpdatePointsSlider : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("lol");
         slider.maxValue = timerAndPoints.requiredPoints;
         slider.value = timerAndPoints.currentPoints;
     }
