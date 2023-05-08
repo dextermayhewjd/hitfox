@@ -84,7 +84,7 @@ MonoBehaviour:
     spawnLocations: []
   - id: 1
     numObjectsToSpawn: 2
-    objectToSpawn: {fileID: 2932343578486992406, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
+    objectToSpawn: {fileID: 2552415641573930655, guid: 7cb5f115dc6fdd6e98b84f548012f017, type: 3}
     spawnLocations: []
 --- !u!114 &2880457043809172450
 MonoBehaviour:

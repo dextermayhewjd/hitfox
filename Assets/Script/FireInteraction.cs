@@ -12,6 +12,8 @@ public class FireInteraction : MonoBehaviourPun
     // public GameObject QuestSystem = GameObject.Find("QuestManager");
     // for the fire it encounter 
     private BucketFill BucketFillInteraction;
+
+    [SerializeField] private int points;
     
     void Update(){
         // if the fire is put out
@@ -21,9 +23,6 @@ public class FireInteraction : MonoBehaviourPun
             PhotonNetwork.Destroy(this.gameObject);
             if (PhotonNetwork.IsMasterClient) {
                 BucketFillInteraction = null;
-                GameObject objectives = GameObject.Find("Timer+point");
-                Debug.Log("20 points for putting out fire");
-                objectives.GetComponent<Timer>().IncreaseScore(20);
                 // QuestSystem.GetComponent<Quest>().missionComplete("Fire");
             }
         }
