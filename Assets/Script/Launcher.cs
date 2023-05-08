@@ -34,7 +34,9 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        UnityEngine.Debug.Log("Connnected to Master");
+        PhotonNetwork.SendRate = 40; /// added
+		PhotonNetwork.SerializationRate = 40;//
+		UnityEngine.Debug.Log("Connnected to Master");
         PhotonNetwork.ConnectUsingSettings();
     }
     public override void OnConnectedToMaster()
