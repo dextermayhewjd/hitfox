@@ -62,7 +62,7 @@ public class DoggoBehaviour : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (view.IsMine) {
+        if (PhotonNetwork.IsMasterClient) {
             GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
             GameObject[] dogs = GameObject.FindGameObjectsWithTag("Dog");
             float distance = 0;
@@ -234,7 +234,7 @@ public class DoggoBehaviour : MonoBehaviour {
     [PunRPC]
     void becomeChased(int dogID, float time) {
 
-        if (view.IsMine && interactingWith.tag != "Player" && (state == DoggoState.PLAY || state == DoggoState.RUNTOWARD)) {
+        if (PhotonNetwork.IsMasterClient && interactingWith.tag != "Player" && (state == DoggoState.PLAY || state == DoggoState.RUNTOWARD)) {
             interactingWith = PhotonView.Find(dogID).gameObject;
             state = DoggoState.RUNAWAY;
             timer2 = time;
