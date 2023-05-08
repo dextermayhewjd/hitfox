@@ -173,7 +173,7 @@ public class DoggoBehaviour : MonoBehaviour {
 
                             float time = Random.Range(5, 10);
                             object[] param = { view.ViewID, time };
-                            view.RPC("becomeChased", RpcTarget.AllBuffered, param);
+                            view.RPC("becomeChased", RpcTarget.All, param);
                             state = DoggoState.RUNTOWARD;
                         }
                         Debug.DrawRay(transform.position, agent.destination - transform.position, Color.black, 0, false);
@@ -190,7 +190,7 @@ public class DoggoBehaviour : MonoBehaviour {
                     if (Vector3.Distance(transform.position, interactingWith.transform.position) < 2) {
                         float time = Random.Range(10, 20);
                         object[] param = { view.ViewID, time };
-                        view.RPC("becomeChased", RpcTarget.AllBuffered, param);
+                        view.RPC("becomeChased", RpcTarget.All, param);
                         state = DoggoState.RUNTOWARD;
                     }
                     foreach (GameObject player in players) {
