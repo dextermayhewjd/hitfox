@@ -140,17 +140,17 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             }
 
             // manual capture only for testing
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                if (!captured)
-                {
-                    Catch();
-                } 
-                else if (captured)
-                {
-                    captured = false;
-                }   
-            }
+            // if (Input.GetKeyDown(KeyCode.R))
+            // {
+            //     if (!captured)
+            //     {
+            //         Catch();
+            //     } 
+            //     else if (captured)
+            //     {
+            //         captured = false;
+            //     }   
+            // }
 
             if (!driving)
             {

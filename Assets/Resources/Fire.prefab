@@ -10025,6 +10025,7 @@ MonoBehaviour:
   progressBar: {fileID: 5623150326858938802}
   health: 1
   recoverSpeed: 0.05
+  points: 0
 --- !u!114 &9142267564987096678
 MonoBehaviour:
   m_ObjectHideFlags: 0
