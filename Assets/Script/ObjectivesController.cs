@@ -471,7 +471,7 @@ public class ObjectivesController : MonoBehaviour
 
         for (int i = 0; i < numHedgehog; i++)
         {
-            spawnLocationIndex = Random.Range(0, objective.spawnLocations.Length);
+            int spawnLocationIndex = Random.Range(0, objective.spawnLocations.Length);
             SpawnLocation spawnLocationArea = objective.spawnLocations[spawnLocationIndex];
             Vector3 spawnLocation = spawnLocationArea.GetRandomPoint();
             GameObject spawnedObject = PhotonNetwork.InstantiateRoomObject(objectToSpawn.name, spawnLocation, Quaternion.identity);

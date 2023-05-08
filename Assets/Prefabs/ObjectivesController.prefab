@@ -120,7 +120,7 @@ MonoBehaviour:
   - objectiveWaypointId: 6
     header: Fox Captured
     subHeader: Free The Fox
-    waypointMarker: {fileID: 7777117702791711035, guid: 0718d93a7021d5b44a5268435b8fcd21, type: 3}
+    waypointMarker: {fileID: 95992366498573678, guid: 0d6c7ad84f320c04fb1f43f4c6b55da7, type: 3}
 --- !u!114 &7187319587734717210
 MonoBehaviour:
   m_ObjectHideFlags: 0
