@@ -68,7 +68,7 @@ public class NewCarUserControl : MonoBehaviourPun
             if (driver.IsMine) {
                 hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
                 hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Exit"; // change text of action
-                if (Input.GetButtonDown("Enter"))
+                if (Input.GetButtonDown("Enter") || driver.gameObject.GetComponent<PlayerMovement>().captured)
                 {
                     hud.transform.Find("EnterButton").gameObject.SetActive(false); // show button
                     CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
