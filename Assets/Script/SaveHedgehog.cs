@@ -10,6 +10,8 @@ public class SaveHedgehog : MonoBehaviourPun
     public GameObject hedgehog;
     float timer = 0f;
 
+    [SerializeField] private int points;
+
     void Start() {
         hedgehog.SetActive(false);
         GetComponent<MeshRenderer>().enabled = false;
@@ -28,7 +30,20 @@ public class SaveHedgehog : MonoBehaviourPun
     void OnTriggerStay(Collider other) {
         if (other.CompareTag("Forklift") && other.gameObject.GetComponent<Taxi>().hedgehog.activeSelf) {
             other.gameObject.GetComponent<Taxi>().drop();
-            GetComponent<PhotonView>().RPC("RPC_SaveHedgehog", RpcTarget.All);
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                GameObject objectives = GameObject.Find("Timer+point");
+                objectives.GetComponent<Timer>().IncreaseScore(points);
+
+                GameObject pointsDisplay = GameObject.Find("PointsPopupDisplay");
+                if (pointsDisplay != null)
+                {
+                    pointsDisplay.GetComponent<PointsPopupDisplay>().PointsPopup(points);
+                }
+
+                GetComponent<PhotonView>().RPC("RPC_SaveHedgehog", RpcTarget.All);
+            }
         }
     }
 
