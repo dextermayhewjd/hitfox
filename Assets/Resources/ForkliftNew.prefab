@@ -224,6 +224,10 @@ PrefabInstance:
       propertyPath: m_SynchronizeAngularVelocity
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1587611172048560473, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2906130563069590836, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -278,7 +282,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2965419264229415076, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
       propertyPath: m_Topspeed
-      value: 40
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7206079458014678553, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
