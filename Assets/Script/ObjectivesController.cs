@@ -22,6 +22,8 @@ public enum StartingObjectId
 
 public class ObjectivesController : MonoBehaviour
 {
+    [SerializeField] private bool developerMode;
+
     private PhotonView pv;
 
     [SerializeField] private GameObject pointsControllerObject;
@@ -113,6 +115,7 @@ public class ObjectivesController : MonoBehaviour
 
     private float timeSinceObjectiveStart;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -149,23 +152,25 @@ public class ObjectivesController : MonoBehaviour
 
         // Development Purposes.
         // =====
-        if (Input.GetKeyDown(KeyCode.G))
+        if (developerMode)
         {
-            FireObjective();
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                FireObjective();
+            }
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                TrashObjective();
+            }
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                HedgedogTaxiObjective();
+            }
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                LumberjackObjective();
+            }
         }
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            TrashObjective();
-        }
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            HedgedogTaxiObjective();
-        }
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            LumberjackObjective();
-        }
-
         // =====
 
         UpdateObjectiveRates();
