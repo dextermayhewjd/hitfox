@@ -50,9 +50,9 @@ MonoBehaviour:
   objectiveObject: {fileID: 8831651902553531394, guid: c933735c65e933548ad8a4abfa03ee2e, type: 3}
   objectivesAlert: {fileID: 0}
   dynamicObjectives: 1
-  startDelay: 10
+  startDelay: 5
   maxActiveObjectives: 10
-  objectiveRate: 30
+  objectiveRate: 20
   objectiveInfoList:
   - objectiveId: 1
     objectsToSpawn:
