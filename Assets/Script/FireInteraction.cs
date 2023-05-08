@@ -25,17 +25,21 @@ public class FireInteraction : MonoBehaviourPun
                 BucketFillInteraction = null;
                 // QuestSystem.GetComponent<Quest>().missionComplete("Fire");
             }
-        }
-        else
-        {
-            if(health >=1f)
+            else
             {
-                health = 1f;
+                if(health >=1f)
+                {
+                    health = 1f;
+                }
+                health += recoverSpeed*Time.deltaTime;
             }
-            health += recoverSpeed*Time.deltaTime;
+            progressBar.value = Mathf.Clamp(health,0f,1f);
+            // this.photonView.RPC("RPC_UpdateBucket", RpcTarget.AllBuffered);
         }
-        progressBar.value = Mathf.Clamp(health,0f,1f);
-        // this.photonView.RPC("RPC_UpdateBucket", RpcTarget.AllBuffered);
+    }
+
+    void OnTriggerStay(Collider other) {
+        
     }
 
     void OnTriggerEnter(Collider collision)

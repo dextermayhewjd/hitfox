@@ -194,6 +194,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             }
             else
             {
+                speedLines.SetActive(false);
                 Idle();
             }
 

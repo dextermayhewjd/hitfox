@@ -102,7 +102,7 @@ public class NPC_Woodcutter : OnTrigger {
         chasedPlayer = FindClosestTarget("Player");
         agent.speed = 0;
         isStunned = true;
-        this.photonView.RPC("RPC_ShowAngrySign", RpcTarget.AllBuffered);
+        this.photonView.RPC("RPC_ShowAngrySign", RpcTarget.All);
         if (axe != null) {
             this.photonView.RPC("RPC_DropAxe", RpcTarget.AllBuffered);
         }   
@@ -123,16 +123,16 @@ public class NPC_Woodcutter : OnTrigger {
         agent.speed = 0;
         state = WoodcutterState.SEEKINGTREE;
         // disable collisions otherwise he pushes the player out of the cage
-        transform.Find("Collision").gameObject.SetActive(false);
+        this.GetComponent<CapsuleCollider>().enabled = false;
         yield return new WaitForSeconds(2);
         agent.speed = speed;
-        this.photonView.RPC("RPC_HideAngrySign", RpcTarget.AllBuffered);
+        this.photonView.RPC("RPC_HideAngrySign", RpcTarget.All);
         
         // view.RPC("RPC_trigger", RpcTarget.AllBuffered, "AngryRun");
         anim.SetBool("AngryRun", true);
         anim.SetBool("RunAngry", false);
         yield return new WaitForSeconds(secs);
-        transform.Find("Collision").gameObject.SetActive(true); 
+        this.GetComponent<CapsuleCollider>().enabled = true; 
     }
 
     // Update is called once per frame

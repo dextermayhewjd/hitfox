@@ -24,17 +24,21 @@ public class NewCarUserControl : MonoBehaviourPun
     }
 
     void OnTriggerEnter(Collider other) {
-        if (other.gameObject.GetComponent<PhotonView>().IsMine&& !other.gameObject.GetComponent<PlayerMovement>().driving && !other.gameObject.GetComponent<PlayerMovement>().hidden) {
-            hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
-            hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Drive"; // change text of action
-            playerOutside = other.gameObject.GetComponent<PhotonView>();
+        if (other.CompareTag("Player")) {
+            if (other.gameObject.GetComponent<PhotonView>().IsMine&& !other.gameObject.GetComponent<PlayerMovement>().driving && !other.gameObject.GetComponent<PlayerMovement>().hidden) {
+                hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
+                hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Drive"; // change text of action
+                playerOutside = other.gameObject.GetComponent<PhotonView>();
+            }
         }
     }
 
     void OnTriggerExit(Collider other) {
-        if (other.gameObject.GetComponent<PhotonView>().IsMine) {
-            hud.transform.Find("EnterButton").gameObject.SetActive(false); // hide button
-            playerOutside = null;
+        if (other.CompareTag("Player")) {
+            if (other.gameObject.GetComponent<PhotonView>().IsMine) {
+                hud.transform.Find("EnterButton").gameObject.SetActive(false); // hide button
+                playerOutside = null;
+            }
         }
     }
 
@@ -59,30 +63,34 @@ public class NewCarUserControl : MonoBehaviourPun
 
     private void Update()
     {
-        if (driving && driver.IsMine)
+        if (driving && driver != null)
         {
-            hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
-            hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Exit"; // change text of action
-            if (Input.GetButtonDown("Enter"))
-            {
-                hud.transform.Find("EnterButton").gameObject.SetActive(false); // show button
-                CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
-                cam.LookAt = driver.transform;
-                cam.Follow = driver.transform;
-                this.photonView.RPC("RPC_ExitAccPlayer", RpcTarget.All);
-                
+            if (driver.IsMine) {
+                hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
+                hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Exit"; // change text of action
+                if (Input.GetButtonDown("Enter"))
+                {
+                    hud.transform.Find("EnterButton").gameObject.SetActive(false); // show button
+                    CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
+                    cam.LookAt = driver.transform;
+                    cam.Follow = driver.transform;
+                    this.photonView.RPC("RPC_ExitAccPlayer", RpcTarget.All);
+                    
+                }
             }
         }
-        else if (!driving && playerOutside.IsMine && !playerOutside.gameObject.GetComponent<PlayerMovement>().hidden) 
+        else if (!driving && playerOutside != null) 
         {
-            hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
-            hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Drive"; // change text of action
-            if (Input.GetButtonDown("Enter")) {
-                CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
-                cam.LookAt = transform;
-                cam.Follow = transform;
-                base.photonView.RequestOwnership();
-                this.photonView.RPC("RPC_EnterAccPlayer", RpcTarget.All, playerOutside.ViewID);
+            if (playerOutside.IsMine && !playerOutside.gameObject.GetComponent<PlayerMovement>().hidden) {
+                hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
+                hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Drive"; // change text of action
+                if (Input.GetButtonDown("Enter")) {
+                    CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
+                    cam.LookAt = transform;
+                    cam.Follow = transform;
+                    base.photonView.RequestOwnership();
+                    this.photonView.RPC("RPC_EnterAccPlayer", RpcTarget.All, playerOutside.ViewID);
+                }
             }
         }
     }
