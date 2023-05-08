@@ -71,7 +71,7 @@ public class ObjectivesController : MonoBehaviour
                     return ObjectsToSpawnMultipler(5, numPlayers);
                     break;
                 case ObjectiveId.HedgedogTaxi:
-                    return ObjectsToSpawnMultipler(5, numPlayers);
+                    return ObjectsToSpawnMultipler(2, numPlayers);
             }
 
             return 1;

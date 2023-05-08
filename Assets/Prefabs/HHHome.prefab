@@ -399,6 +399,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hedgehog: {fileID: 6710299790066020121}
+  points: 80
 --- !u!114 &3961375853908428276
 MonoBehaviour:
   m_ObjectHideFlags: 0
