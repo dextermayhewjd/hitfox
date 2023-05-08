@@ -50,9 +50,9 @@ MonoBehaviour:
   objectiveObject: {fileID: 8831651902553531394, guid: c933735c65e933548ad8a4abfa03ee2e, type: 3}
   objectivesAlert: {fileID: 0}
   dynamicObjectives: 1
-  startDelay: 10
+  startDelay: 5
   maxActiveObjectives: 10
-  objectiveRate: 30
+  objectiveRate: 20
   objectiveInfoList:
   - objectiveId: 1
     objectsToSpawn:
@@ -84,7 +84,7 @@ MonoBehaviour:
     spawnLocations: []
   - id: 1
     numObjectsToSpawn: 2
-    objectToSpawn: {fileID: 2552415641573930655, guid: 7cb5f115dc6fdd6e98b84f548012f017, type: 3}
+    objectToSpawn: {fileID: 2932343578486992406, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
     spawnLocations: []
 --- !u!114 &2880457043809172450
 MonoBehaviour:
@@ -120,7 +120,7 @@ MonoBehaviour:
   - objectiveWaypointId: 6
     header: Fox Captured
     subHeader: Free The Fox
-    waypointMarker: {fileID: 7777117702791711035, guid: 0718d93a7021d5b44a5268435b8fcd21, type: 3}
+    waypointMarker: {fileID: 95992366498573678, guid: 0d6c7ad84f320c04fb1f43f4c6b55da7, type: 3}
 --- !u!114 &7187319587734717210
 MonoBehaviour:
   m_ObjectHideFlags: 0

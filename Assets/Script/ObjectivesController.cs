@@ -340,7 +340,7 @@ public class ObjectivesController : MonoBehaviour
                 TrashObjective(numObjectsToSpawn, spawnLocationIndex);
                 break;
             case ObjectiveId.HedgedogTaxi:
-                HedgedogTaxiObjective(numObjectsToSpawn, spawnLocationIndex);
+                HedgedogTaxiObjective(numObjectsToSpawn);
                 break;
             case ObjectiveId.Lumberjack:
                 LumberjackObjective(numObjectsToSpawn, spawnLocationIndex);
@@ -384,7 +384,7 @@ public class ObjectivesController : MonoBehaviour
         }
 
         Vector3 waypointMarkerLocation = spawnLocationArea.centre;
-        waypointMarkerLocation.y += 5f;
+        waypointMarkerLocation.y += 4f;
 
         // Spawn an Objective to track that objective.
         object[] instanceData = new object[6];
@@ -433,7 +433,7 @@ public class ObjectivesController : MonoBehaviour
         spawnedObjectsId.Add(spawnedObjectviewID);
 
         Vector3 waypointMarkerLocation = spawnLocationArea.centre;
-        waypointMarkerLocation.y += 5f;
+        waypointMarkerLocation.y += 4f;
 
         // Spawn an Objective to track that objective.
         object[] instanceData = new object[6];
@@ -454,7 +454,7 @@ public class ObjectivesController : MonoBehaviour
         pv.RPC("ObjectiveWaypointMarker", RpcTarget.All, objectiveViewId, waypointMarkerLocation, ObjectiveWaypointId.Fire, true);
     }
 
-    public void HedgedogTaxiObjective(int numHedgehog = 2, int spawnLocationIndex = -1)
+    public void HedgedogTaxiObjective(int numHedgehog = 2)
     {
         ObjectiveId objectiveId = ObjectiveId.HedgedogTaxi;
 
@@ -471,11 +471,7 @@ public class ObjectivesController : MonoBehaviour
 
         for (int i = 0; i < numHedgehog; i++)
         {
-            if (spawnLocationIndex == -1)
-            {
-                spawnLocationIndex = Random.Range(0, objective.spawnLocations.Length);
-            }
-
+            int spawnLocationIndex = Random.Range(0, objective.spawnLocations.Length);
             SpawnLocation spawnLocationArea = objective.spawnLocations[spawnLocationIndex];
             Vector3 spawnLocation = spawnLocationArea.GetRandomPoint();
             GameObject spawnedObject = PhotonNetwork.InstantiateRoomObject(objectToSpawn.name, spawnLocation, Quaternion.identity);

@@ -32,6 +32,11 @@ public class CageScript : MonoBehaviourPun
     }
 
     void OnTriggerEnter(Collider other) {
+        if (!other.CompareTag("Player"))
+        {
+            return;
+        }
+
         if (other.gameObject.GetComponent<PhotonView>().IsMine && !other.gameObject.GetComponent<PlayerMovement>().driving) {
             hud.transform.Find("InteractButton").gameObject.SetActive(true); // show button
             hud.transform.Find("InteractButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Rescue"; // change text of action
@@ -40,6 +45,11 @@ public class CageScript : MonoBehaviourPun
     }
 
     void OnTriggerExit(Collider other) {
+        if (!other.CompareTag("Player"))
+        {
+            return;
+        }
+
         if (other.gameObject.GetComponent<PhotonView>().IsMine) {
             hud.transform.Find("InteractButton").gameObject.SetActive(false); // hide button
             playerOutside = null;
@@ -48,6 +58,11 @@ public class CageScript : MonoBehaviourPun
     }
 
     void OnTriggerStay(Collider other) {
+        if (!other.CompareTag("Player"))
+        {
+            return;
+        }
+
         if (other.gameObject.GetComponent<PhotonView>().IsMine &&
         !other.gameObject.GetComponent<PlayerMovement>().captured && !other.gameObject.GetComponent<PlayerMovement>().driving) 
         {
