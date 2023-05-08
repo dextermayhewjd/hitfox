@@ -19,17 +19,21 @@ public class BushScript : MonoBehaviourPun
     }
 
     void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Player") && other.gameObject.GetComponent<PhotonView>().IsMine && !inUse && !other.gameObject.GetComponent<PlayerMovement>().driving) {
-            hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
-            hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Hide"; // change text of action
-            playerOutside = other.gameObject.GetComponent<PhotonView>();
+        if (other.CompareTag("Player")) {
+            if (other.gameObject.GetComponent<PhotonView>().IsMine && !inUse && !other.gameObject.GetComponent<PlayerMovement>().driving) {
+                hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
+                hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Hide"; // change text of action
+                playerOutside = other.gameObject.GetComponent<PhotonView>();
+            }
         }
     }
 
     void OnTriggerExit(Collider other) {
-        if (other.CompareTag("Player") && other.gameObject.GetComponent<PhotonView>().IsMine) {
-            hud.transform.Find("EnterButton").gameObject.SetActive(false); // hide button
-            playerOutside = null;
+        if (other.CompareTag("Player")) {
+            if (other.gameObject.GetComponent<PhotonView>().IsMine) {
+                hud.transform.Find("EnterButton").gameObject.SetActive(false); // hide button
+                playerOutside = null;
+            }
         }
     }
 
