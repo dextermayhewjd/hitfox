@@ -62,7 +62,7 @@ public class NPC_Behaviour : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
-        if (view.IsMine) {
+        if (PhotonNetwork.IsMasterClient) {
             emoteTimer -= Time.deltaTime;
             invincTimer -= Time.deltaTime;
             if (emoteTimer < 0) this.view.RPC("RPC_HideSign", RpcTarget.All);
@@ -151,7 +151,7 @@ public class NPC_Behaviour : MonoBehaviour{
     }
     private void OnTriggerEnter(Collider other) {
         GameObject o = other.gameObject;
-        if (view.IsMine) {
+        if (PhotonNetwork.IsMasterClient) {
             if (o.tag == "NPC" && state != State.CONVERSATION) {
                 if (relationships.ContainsKey(o)) {
                     int i = Random.Range(25, 100);
@@ -201,7 +201,7 @@ public class NPC_Behaviour : MonoBehaviour{
     }
 
     public void OnTriggerStay(Collider other) {
-        if(view.IsMine && other.tag == "Player" && state == State.CHASE && invincTimer <0) {
+        if(PhotonNetwork.IsMasterClient && other.tag == "Player" && state == State.CHASE && invincTimer <0) {
             PlayerMovement movement = other.GetComponent<PlayerMovement>();
             if (!movement.captured) { 
                 movement.Catch();
@@ -233,7 +233,7 @@ public class NPC_Behaviour : MonoBehaviour{
     [PunRPC]
     void initiateConversation(int npcID) {
        
-        if (view.IsMine) {
+        if (PhotonNetwork.IsMasterClient) {
             anim.SetBool("Sitting",false);
             anim.SetBool("Walking",false);
             anim.SetBool("Standing",true);
@@ -248,7 +248,7 @@ public class NPC_Behaviour : MonoBehaviour{
     [PunRPC]
     void endConversation(int npcID) {
         
-        if (view.IsMine) {
+        if (PhotonNetwork.IsMasterClient) {
             GameObject npc = PhotonView.Find(npcID).gameObject;
             npcsTalkingWith.Remove(npc);
             if (npcsTalkingWith.Count == 0) {
