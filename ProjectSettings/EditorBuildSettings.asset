@@ -29,10 +29,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/map-build-wallAB.unity
     guid: 0f4e408da58c1a345b2d79cf84c9e0c8
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/HUD-test.unity
     guid: 073464b99886f3550a91e659aeff3da1
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/RoyalFortGardens.unity
     guid: cd9fb5ccebf30424e84c0c41d06ddd88
+  - enabled: 0
+    path: Assets/Scenes/Lumberjack test.unity
+    guid: 1bbfe61acf4fd7d3d9f2d6ae979ea197
   m_configObjects: {}

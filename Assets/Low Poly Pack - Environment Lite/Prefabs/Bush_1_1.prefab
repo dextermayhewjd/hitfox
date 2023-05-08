@@ -20,7 +20,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 119
   m_IsActive: 1
 --- !u!4 &4122099175535646
 Transform:
@@ -101,10 +101,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeca4622e295887d9a281080bc556fee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colliders: []
   inUse: 0
   playerInBush: {fileID: 0}
   inUseSign: {fileID: 8620544023115136366}
+  hud: {fileID: 0}
+  playerOutside: {fileID: 0}
 --- !u!82 &2163221685393927042
 AudioSource:
   m_ObjectHideFlags: 0

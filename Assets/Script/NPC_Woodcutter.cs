@@ -54,6 +54,9 @@ public class NPC_Woodcutter : OnTrigger {
     public Canvas angrySign;
     public GameObject axe;
 
+    public AudioSource grunt;
+    public AudioSource chopping;
+
 
     GameObject FindClosestTarget(string trgt) {
         GameObject closestGameObject = GameObject.FindGameObjectsWithTag(trgt)
@@ -64,7 +67,7 @@ public class NPC_Woodcutter : OnTrigger {
 
 
     void Start(){
-        GetComponent<Rigidbody>().isKinematic = true; // otherwise he slides down the hill
+        // GetComponent<Rigidbody>().isKinematic = true; // otherwise he slides down the hill
 
         isCutting = false;
         isStunned = false;
@@ -92,6 +95,7 @@ public class NPC_Woodcutter : OnTrigger {
 
     public IEnumerator Interact(int secs) {
         // view.RPC("RPC_trigger", RpcTarget.AllBuffered, "RunAngry");
+        grunt.Play();
         anim.SetBool("RunAngry", true);
         Debug.Log("Angry Trigger");
         Debug.Log("Interacted with NPC");
@@ -117,12 +121,13 @@ public class NPC_Woodcutter : OnTrigger {
         anim.SetBool("AngryChase", false);
         Debug.Log("Angry Trigger");
         agent.speed = 0;
+        state = WoodcutterState.SEEKINGTREE;
         // disable collisions otherwise he pushes the player out of the cage
         transform.Find("Collision").gameObject.SetActive(false);
         yield return new WaitForSeconds(2);
         agent.speed = speed;
         this.photonView.RPC("RPC_HideAngrySign", RpcTarget.AllBuffered);
-        state = WoodcutterState.SEEKINGTREE;
+        
         // view.RPC("RPC_trigger", RpcTarget.AllBuffered, "AngryRun");
         anim.SetBool("AngryRun", true);
         anim.SetBool("RunAngry", false);
@@ -208,8 +213,8 @@ public class NPC_Woodcutter : OnTrigger {
                                     goto case WoodcutterState.CURIOUS;
                                 }
                             
-                                chaseAudio.enabled = false;
-                                themeAudio.enabled = true;
+                                // chaseAudio.enabled = false;
+                                // themeAudio.enabled = true;
                                 break;
                             
                             case WoodcutterState.CURIOUS:
@@ -236,6 +241,7 @@ public class NPC_Woodcutter : OnTrigger {
     }
 
     private IEnumerator CutTree(int secs, GameObject tree) {
+        chopping.Play();
         yield return new WaitForSeconds(secs);
         tree.tag = "CutTree";
         //tree.GetComponent<Animator>().enabled = true;
@@ -296,14 +302,14 @@ public class NPC_Woodcutter : OnTrigger {
         //     Debug.Log("stunned: " + isStunned + " isMine: " + other.gameObject.GetComponent<PhotonView>().IsMine + " playerTag" + other.CompareTag("Player"));
 
         // }
-        if (Input.GetButtonDown("Interact") && !isStunned && other.CompareTag("Player") && other.gameObject.GetComponent<PhotonView>().IsMine) 
+        if (Input.GetButtonDown("Interact") && !isStunned && other.CompareTag("Player") && other.gameObject.GetComponent<PhotonView>().IsMine && !other.gameObject.GetComponent<PlayerMovement>().captured) 
         {
-            if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null && 
-            !colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>().captured)
-        {
+        //     if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null && 
+        //     !colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>().captured)
+        // {
                 Debug.Log("interacted with lubmerjack");
                 this.GetComponent<PhotonView>().RPC("RPC_InteractWithLumberjack", RpcTarget.MasterClient);
-            }
+            // }
         }
         if (PhotonNetwork.IsMasterClient)
         {

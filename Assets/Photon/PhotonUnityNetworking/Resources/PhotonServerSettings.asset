@@ -96,6 +96,7 @@ MonoBehaviour:
   - RPC_trigger
   - RPC_TurnLightOff
   - RPC_TurnLightOn
+  - RPC_PointsPopup
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
