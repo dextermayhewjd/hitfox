@@ -25,8 +25,8 @@ public class NPC_Behaviour : MonoBehaviour{
     float talkTimer = 0;
     float invincTimer;
     float angry;
-    float fov = 100;
-    float loseDistance = 10;
+    float fov = 180;
+    float loseDistance = 20;
     public float sitTimer;
     public List<GameObject> npcsTalkingWith = new List<GameObject>();
     public GameObject playerChasing;
@@ -186,7 +186,8 @@ public class NPC_Behaviour : MonoBehaviour{
                             playerChasing = o;
                             invincTimer = 2;
                             state = State.CHASE;
-                            Debug.Log("Chasing");
+                            anim.SetBool("Sitting",false);
+                            anim.SetBool("Walking", true);
                         }
                     } else {
                         this.view.RPC("RPC_ShowSign", RpcTarget.AllBuffered, Emotion.QUESTION);
@@ -202,7 +203,10 @@ public class NPC_Behaviour : MonoBehaviour{
     public void OnTriggerStay(Collider other) {
         if(view.IsMine && other.tag == "Player" && state == State.CHASE && invincTimer <0) {
             PlayerMovement movement = other.GetComponent<PlayerMovement>();
-             if (!movement.captured)movement.Catch();
+            if (!movement.captured) { 
+                movement.Catch();
+                state = State.WALK;
+            }
         }
     }
 

@@ -307,6 +307,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1d4570afd816522fbb2bdea7fbb8174, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trashPoints: 20
+  axePoints: 40
 --- !u!136 &1866319961319671453
 CapsuleCollider:
   m_ObjectHideFlags: 0
