@@ -61,8 +61,8 @@ public class Timer : MonoBehaviourPun
                     seconds = "0" + seconds;
                 }
                 string time = minutes + ":" + seconds;
-                this.photonView.RPC("RPC_UpdateTimer", RpcTarget.AllBuffered, time);
-                this.photonView.RPC("RPC_UpdateScore", RpcTarget.OthersBuffered, currentPoints);
+                this.photonView.RPC("RPC_UpdateTimer", RpcTarget.All, time);
+                
             }
             //Note: change later so when reaches 1 min left turns red/blue
         }
@@ -79,6 +79,7 @@ public class Timer : MonoBehaviourPun
     void RPC_IncreaseScore(int amount)
     {
         currentPoints += amount;
+        this.photonView.RPC("RPC_UpdateScore", RpcTarget.Others, currentPoints);
     }
 
     [PunRPC]

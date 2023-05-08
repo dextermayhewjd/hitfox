@@ -14,7 +14,6 @@ public class SaveHedgehog : MonoBehaviourPun
 
     void Start() {
         hedgehog.SetActive(false);
-        GetComponent<MeshRenderer>().enabled = false;
     }
 
     void Update() {

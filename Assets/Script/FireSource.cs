@@ -132,12 +132,6 @@ public class FireSource : MonoBehaviour
         {
             pointsDisplay.GetComponent<PointsPopupDisplay>().PointsPopup(points);
         }
-        pv.RPC("RPC_FiresPutOut", RpcTarget.All);
-    }
-
-    [PunRPC]
-    public void RPC_FiresPutOut()
-    {
-        Destroy(this.gameObject);
+        PhotonNetwork.Destroy(this.gameObject);
     }
 }
