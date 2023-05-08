@@ -216,6 +216,14 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 2622656638680047097}
     m_Modifications:
+    - target: {fileID: 739943782578913404, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
+      propertyPath: m_TeleportEnabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 739943782578913404, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
+      propertyPath: m_SynchronizeAngularVelocity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2906130563069590836, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -267,6 +275,10 @@ PrefabInstance:
     - target: {fileID: 2935360206655593274, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2965419264229415076, guid: 273f9c28581cae47dafe7ea0bf207ee5, type: 3}
+      propertyPath: m_Topspeed
+      value: 40
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

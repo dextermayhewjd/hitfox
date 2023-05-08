@@ -20,7 +20,6 @@ public class EatTrash : MonoBehaviourPun
             {
                 pointsDisplay.GetComponent<PointsPopupDisplay>().PointsPopup(trashPoints);
             }
-            other.GetComponent<PickUpObject>().hasBeenDeleted = true;
             PhotonNetwork.Destroy(other.gameObject);
         }
         else if (other.CompareTag("Axe") && PhotonNetwork.IsMasterClient)
@@ -33,7 +32,6 @@ public class EatTrash : MonoBehaviourPun
             {
                 pointsDisplay.GetComponent<PointsPopupDisplay>().PointsPopup(axePoints);
             }
-            other.GetComponent<PickUpObject>().hasBeenDeleted = true;
             PhotonNetwork.Destroy(other.gameObject);
         }
     }
