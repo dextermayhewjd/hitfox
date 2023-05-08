@@ -114,8 +114,10 @@ public class NPC_Behaviour : MonoBehaviour{
                     if (talkTimer < 0 || npcsTalkingWith.Count == 0) {
                         npcsTalkingWith.ForEach((x)=>x.GetComponent<PhotonView>().RPC("endConversation", RpcTarget.All,view.ViewID));
                         npcsTalkingWith.Clear();
-                        anim.SetBool("Sitting",false);
-                        anim.SetBool("Walking",false);
+                        anim.SetBool("Sitting", false);
+                        anim.SetBool("Standing", false);
+                        anim.SetBool("Walking", true);
+
                         state = State.WALK;
                     }
 
@@ -199,7 +201,8 @@ public class NPC_Behaviour : MonoBehaviour{
 
     public void OnTriggerStay(Collider other) {
         if(view.IsMine && other.tag == "Player" && state == State.CHASE && invincTimer <0) {
-            other.GetComponent<PlayerMovement>().Catch();
+            PlayerMovement movement = other.GetComponent<PlayerMovement>();
+             if (!movement.captured)movement.Catch();
         }
     }
 
@@ -248,7 +251,7 @@ public class NPC_Behaviour : MonoBehaviour{
                 state = State.WALK;
                 anim.SetBool("Sitting",false);
                 anim.SetBool("Standing",false);
-                anim.SetBool("Walking",false);
+                anim.SetBool("Walking",true);
             }
             
         }
