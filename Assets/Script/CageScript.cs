@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using TMPro;
 
-public class CageScript : MonoBehaviourPun
+public class CageScript : MonoBehaviour
 {
     public int ownerId;
     public float x, y, z;
@@ -28,7 +28,8 @@ public class CageScript : MonoBehaviourPun
         y = 0.3f;
         z = 0;
         playerOutside = null;
-        holdTime = 0;
+        holdTime = 0f;
+        hud = GameObject.Find("HUD");
     }
 
     void OnTriggerEnter(Collider other) {
@@ -37,7 +38,7 @@ public class CageScript : MonoBehaviourPun
             return;
         }
 
-        if (other.gameObject.GetComponent<PhotonView>().IsMine && !other.gameObject.GetComponent<PlayerMovement>().driving) {
+        if (other.gameObject.GetComponent<PhotonView>().IsMine && !other.gameObject.GetComponent<PlayerMovement>().driving && !other.gameObject.GetComponent<PlayerMovement>().captured) {
             hud.transform.Find("InteractButton").gameObject.SetActive(true); // show button
             hud.transform.Find("InteractButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Rescue"; // change text of action
             playerOutside = other.gameObject.GetComponent<PhotonView>();
@@ -70,10 +71,10 @@ public class CageScript : MonoBehaviourPun
             if (Input.GetButton("Interact"))
             {
                 holdTime += Time.deltaTime;
-                if (holdTime >= 3f) {
+                if (holdTime >= 5f) {
                     Debug.Log("destroy");
-                    base.photonView.RequestOwnership();
-                    this.photonView.RPC("RPC_Rescue", RpcTarget.All, ownerId);
+                    this.gameObject.GetComponent<PhotonView>().RequestOwnership();
+                    this.gameObject.GetComponent<PhotonView>().RPC("RPC_Rescue", RpcTarget.All, ownerId);
                     PhotonNetwork.Destroy(gameObject);
                 }
             } else {

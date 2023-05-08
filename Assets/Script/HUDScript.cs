@@ -11,7 +11,6 @@ public class HUDScript : MonoBehaviourPun
     public Transform ThrowButton; // should always be above the InteractButton if the player is holding something
     public Transform EnterButton; // should always be above the 2 upper mentioned button, depending on if they are active
     public Vector3 originalEnterButtonPosition;
-    public TextMeshProUGUI ping;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +24,6 @@ public class HUDScript : MonoBehaviourPun
     // Update is called once per frame
     void Update()
     {
-        ping.text = PhotonNetwork.GetPing().ToString();
         if (InteractButton.gameObject.activeSelf) {
             if (ThrowButton.gameObject.activeSelf) {
                 EnterButton.position = originalEnterButtonPosition;
