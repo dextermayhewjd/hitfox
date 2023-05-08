@@ -18,15 +18,13 @@ public class NPCFactory : MonoBehaviour {
     // Update is called once per frame
     void Update(){
         
-        if (view.IsMine) {
-            
+        if (PhotonNetwork.IsMasterClient) {
             if (spawnTimer <= 0) {
                 spawnNpc();
                 spawnTimer = secondsPerSpawn;
                 
             }
             spawnTimer -= Time.deltaTime;
-
         }
     }
 
