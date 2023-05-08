@@ -86,10 +86,10 @@ MonoBehaviour:
   - objectiveId: 3
     location: 
     header: Lost Hogs
-    subHeader: Hedgedogs have wandered off again from their home
+    subHeader: Hedgehogs have wandered off again from their home
     body: 'Find a Forklift
 
-      Drive Hedgedogs Back To Their Home'
+      Drive Hedgehogs Back To Their Home'
   - objectiveId: 4
     location: 
     header: Save The Trees!!
