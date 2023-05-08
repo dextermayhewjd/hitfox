@@ -19,7 +19,7 @@ GameObject:
   m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 119
   m_IsActive: 1
 --- !u!4 &811974551519282287
 Transform:
@@ -198,9 +198,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -6.64
       objectReference: {fileID: 0}
+    - target: {fileID: 8602647477138859215, guid: 20ec1772b4302c94b8149c7c5dc6d876, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 119
+      objectReference: {fileID: 0}
     - target: {fileID: 8955956948245921991, guid: 20ec1772b4302c94b8149c7c5dc6d876, type: 3}
       propertyPath: m_Name
       value: Poster
+      objectReference: {fileID: 0}
+    - target: {fileID: 8955956948245921991, guid: 20ec1772b4302c94b8149c7c5dc6d876, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 119
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

@@ -56,7 +56,7 @@ public class LightPlayerInter : MonoBehaviour
 
     void OnTriggerExit(Collider col)
     {
-        if (col.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Player" && col.gameObject.GetComponent<PhotonView>().IsMine)
         {
             playerHoldTimer = 0;
         }

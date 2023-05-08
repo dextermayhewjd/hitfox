@@ -128,7 +128,7 @@ AudioSource:
   m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: dddbff3564ca4b2489c883d0cb3e3d4f, type: 3}
+  m_audioClip: {fileID: 8300000, guid: b3abb1ac4126d7b44a8793f095a359f4, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -390,7 +390,7 @@ AudioSource:
   m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: becf2154cce2b714a93d30860edbc1c7, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 8ac3f3bea46755a2c837c97a5f703d8d, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -761,7 +761,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3843547290273367784, guid: 33a05fdb5878116b2a057d6a185ec016, type: 3}
       propertyPath: m_Name
-      value: Lumberjack
+      value: LumberjackSFX
       objectReference: {fileID: 0}
     - target: {fileID: 3843547290273367784, guid: 33a05fdb5878116b2a057d6a185ec016, type: 3}
       propertyPath: m_IsActive
