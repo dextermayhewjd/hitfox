@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8841625326136199027}
   m_Layer: 10
   m_Name: Axe
-  m_TagString: Untagged
+  m_TagString: Axe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,6 +81,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pickedUp: 0
   throwForce: 0
+  hasBeenDeleted: 0
+  hud: {fileID: 0}
 --- !u!114 &4629105782597346176
 MonoBehaviour:
   m_ObjectHideFlags: 0
