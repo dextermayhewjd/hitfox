@@ -10,7 +10,6 @@ public enum ObjectiveId
     Trash,
     HedgedogTaxi,
     Lumberjack,
-    Lampost,
 }
 
 public enum StartingObjectId
@@ -542,12 +541,6 @@ public class ObjectivesController : MonoBehaviour
 
         // Display An Alert Of The Objective.
         pv.RPC("AddObjectiveAlert", RpcTarget.All, objective.objectiveId, "");
-    }
-
-    public void LampostObjective()
-    {
-        ObjectiveId objectiveId = ObjectiveId.Lampost;
-        pv.RPC("AddObjectiveAlert", RpcTarget.All, objectiveId, "");
     }
 
     public void FoxCaptured(int viewID)

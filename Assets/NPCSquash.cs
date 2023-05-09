@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Photon.Pun;
 
 public class NPCSquash : MonoBehaviour
 {
@@ -20,14 +21,16 @@ public class NPCSquash : MonoBehaviour
         Debug.Log("lumb coll");
         if (collision.gameObject.CompareTag("Forklift") && collision.gameObject.GetComponent<NewCarUserControl>().driving && !isSquashed)
         {
-            Debug.Log("start squashing ");
-            GameObject objectives = GameObject.Find("Timer+point");
-            Debug.Log("5 points for squashing");
-            objectives.GetComponent<Timer>().IncreaseScore(5);
-            GameObject pointsDisplay = GameObject.Find("PointsPopupDisplay");
-            if (pointsDisplay != null)
-            {
-                pointsDisplay.GetComponent<PointsPopupDisplay>().PointsPopup(5);
+            if (PhotonNetwork.IsMasterClient) {
+                Debug.Log("start squashing ");
+                GameObject objectives = GameObject.Find("Timer+point");
+                Debug.Log("5 points for squashing");
+                objectives.GetComponent<Timer>().IncreaseScore(5);
+                GameObject pointsDisplay = GameObject.Find("PointsPopupDisplay");
+                if (pointsDisplay != null)
+                {
+                    pointsDisplay.GetComponent<PointsPopupDisplay>().PointsPopup(5);
+                }
             }
             // The NPC has been hit by the forklift and is not already squashed
             StartCoroutine(SquashAndRestore());

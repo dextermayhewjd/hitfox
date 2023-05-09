@@ -7,11 +7,13 @@ public class EatTrash : MonoBehaviourPun
 {
     [SerializeField] private int trashPoints;
     [SerializeField] private int axePoints;
+    public AudioSource trashNoise;
 
 
     private void OnTriggerStay(Collider other) {
         if (other.CompareTag("Trash") && PhotonNetwork.IsMasterClient)
         {
+            trashNoise.Play();
             GameObject objectives = GameObject.Find("Timer+point");
             objectives.GetComponent<Timer>().IncreaseScore(trashPoints);
 
@@ -24,6 +26,7 @@ public class EatTrash : MonoBehaviourPun
         }
         else if (other.CompareTag("Axe") && PhotonNetwork.IsMasterClient)
         {
+            trashNoise.Play();
             GameObject objectives = GameObject.Find("Timer+point");
             objectives.GetComponent<Timer>().IncreaseScore(axePoints);
 

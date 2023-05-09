@@ -12,7 +12,7 @@ public class BucketFill : MonoBehaviour
     public float pourSpeed;
     public bool isFilling = false;
     public bool isPouring = false;
-    private float fillAmount = 0f;
+    public float fillAmount = 0f;
     public Transform water;
     public float waterLevelHeightTop;
     public float waterLevelHeightBottom = 0.1f;
@@ -20,7 +20,7 @@ public class BucketFill : MonoBehaviour
     public float waterLevelRiseAmount;
 
     // for the fire it encounter 
-    private FireInteraction currentFireInteraction;
+    public FireInteraction currentFireInteraction;
     private NPC_Woodcutter currentNPC_Woodcutter;
 
     void Start()
@@ -56,7 +56,7 @@ public class BucketFill : MonoBehaviour
                 Debug.Log("bucket is being filled");
                 fillAmount += fillSpeed * Time.deltaTime;
                 waterLevelHeightCurrent += waterLevelRiseAmount * Time.deltaTime;
-                progressBar.value = Mathf.Clamp(fillAmount, 0f, 1f);
+                // progressBar.value = Mathf.Clamp(fillAmount, 0f, 1f);
                 water.transform.localPosition = new Vector3(0f, Mathf.Clamp(waterLevelHeightCurrent, waterLevelHeightBottom, waterLevelHeightCurrent), 0f);
 
             }
@@ -77,7 +77,7 @@ public class BucketFill : MonoBehaviour
                 Debug.Log("bucket is pouring water");
                 fillAmount -= pourSpeed * Time.deltaTime;
                 waterLevelHeightCurrent -= waterLevelRiseAmount * Time.deltaTime;
-                progressBar.value = Mathf.Clamp(fillAmount, 0f, 1f);
+                // progressBar.value = Mathf.Clamp(fillAmount, 0f, 1f);
                 water.transform.localPosition = new Vector3(0f, Mathf.Clamp(waterLevelHeightCurrent, waterLevelHeightBottom, waterLevelHeightCurrent), 0f);
             }
 
@@ -85,7 +85,7 @@ public class BucketFill : MonoBehaviour
             {
                 currentFireInteraction.health -= pourSpeed * 2 * Time.deltaTime;
                 currentFireInteraction.health = Mathf.Clamp(currentFireInteraction.health, 0f, 1f);
-                currentFireInteraction.progressBar.value = Mathf.Clamp(currentFireInteraction.health, 0f, 1f);
+                // currentFireInteraction.progressBar.value = Mathf.Clamp(currentFireInteraction.health, 0f, 1f);
             }
         }
     }
@@ -109,11 +109,11 @@ public class BucketFill : MonoBehaviour
          if (collision.gameObject.CompareTag("Lumberjack"))
         {
             currentNPC_Woodcutter = collision.gameObject.GetComponent<NPC_Woodcutter>();  
-            float timeForLumberjackToStop = fillAmount * 4;
-            Debug.Log("Lumberjack need to stop for" + timeForLumberjackToStop +"secs");
-            // Get the FireInteraction component of the current fire
-
-            currentNPC_Woodcutter.pauseTime = timeForLumberjackToStop;
+            // float timeForLumberjackToStop = fillAmount * 4;
+            // Debug.Log("Lumberjack need to stop for" + timeForLumberjackToStop +"secs");
+            // // Get the FireInteraction component of the current fire
+            // currentNPC_Woodcutter.pauseTime = timeForLumberjackToStop;
+            currentNPC_Woodcutter.MakeAngry();
             WaterIsallGone();    
             Debug.Log("WaterEmpty");
 

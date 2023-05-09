@@ -6,8 +6,9 @@ using UnityEngine.AI;
 using System;
 using System.Linq;
 using static TeeFallAnim;
+using TMPro;
 
-public class NPC_Woodcutter : OnTrigger {
+public class NPC_Woodcutter : MonoBehaviourPun {
 
     public enum WoodcutterState { 
         SEEKINGTREE,
@@ -54,6 +55,8 @@ public class NPC_Woodcutter : OnTrigger {
 
     public AudioSource grunt;
     public AudioSource chopping;
+    public GameObject hud;
+    public PhotonView playerOutside = null;
 
 
     GameObject FindClosestTarget(string trgt) {
@@ -88,6 +91,7 @@ public class NPC_Woodcutter : OnTrigger {
         view = GetComponent<PhotonView>();
 
         agent.speed = speed;
+        hud = GameObject.Find("HUD");
     }
 
     public IEnumerator Interact(int secs) {
@@ -98,16 +102,18 @@ public class NPC_Woodcutter : OnTrigger {
         Debug.Log("Interacted with NPC");
         chasedPlayer = FindClosestTarget("Player");
         agent.speed = 0;
-        isStunned = true;
+        this.photonView.RPC("RPC_UpdateLumberjack", RpcTarget.All, true);
         this.photonView.RPC("RPC_ShowAngrySign", RpcTarget.All);
-        if (axe != null) {
-            this.photonView.RPC("RPC_DropAxe", RpcTarget.AllBuffered);
+        if (axe.activeSelf) {
+            axe.SetActive(false);
+            PhotonNetwork.Instantiate("Axe", axe.transform.position, axe.transform.rotation);
+            // this.photonView.RPC("RPC_DropAxe", RpcTarget.All);
         }   
         yield return new WaitForSeconds(secs);
         // view.RPC("RPC_trigger", RpcTarget.AllBuffered, "AngryChase");
         anim.SetBool("AngryChase", true);
         state = WoodcutterState.CHASE;
-        isStunned = false;
+        this.photonView.RPC("RPC_UpdateLumberjack", RpcTarget.All, false);
         agent.speed = speed * 2;
     }
 
@@ -122,9 +128,9 @@ public class NPC_Woodcutter : OnTrigger {
         // disable collisions otherwise he pushes the player out of the cage
         this.GetComponent<CapsuleCollider>().enabled = false;
         yield return new WaitForSeconds(2);
+        axe.SetActive(true);
         agent.speed = speed;
         this.photonView.RPC("RPC_HideAngrySign", RpcTarget.All);
-        
         // view.RPC("RPC_trigger", RpcTarget.AllBuffered, "AngryRun");
         anim.SetBool("AngryRun", true);
         anim.SetBool("RunAngry", false);
@@ -150,7 +156,7 @@ public class NPC_Woodcutter : OnTrigger {
                 if (!isStunned)
                 {
                     dest = agent.destination;
-                    if (view.IsMine) {
+                    // if (view.IsMine) {
                         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
                         GameObject[] trees = GameObject.FindGameObjectsWithTag("Tree");
 
@@ -205,7 +211,7 @@ public class NPC_Woodcutter : OnTrigger {
 
                                 if(distance < curiousDistance && distance > chaseDistance && !pm.captured) {
                                     agent.speed = speed;
-                                    this.photonView.RPC("RPC_HideAngrySign", RpcTarget.AllBuffered);
+                                    this.photonView.RPC("RPC_HideAngrySign", RpcTarget.All);
                                     state = WoodcutterState.CURIOUS;
                                     goto case WoodcutterState.CURIOUS;
                                 }
@@ -230,17 +236,16 @@ public class NPC_Woodcutter : OnTrigger {
                                 }
                             break;
                             }                
-                        }
+                        // }
                 }
             }
         }
-        this.photonView.RPC("RPC_UpdateLumberjack", RpcTarget.OthersBuffered, isStunned);
     }
 
     private IEnumerator CutTree(int secs, GameObject tree) {
         chopping.Play();
         yield return new WaitForSeconds(secs);
-        tree.tag = "CutTree";
+        tree.tag = "Untagged";
         //tree.GetComponent<Animator>().enabled = true;
         treeAnimator = tree.GetComponent<Animator>();
         if (treeAnimator != null)
@@ -269,10 +274,15 @@ public class NPC_Woodcutter : OnTrigger {
     }
 
     private IEnumerator CalmDown(int secs) {
+        anim.SetBool("ChaseAngry", true);
+        anim.SetBool("AngryChase", false);
         yield return new WaitForSeconds(secs);
         state = WoodcutterState.SEEKINGTREE;
         Debug.Log("Lost him!");
         calming = false;
+        anim.SetBool("AngryRun", true);
+        anim.SetBool("RunAngry", false);
+        axe.SetActive(true);
         // TODO: points
     }
 
@@ -294,26 +304,43 @@ public class NPC_Woodcutter : OnTrigger {
         return false;
     }
 
-    public void OnTriggerStay(Collider other) {
-        // if (Input.GetButtonDown("Interact")) {
-        //     Debug.Log("stunned: " + isStunned + " isMine: " + other.gameObject.GetComponent<PhotonView>().IsMine + " playerTag" + other.CompareTag("Player"));
+    void OnTriggerEnter(Collider other) {
+        if (other.CompareTag("Player")) {
+            if (other.gameObject.GetComponent<PhotonView>().IsMine && !other.gameObject.GetComponent<PlayerMovement>().driving && !other.gameObject.GetComponent<PlayerMovement>().captured) {
+                hud.transform.Find("InteractButton").gameObject.SetActive(true); // show button
+                hud.transform.Find("InteractButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Bite"; // change text of action
+                playerOutside = other.gameObject.GetComponent<PhotonView>();
+            }
+        }
+    }
 
-        // }
-        if (Input.GetButtonDown("Interact") && !isStunned && other.CompareTag("Player") && other.gameObject.GetComponent<PhotonView>().IsMine && !other.gameObject.GetComponent<PlayerMovement>().captured) 
-        {
-        //     if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null && 
-        //     !colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>().captured)
-        // {
+    void OnTriggerExit(Collider other) {
+        if (other.CompareTag("Player")) {
+            if (other.gameObject.GetComponent<PhotonView>().IsMine) {
+                hud.transform.Find("InteractButton").gameObject.SetActive(false); // hide button
+                playerOutside = null;
+            }
+        }
+    }
+
+    public void MakeAngry() {
+        this.GetComponent<PhotonView>().RPC("RPC_InteractWithLumberjack", RpcTarget.MasterClient);
+    }
+
+    public void OnTriggerStay(Collider other) {
+        if (other.CompareTag("Player")) {
+            if (Input.GetButtonDown("Interact") && !isStunned && other.CompareTag("Player") && other.gameObject.GetComponent<PhotonView>().IsMine && !other.gameObject.GetComponent<PlayerMovement>().captured) 
+            {
                 Debug.Log("interacted with lubmerjack");
                 this.GetComponent<PhotonView>().RPC("RPC_InteractWithLumberjack", RpcTarget.MasterClient);
-            // }
-        }
-        if (PhotonNetwork.IsMasterClient)
-        {
-            if (other.CompareTag("Player") && !other.gameObject.GetComponent<PlayerMovement>().captured && state == WoodcutterState.CHASE)
+            }
+            if (PhotonNetwork.IsMasterClient)
             {
-                other.gameObject.GetComponent<PlayerMovement>().Catch();
-                StartCoroutine(PauseAfterCatch(2));
+                if (!other.gameObject.GetComponent<PlayerMovement>().captured && state == WoodcutterState.CHASE)
+                {
+                    other.gameObject.GetComponent<PlayerMovement>().Catch();
+                    StartCoroutine(PauseAfterCatch(2));
+                }
             }
         }
     }

@@ -104,6 +104,7 @@ public class Timer : MonoBehaviourPun
     {
         gameOver = true;
         victoryText.gameObject.SetActive(true);
+        // GameObject.Find("PointsPopupDisplay").SetActive(false);
     }
 
     [PunRPC]
@@ -111,5 +112,6 @@ public class Timer : MonoBehaviourPun
     {
         gameOver = true;
         failedText.gameObject.SetActive(true);
+        // GameObject.Find("PointsPopupDisplay").SetActive(false);
     }
 }
