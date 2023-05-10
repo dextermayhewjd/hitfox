@@ -10,6 +10,13 @@
 ## Group Details
 Team member: Dexter Ding, Hailey Liney, Tuesday Hands, Azmil Roslan, Elan Virtucio, Jakub Navratil, Abdulrahman Abdulaal
 
+## Deploying the game
+1-unzip zip folder submitted
+2-navigate to dev folder 
+3- run the hitfox.exe application located in the folder
+4-(Optional) Change user tag and create or find a room 
+5-Play the game
+
 ## Description of the project
 This is a team project that is developed by seven University of Bristol CS MEng student  
 
