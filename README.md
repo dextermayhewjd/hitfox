@@ -7,6 +7,14 @@
 - [What does the folders contains](#what-does-the-folders-contains)
 - [Development log book](#development-log-book)
 
+## Deploying the game
+1-unzip zip folder submitted
+2-navigate to dev folder 
+3- run the hitfox.exe application located in the folder
+4-(Optiona) Change user tag 
+5- create or find a room 
+5-Play the game
+
 ## Group Details
 Team member: Dexter Ding, Hailey Liney, Tuesday Hands, Azmil Roslan, Elan Virtucio, Jakub Navratil, Abdulrahman Abdulaal
 
