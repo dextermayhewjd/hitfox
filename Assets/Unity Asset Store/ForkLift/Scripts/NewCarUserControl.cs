@@ -15,17 +15,21 @@ public class NewCarUserControl : MonoBehaviourPun
     public float h = 0f, v = 0f, handbrake = 1;
     public GameObject hud;
     public PhotonView playerOutside = null;
+    public AudioSource forkliftNoise;
+    public ParticleSystem smoke;
 
     private void Awake()
     {
         // get the car controller
         m_Car = GetComponent<NewCarController>();
         hud = GameObject.Find("HUD");
+        smoke.Stop();
     }
 
     void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            if (other.gameObject.GetComponent<PhotonView>().IsMine&& !other.gameObject.GetComponent<PlayerMovement>().driving && !other.gameObject.GetComponent<PlayerMovement>().hidden) {
+            if (other.gameObject.GetComponent<PhotonView>().IsMine&& !other.gameObject.GetComponent<PlayerMovement>().driving && !other.gameObject.GetComponent<PlayerMovement>().hidden
+            && !other.gameObject.GetComponent<PlayerMovement>().captured) {
                 hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
                 hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Drive"; // change text of action
                 playerOutside = other.gameObject.GetComponent<PhotonView>();
@@ -99,7 +103,9 @@ public class NewCarUserControl : MonoBehaviourPun
     void RPC_ExitAccPlayer()
     {
         Debug.Log("Player left vehicle");
-        driver.transform.position += Camera.main.transform.forward;
+        forkliftNoise.Stop();
+        smoke.Stop();
+        driver.transform.position += Camera.main.transform.forward + Camera.main.transform.up;
         driver.transform.SetParent(null);
         driver.GetComponent<PlayerMovement>().driving = false;
         driver.GetComponent<CharacterController>().enabled = true;
@@ -115,6 +121,8 @@ public class NewCarUserControl : MonoBehaviourPun
     void RPC_EnterAccPlayer(int player)
     {
         Debug.Log("Player entered vehicle");
+        forkliftNoise.Play();
+        smoke.Play();
         driving = true;
         driver = PhotonView.Find(player);
         driver.transform.SetParent(this.transform.Find("AccelerateSeat"));

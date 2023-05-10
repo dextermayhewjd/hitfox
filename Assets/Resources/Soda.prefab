@@ -242,6 +242,7 @@ GameObject:
   - component: {fileID: 7031390314083761557}
   - component: {fileID: 2580931572414732962}
   - component: {fileID: 4350518354616720091}
+  - component: {fileID: 9201059490260320760}
   m_Layer: 10
   m_Name: Soda
   m_TagString: Trash
@@ -367,6 +368,18 @@ CapsuleCollider:
   m_Height: 12.008076
   m_Direction: 1
   m_Center: {x: 0, y: 0.37245953, z: 0}
+--- !u!114 &9201059490260320760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7092083984586214436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d34bcb97c37d2c7308a746e2adc612de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8909741203989414460
 GameObject:
   m_ObjectHideFlags: 0

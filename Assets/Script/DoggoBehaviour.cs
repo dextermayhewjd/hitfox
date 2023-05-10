@@ -32,6 +32,7 @@ public class DoggoBehaviour : MonoBehaviour {
     PhotonView view;
 
     UnityEngine.AI.NavMeshAgent agent;
+    public AudioSource dogbark;
 
     public enum DoggoState {
         WALK,
@@ -126,6 +127,7 @@ public class DoggoBehaviour : MonoBehaviour {
                     if (Random.Range(0, 100) <= 2) {
                         PhotonNetwork.Instantiate(woof.name, transform.position, transform.rotation);
                         Debug.Log("Woof");
+                        dogbark.Play();
                     }
                     if (timer > 5) {
 

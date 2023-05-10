@@ -8,7 +8,7 @@ public class CursorController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Lock();
+        Unlock();
     }
 
     // Update is called once per frame

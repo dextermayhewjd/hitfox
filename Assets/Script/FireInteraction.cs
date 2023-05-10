@@ -20,20 +20,19 @@ public class FireInteraction : MonoBehaviourPun
         if(health <= 0)
         {
             BucketFillInteraction.isPouring = false;
+            BucketFillInteraction.currentFireInteraction = null;
             PhotonNetwork.Destroy(this.gameObject);
-            if (PhotonNetwork.IsMasterClient) {
-                BucketFillInteraction = null;
-                // QuestSystem.GetComponent<Quest>().missionComplete("Fire");
-            }
-            else
+            BucketFillInteraction = null;
+            // QuestSystem.GetComponent<Quest>().missionComplete("Fire");
+        }
+        else
+        {
+            if(health >=1f)
             {
-                if(health >=1f)
-                {
-                    health = 1f;
-                }
-                health += recoverSpeed*Time.deltaTime;
+                health = 1f;
             }
-            progressBar.value = Mathf.Clamp(health,0f,1f);
+            health += recoverSpeed*Time.deltaTime;
+            // progressBar.value = Mathf.Clamp(health,0f,1f);
             // this.photonView.RPC("RPC_UpdateBucket", RpcTarget.AllBuffered);
         }
     }
@@ -57,11 +56,5 @@ public class FireInteraction : MonoBehaviourPun
         {    
             BucketFillInteraction = null;
         }
-    }
-
-    [PunRPC]
-    void RPC_UpdateBucket()
-    {
-        
     }
 }

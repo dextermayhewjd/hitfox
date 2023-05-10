@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: 3563413266810362142}
   - component: {fileID: 8104246669022804911}
   - component: {fileID: 9016521834095766783}
+  - component: {fileID: 4243755125797202802}
   m_Layer: 0
   m_Name: Hedhehog
   m_TagString: Hedgehog
@@ -252,6 +253,18 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 0
+--- !u!114 &4243755125797202802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167724864849416357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d34bcb97c37d2c7308a746e2adc612de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1810800710048642808
 GameObject:
   m_ObjectHideFlags: 0
