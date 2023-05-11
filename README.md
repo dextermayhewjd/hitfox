@@ -1,11 +1,11 @@
 # hitfox
 
 ## Table of Contents 
+- [Deploying the game](#deploying-the-game)
 - [Group Details](#group-details)
 - [Description of the project](#description-of-the-project)
 - [How to develop using C# and unity](#how-to-develop-using-c-and-unity)
 - [What does the folders contains](#what-does-the-folders-contains)
-- [Development log book](#development-log-book)
 
 ## Deploying the game
 1-unzip zip folder submitted
@@ -20,7 +20,6 @@ Team member: Dexter Ding, Hailey Liney, Tuesday Hands, Azmil Roslan, Elan Virtuc
 
 ## Description of the project
 This is a team project that is developed by seven University of Bristol CS MEng student  
-
 Here is the Link for the game idea : [hitfox idea](https://docs.google.com/document/d/1GQw3GEfUrCOAK0CKi3Sczs0TBW-TibXbnsBiwvKPHNw/edit?usp=sharing) 
 
 
@@ -38,24 +37,7 @@ Here is the Link for the game idea : [hitfox idea](https://docs.google.com/docum
 
 ## What does the folders contains
 1. All the C# scripts that are stored in the `Asset/Script`  
-2. The script that contains the movement logic of the player is in the `Assets/Script/Player.cs`  
-3. The basic scene that contains the moveable cube in the `Asset/Scenes/basic.unity`
+2. The script that contains the login page is the `Assets\Scenes\StartMenu`  
+3. The scene that contains the game logic is the `Assets\Scenes\RoyalFortGardens`
 
 
-## Development log book 
-Used by Everyone to keep track of the development process
-
-2023-1-25   
-
-
-    a working cube that is able to move using WASD key 
-    the the moving area is restricted       
-    
-    the start() define the starting point of the cube 
-    
-    the update is called per frame
-    
-    the movement of the object is updated using transform.Translate
-
-    the restriced area by updating the position using if statement and transform.position  
-    by Dexter Ding
