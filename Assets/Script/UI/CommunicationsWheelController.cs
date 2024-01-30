@@ -45,6 +45,7 @@ public class CommunicationsWheelController : MonoBehaviour
     // Defines the parameters of a single sector of the wheel.
     public class CommunicationPing
     {
+        public Animator anim;
         public float sectorStart;
         public float sectorEnd;
         public string message;
@@ -79,6 +80,8 @@ public class CommunicationsWheelController : MonoBehaviour
     private Wheel currWheel;
     private List<CommunicationPing> currWheelList;
 
+    private bool wheelOpen = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -98,6 +101,10 @@ public class CommunicationsWheelController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (wheelOpen)
+        {
+            AnimateWheel();
+        }
         if (inputController.GetInputDown(wheelKey))
         {
             OpenWheel();
@@ -132,6 +139,21 @@ public class CommunicationsWheelController : MonoBehaviour
         }
     }
 
+    private void AnimateWheel()
+    {
+        foreach (var wheelSection in currWheelList)
+        {
+            if (WithinSector(wheelSection.sectorStart, wheelSection.sectorEnd, Input.mousePosition))
+            {
+                wheelSection.anim.SetBool("Hovered", true);
+            }
+            else
+            {
+                wheelSection.anim.SetBool("Hovered", false);
+            }
+        }
+    }
+
     private void SetLayers()
     {
         layerGround = LayerMask.NameToLayer("Ground");
@@ -141,6 +163,7 @@ public class CommunicationsWheelController : MonoBehaviour
 
     private void OpenWheel()
     {
+        wheelOpen = true;
         if (wheelParent != null)
         {
             wheelParent.SetActive(true);
@@ -156,6 +179,7 @@ public class CommunicationsWheelController : MonoBehaviour
 
     private void CloseWheel()
     {
+        wheelOpen = false;
         if (wheelParent != null)
         {
             wheelParent.SetActive(false);
@@ -306,6 +330,14 @@ public class CommunicationsWheelController : MonoBehaviour
                 textField.text = msgs[textFieldsIndex];
                 textFieldsIndex++;
             }
+            Animator[] wheelAnimators;
+            wheelAnimators = currWheelObj.GetComponentsInChildren<Animator>();
+            int animatorIndex = 0;
+            foreach (Animator anim in wheelAnimators)
+            {
+                newList[animatorIndex].anim = anim;
+                animatorIndex++;
+            }
         }
 
         return newList;
@@ -334,7 +366,7 @@ public class CommunicationsWheelController : MonoBehaviour
 
         return !PointClockwiseToVector(sectorStartVector, relativePoint)
             && PointClockwiseToVector(sectorEndVector, relativePoint)
-            && PointOutsideCentre(0.1f * wheelRadius, relativePoint); // change first input to match wheel UI. This portion gets ignored as part of the wheel.
+            && PointOutsideCentre(0.2f * wheelRadius, relativePoint); // change first input to match wheel UI. This portion gets ignored as part of the wheel.
     }
 
     private bool PointOutsideCentre(float threshold, Vector2 point)

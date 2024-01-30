@@ -195,7 +195,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4692620361261686761
 CanvasRenderer:
@@ -341,8 +341,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
-  waypointMarkerGround: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
-  waypointMarkerObject: {fileID: 2626917578217483014, guid: 8b94e561a8d819e40af7790e2b1b54d5, type: 3}
+  waypointMarkerGround: {fileID: 2626917578217483014, guid: 5a37426177a620441a6d279dbf2976a2, type: 3}
+  waypointMarkerObject: {fileID: 2626917578217483014, guid: 5a37426177a620441a6d279dbf2976a2, type: 3}
   audioWarning: {fileID: 0}
   audioNeutral: {fileID: 0}
 --- !u!114 &3099298112193204347

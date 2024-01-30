@@ -15,9 +15,10 @@ GameObject:
   - component: {fileID: 4629105782597346176}
   - component: {fileID: 918153092800223709}
   - component: {fileID: 8841625326136199027}
+  - component: {fileID: 6277666572624087160}
   m_Layer: 10
   m_Name: Axe
-  m_TagString: Untagged
+  m_TagString: Axe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,6 +82,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pickedUp: 0
   throwForce: 0
+  hasBeenDeleted: 0
+  hud: {fileID: 0}
 --- !u!114 &4629105782597346176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,9 +137,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 1
-  m_TeleportEnabled: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &6277666572624087160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2588448859890265741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d34bcb97c37d2c7308a746e2adc612de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2613159116659123789
 GameObject:
   m_ObjectHideFlags: 0

@@ -32,7 +32,7 @@ public class ForkController : MonoBehaviour {
             mastMoveTrue = false;
         }
       
-        if (Input.GetKey(KeyCode.PageUp))
+        if (Input.GetKey(KeyCode.UpArrow))
         {
            //fork.Translate(Vector3.up * speedTranslate * Time.deltaTime);
             fork.transform.localPosition = Vector3.MoveTowards(fork.transform.localPosition, maxY, speedTranslate * Time.deltaTime);
@@ -42,7 +42,7 @@ public class ForkController : MonoBehaviour {
             }
           
         }
-        if (Input.GetKey(KeyCode.PageDown))
+        if (Input.GetKey(KeyCode.DownArrow))
         {
             fork.transform.localPosition = Vector3.MoveTowards(fork.transform.localPosition, minY, speedTranslate * Time.deltaTime);
 

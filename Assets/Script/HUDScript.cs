@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using Photon.Pun;
 
 // this script shifts the position of HUD buttons depedning on which ones are active
-public class HUDScript : MonoBehaviour
+public class HUDScript : MonoBehaviourPun
 {
     public Transform InteractButton; // should always be on bottom of screen
     public Transform ThrowButton; // should always be above the InteractButton if the player is holding something

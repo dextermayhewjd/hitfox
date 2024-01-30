@@ -211,6 +211,7 @@ GameObject:
   - component: {fileID: 1652895468544344650}
   - component: {fileID: 8223707536423081701}
   - component: {fileID: 145939503612058763}
+  - component: {fileID: 9145183294126523435}
   m_Layer: 10
   m_Name: Champagne
   m_TagString: Trash
@@ -335,9 +336,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 1
-  m_TeleportEnabled: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &9145183294126523435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5174316512915270022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d34bcb97c37d2c7308a746e2adc612de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7032310053465870736
 GameObject:
   m_ObjectHideFlags: 0

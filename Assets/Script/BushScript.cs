@@ -19,50 +19,58 @@ public class BushScript : MonoBehaviourPun
     }
 
     void OnTriggerEnter(Collider other) {
-        if (other.gameObject.GetComponent<PhotonView>().IsMine && !inUse && !other.gameObject.GetComponent<PlayerMovement>().driving) {
-            hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
-            hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Hide"; // change text of action
-            playerOutside = other.gameObject.GetComponent<PhotonView>();
+        if (other.CompareTag("Player")) {
+            if (other.gameObject.GetComponent<PhotonView>().IsMine && !inUse && !other.gameObject.GetComponent<PlayerMovement>().driving) {
+                hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
+                hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Hide"; // change text of action
+                playerOutside = other.gameObject.GetComponent<PhotonView>();
+            }
         }
     }
 
     void OnTriggerExit(Collider other) {
-        if (other.gameObject.GetComponent<PhotonView>().IsMine) {
-            hud.transform.Find("EnterButton").gameObject.SetActive(false); // hide button
-            playerOutside = null;
+        if (other.CompareTag("Player")) {
+            if (other.gameObject.GetComponent<PhotonView>().IsMine) {
+                hud.transform.Find("EnterButton").gameObject.SetActive(false); // hide button
+                playerOutside = null;
+            }
         }
     }
 
     void Update() {
-        if (inUse && playerInBush.IsMine)
+        if (inUse && playerInBush != null)
         {
-            hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
-            hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Stop Hiding"; // change text of action
-            if (Input.GetButtonDown("Enter")) {
-                hud.transform.Find("EnterButton").gameObject.SetActive(false); // show button
-                CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
-                cam.LookAt = playerInBush.transform;
-                cam.Follow = playerInBush.transform;
-                this.photonView.RPC("RPC_PlaySound", RpcTarget.All);
-                this.photonView.RPC("RPC_UnhidePlayer", RpcTarget.All);
-                this.photonView.RPC("RPC_HideSign", RpcTarget.Others);
+            if (playerInBush.IsMine) {
+                hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
+                hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Stop Hiding"; // change text of action
+                if (Input.GetButtonDown("Enter")) {
+                    hud.transform.Find("EnterButton").gameObject.SetActive(false); // show button
+                    CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
+                    cam.LookAt = playerInBush.transform;
+                    cam.Follow = playerInBush.transform;
+                    this.photonView.RPC("RPC_PlaySound", RpcTarget.All);
+                    this.photonView.RPC("RPC_UnhidePlayer", RpcTarget.All);
+                    this.photonView.RPC("RPC_HideSign", RpcTarget.Others);
+                }
             }
             
         }
 
-        else if (!inUse && playerOutside.IsMine) 
+        else if (!inUse && playerOutside != null) 
         {
-            hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
-            hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Hide"; // change text of action
-            if (Input.GetButtonDown("Enter")) {
-                this.photonView.RPC("RPC_PlaySound", RpcTarget.All);
-                this.photonView.RPC("RPC_HidePlayer", RpcTarget.All, playerOutside.ViewID);
-                this.photonView.RPC("RPC_ShowSign", RpcTarget.Others);
-                if (playerInBush.IsMine) 
-                {
-                    CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
-                    cam.LookAt = transform;
-                    cam.Follow = transform;
+            if (playerOutside.IsMine) {
+                hud.transform.Find("EnterButton").gameObject.SetActive(true); // show button
+                hud.transform.Find("EnterButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Hide"; // change text of action
+                if (Input.GetButtonDown("Enter")) {
+                    this.photonView.RPC("RPC_PlaySound", RpcTarget.All);
+                    this.photonView.RPC("RPC_HidePlayer", RpcTarget.All, playerOutside.ViewID);
+                    this.photonView.RPC("RPC_ShowSign", RpcTarget.Others);
+                    if (playerInBush.IsMine) 
+                    {
+                        CinemachineFreeLook cam = FindObjectOfType<CinemachineFreeLook>();
+                        cam.LookAt = transform;
+                        cam.Follow = transform;
+                    }
                 }
             }
         }

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Photon.Pun;
 
 public class NPCSquash : MonoBehaviour
 {
@@ -15,31 +16,39 @@ public class NPCSquash : MonoBehaviour
         originalSpeed = woodcutter.speed;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("lumb coll");
         if (collision.gameObject.CompareTag("Forklift") && collision.gameObject.GetComponent<NewCarUserControl>().driving && !isSquashed)
         {
-            Debug.Log("start squashing ");
-            GameObject objectives = GameObject.Find("Timer+point");
-            Debug.Log("5 points for squashing");
-            objectives.GetComponent<Timer>().IncreaseScore(5);
+            if (PhotonNetwork.IsMasterClient) {
+                Debug.Log("start squashing ");
+                GameObject objectives = GameObject.Find("Timer+point");
+                Debug.Log("5 points for squashing");
+                objectives.GetComponent<Timer>().IncreaseScore(5);
+                GameObject pointsDisplay = GameObject.Find("PointsPopupDisplay");
+                if (pointsDisplay != null)
+                {
+                    pointsDisplay.GetComponent<PointsPopupDisplay>().PointsPopup(5);
+                }
+            }
             // The NPC has been hit by the forklift and is not already squashed
             StartCoroutine(SquashAndRestore());
         }
     }
 
-    private IEnumerator SquashAndRestore()
+    IEnumerator SquashAndRestore()
     {
         // Squash the NPC and set isSquashed to true
         transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y * 0.2f, transform.localScale.z);
         isSquashed = true;
-        transform.Find("Collision").gameObject.SetActive(false);
+        this.GetComponent<CapsuleCollider>().enabled = false;
         woodcutter.agent.speed *= 0.33f;
         // Wait for n seconds
         yield return new WaitForSeconds(5f);
 
         // Restore the NPC to its original size and set isSquashed to false
-        transform.Find("Collision").gameObject.SetActive(true);
+        this.GetComponent<CapsuleCollider>().enabled = true;
         transform.localScale = originalScale;
         woodcutter.agent.speed = originalSpeed;
         isSquashed = false;

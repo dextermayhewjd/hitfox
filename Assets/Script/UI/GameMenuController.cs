@@ -92,7 +92,7 @@ public class GameMenuController : MonoBehaviour
                 OpenDeveloperModeMenu();
             }
         }
-
+        
         uiController.LockCharacterControls();
         uiController.UnlockCursor();
     }

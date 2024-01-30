@@ -17,6 +17,8 @@ public class FireSource : MonoBehaviour
 
     public List<int> fires;
 
+    [SerializeField] private int points;
+
     void Awake()
     {
         fires = new List<int>();
@@ -122,12 +124,14 @@ public class FireSource : MonoBehaviour
 
     private void FiresPutOut()
     {
-        pv.RPC("RPC_FiresPutOut", RpcTarget.All);
-    }
+        GameObject objectives = GameObject.Find("Timer+point");
+        objectives.GetComponent<Timer>().IncreaseScore(points);
 
-    [PunRPC]
-    public void RPC_FiresPutOut()
-    {
-        Destroy(this.gameObject);
+        GameObject pointsDisplay = GameObject.Find("PointsPopupDisplay");
+        if (pointsDisplay != null)
+        {
+            pointsDisplay.GetComponent<PointsPopupDisplay>().PointsPopup(points);
+        }
+        PhotonNetwork.Destroy(this.gameObject);
     }
 }

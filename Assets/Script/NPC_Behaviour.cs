@@ -25,8 +25,8 @@ public class NPC_Behaviour : MonoBehaviour{
     float talkTimer = 0;
     float invincTimer;
     float angry;
-    float fov = 100;
-    float loseDistance = 10;
+    float fov = 180;
+    float loseDistance = 20;
     public float sitTimer;
     public List<GameObject> npcsTalkingWith = new List<GameObject>();
     public GameObject playerChasing;
@@ -62,7 +62,7 @@ public class NPC_Behaviour : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
-        if (view.IsMine) {
+        if (PhotonNetwork.IsMasterClient) {
             emoteTimer -= Time.deltaTime;
             invincTimer -= Time.deltaTime;
             if (emoteTimer < 0) this.view.RPC("RPC_HideSign", RpcTarget.All);
@@ -114,8 +114,10 @@ public class NPC_Behaviour : MonoBehaviour{
                     if (talkTimer < 0 || npcsTalkingWith.Count == 0) {
                         npcsTalkingWith.ForEach((x)=>x.GetComponent<PhotonView>().RPC("endConversation", RpcTarget.All,view.ViewID));
                         npcsTalkingWith.Clear();
-                        anim.SetBool("Sitting",false);
-                        anim.SetBool("Walking",false);
+                        anim.SetBool("Sitting", false);
+                        anim.SetBool("Standing", false);
+                        anim.SetBool("Walking", true);
+
                         state = State.WALK;
                     }
 
@@ -149,7 +151,7 @@ public class NPC_Behaviour : MonoBehaviour{
     }
     private void OnTriggerEnter(Collider other) {
         GameObject o = other.gameObject;
-        if (view.IsMine) {
+        if (PhotonNetwork.IsMasterClient) {
             if (o.tag == "NPC" && state != State.CONVERSATION) {
                 if (relationships.ContainsKey(o)) {
                     int i = Random.Range(25, 100);
@@ -184,7 +186,8 @@ public class NPC_Behaviour : MonoBehaviour{
                             playerChasing = o;
                             invincTimer = 2;
                             state = State.CHASE;
-                            Debug.Log("Chasing");
+                            anim.SetBool("Sitting",false);
+                            anim.SetBool("Walking", true);
                         }
                     } else {
                         this.view.RPC("RPC_ShowSign", RpcTarget.AllBuffered, Emotion.QUESTION);
@@ -198,8 +201,12 @@ public class NPC_Behaviour : MonoBehaviour{
     }
 
     public void OnTriggerStay(Collider other) {
-        if(view.IsMine && other.tag == "Player" && state == State.CHASE && invincTimer <0) {
-            other.GetComponent<PlayerMovement>().Catch();
+        if(PhotonNetwork.IsMasterClient && other.tag == "Player" && state == State.CHASE && invincTimer <0) {
+            PlayerMovement movement = other.GetComponent<PlayerMovement>();
+            if (!movement.captured) { 
+                movement.Catch();
+                state = State.WALK;
+            }
         }
     }
 
@@ -226,7 +233,7 @@ public class NPC_Behaviour : MonoBehaviour{
     [PunRPC]
     void initiateConversation(int npcID) {
        
-        if (view.IsMine) {
+        if (PhotonNetwork.IsMasterClient) {
             anim.SetBool("Sitting",false);
             anim.SetBool("Walking",false);
             anim.SetBool("Standing",true);
@@ -241,14 +248,14 @@ public class NPC_Behaviour : MonoBehaviour{
     [PunRPC]
     void endConversation(int npcID) {
         
-        if (view.IsMine) {
+        if (PhotonNetwork.IsMasterClient) {
             GameObject npc = PhotonView.Find(npcID).gameObject;
             npcsTalkingWith.Remove(npc);
             if (npcsTalkingWith.Count == 0) {
                 state = State.WALK;
                 anim.SetBool("Sitting",false);
                 anim.SetBool("Standing",false);
-                anim.SetBool("Walking",false);
+                anim.SetBool("Walking",true);
             }
             
         }

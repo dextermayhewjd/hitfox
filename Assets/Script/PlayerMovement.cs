@@ -64,6 +64,8 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
     {
         Vector3 cagePosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         GameObject newCage = PhotonNetwork.Instantiate(cage.name, cagePosition, Quaternion.identity);
+        ObjectivesController objectivesController = GameObject.Find("ObjectivesController").GetComponent<ObjectivesController>();
+        objectivesController.FoxCaptured(newCage.GetComponent<PhotonView>().ViewID);
         this.photonView.RPC("RPC_Catch", RpcTarget.AllBuffered, view.ViewID, newCage.GetComponent<PhotonView>().ViewID);
     }
 
@@ -138,17 +140,17 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             }
 
             // manual capture only for testing
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                if (!captured)
-                {
-                    Catch();
-                } 
-                else if (captured)
-                {
-                    captured = false;
-                }   
-            }
+            // if (Input.GetKeyDown(KeyCode.R))
+            // {
+            //     if (!captured)
+            //     {
+            //         Catch();
+            //     } 
+            //     else if (captured)
+            //     {
+            //         captured = false;
+            //     }   
+            // }
 
             if (!driving)
             {
@@ -192,6 +194,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
             }
             else
             {
+                speedLines.SetActive(false);
                 Idle();
             }
 
@@ -224,7 +227,7 @@ public class PlayerMovement : MonoBehaviourPun, ICatchable
 
         if (Time.time - lastGroundedTime <= jumpGracePeriod) {
             controller.stepOffset = stepOffset;
-            ySpeed = -0.5f;
+            ySpeed = -0.8f;
 
             animator.SetBool("isGrounded", true);
             isGrounded = true;

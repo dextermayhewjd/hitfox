@@ -50,6 +50,11 @@ public class Timer : MonoBehaviourPun
             else if (rem <= 0)
             {
                 this.photonView.RPC("RPC_Lose", RpcTarget.AllBuffered);
+                tsectimer += Time.deltaTime;
+                if (tsectimer >= 5f)//waits 5 seconds before switching onto credits
+                {
+                    SceneManager.LoadScene(2);//loads credits scene
+                }
                 return;
             }
             else
@@ -61,8 +66,8 @@ public class Timer : MonoBehaviourPun
                     seconds = "0" + seconds;
                 }
                 string time = minutes + ":" + seconds;
-                this.photonView.RPC("RPC_UpdateTimer", RpcTarget.AllBuffered, time);
-                this.photonView.RPC("RPC_UpdateScore", RpcTarget.OthersBuffered, currentPoints);
+                this.photonView.RPC("RPC_UpdateTimer", RpcTarget.All, time);
+                
             }
             //Note: change later so when reaches 1 min left turns red/blue
         }
@@ -79,6 +84,7 @@ public class Timer : MonoBehaviourPun
     void RPC_IncreaseScore(int amount)
     {
         currentPoints += amount;
+        this.photonView.RPC("RPC_UpdateScore", RpcTarget.Others, currentPoints);
     }
 
     [PunRPC]
@@ -98,6 +104,7 @@ public class Timer : MonoBehaviourPun
     {
         gameOver = true;
         victoryText.gameObject.SetActive(true);
+        // GameObject.Find("PointsPopupDisplay").SetActive(false);
     }
 
     [PunRPC]
@@ -105,5 +112,6 @@ public class Timer : MonoBehaviourPun
     {
         gameOver = true;
         failedText.gameObject.SetActive(true);
+        // GameObject.Find("PointsPopupDisplay").SetActive(false);
     }
 }

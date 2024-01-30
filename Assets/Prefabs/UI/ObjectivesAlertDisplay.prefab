@@ -67,16 +67,18 @@ MonoBehaviour:
   header: {fileID: 8796369489449750205}
   subHeader: {fileID: 623204577533221109}
   body: {fileID: 4611479366965636097}
-  objectiveAlertDuration: 3
+  objectiveAlertDuration: 5
   objectiveAlertList:
   - objectiveId: 1
     location: 
     header: FIRE!!!
     subHeader: 
-    body: 
+    body: 'Fill A Bucket With Water
+
+      Use The Bucket To Put Out The Fire'
   - objectiveId: 2
     location: 
-    header: Students Are Littering Again
+    header: Students Are Littering Again!
     subHeader: 
     body: 'Pick Up Trash With [E]
 
@@ -84,10 +86,20 @@ MonoBehaviour:
   - objectiveId: 3
     location: 
     header: Lost Hogs
-    subHeader: Hedgedogs have wandered off again from their home
+    subHeader: Hedgehogs have wandered off again from their home
     body: 'Find a Forklift
 
-      Drive Hedgedogs Back To Their Home'
+      Drive Hedgehogs Back To Their Home'
+  - objectiveId: 4
+    location: 
+    header: Save The Trees!!
+    subHeader: A Lumberjack Has Begun Cutting Trees In The Garden
+    body: 'Drive Them Over With A Forklift
+
+      Steal Their Axe and throw it in
+      a bin
+
+      Don''t Get Captured'
 --- !u!1 &2872178481444073242
 GameObject:
   m_ObjectHideFlags: 0
@@ -223,6 +235,83 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &3711908955598169559
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5386279758069293763}
+  - component: {fileID: 5908391992885083971}
+  - component: {fileID: 2044715906672700925}
+  m_Layer: 5
+  m_Name: BodyBG
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5386279758069293763
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3711908955598169559}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.95981467, y: 0.95981467, z: 0.95981467}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1580090391487409646}
+  m_Father: {fileID: 7083660904179377398}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -235}
+  m_SizeDelta: {x: 350, y: 300}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &5908391992885083971
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3711908955598169559}
+  m_CullTransparentMesh: 1
+--- !u!114 &2044715906672700925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3711908955598169559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300022, guid: 1eaee135ce037439d925cee5e41ce026, type: 3}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &4126746220001389683
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,16 +628,16 @@ RectTransform:
   m_GameObject: {fileID: 6287611846127629098}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0418679, y: 1.0418679, z: 1.0418679}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7083660904179377398}
+  m_Father: {fileID: 5386279758069293763}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -178}
-  m_SizeDelta: {x: -200, y: 100}
+  m_AnchoredPosition: {x: 0, y: 8.334946}
+  m_SizeDelta: {x: 372, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2753321329254290470
 CanvasRenderer:
@@ -605,8 +694,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
-  m_fontSizeBase: 18
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -641,7 +730,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 216.98756, y: -63.599808, z: 215.11696, w: -69.21155}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -677,7 +766,7 @@ RectTransform:
   m_Children:
   - {fileID: 8015376030319066694}
   - {fileID: 1065302885398924663}
-  - {fileID: 1580090391487409646}
+  - {fileID: 5386279758069293763}
   m_Father: {fileID: 3350041006945004676}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

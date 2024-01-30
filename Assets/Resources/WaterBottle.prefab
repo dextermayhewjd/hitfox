@@ -241,6 +241,7 @@ GameObject:
   - component: {fileID: 1600296261385781746}
   - component: {fileID: 5177949743825061829}
   - component: {fileID: 8601160294166005515}
+  - component: {fileID: 2702800585373643803}
   m_Layer: 10
   m_Name: WaterBottle
   m_TagString: Trash
@@ -363,6 +364,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 1
-  m_TeleportEnabled: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &2702800585373643803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8840149073308605829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d34bcb97c37d2c7308a746e2adc612de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

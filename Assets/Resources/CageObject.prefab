@@ -113,6 +113,7 @@ GameObject:
   - component: {fileID: 2796245265217132308}
   - component: {fileID: 6767463872900724630}
   - component: {fileID: 2890517374139112063}
+  - component: {fileID: 6609165313024291519}
   m_Layer: 0
   m_Name: CageObject
   m_TagString: Untagged
@@ -165,11 +166,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16af33569c1c61c48a999afed264d60c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colliders: []
   ownerId: 0
   x: 0
   y: 0
   z: 0
+  hud: {fileID: 0}
+  playerOutside: {fileID: 0}
+  holdTime: 0
 --- !u!114 &5798108185388815948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,12 +268,24 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 1, y: 1, z: 1}
+  m_Extents: {x: 0.75, y: 0.65, z: 0.75}
   m_MoveThreshold: 0.1
-  m_Carve: 1
+  m_Carve: 0
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0.9, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &6609165313024291519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2487970835940965391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d34bcb97c37d2c7308a746e2adc612de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2487970836280540819
 GameObject:
   m_ObjectHideFlags: 0

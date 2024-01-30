@@ -47,10 +47,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewId: 0
-  objectiveId: 
+  objectiveId: 0
   startTime: 0
   spawnedObjectsId: 
-  spawnLocationDescription: 
+  spawnLocationAreaId: 0
+  spawnLocationIndex: 0
+  objectiveWaypointId: 0
+  objectiveWaypointPos: {x: 0, y: 0, z: 0}
 --- !u!114 &1349439765374117656
 MonoBehaviour:
   m_ObjectHideFlags: 0

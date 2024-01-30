@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4087635331820115852}
   - component: {fileID: 4841281929834598408}
+  - component: {fileID: 7028974030411812817}
   m_Layer: 10
   m_Name: Slider
   m_TagString: Untagged
@@ -91,6 +92,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7028974030411812817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405970943559716576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62dc74bc1a1c7a40a8be6c16263399ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bucketFill: {fileID: 1792147444348374794}
+  slider: {fileID: 0}
 --- !u!1 &1549177152710504172
 GameObject:
   m_ObjectHideFlags: 0
@@ -439,6 +454,7 @@ GameObject:
   - component: {fileID: 8832136190533875666}
   - component: {fileID: 8213143060414362707}
   - component: {fileID: 8143490686729309217}
+  - component: {fileID: 5167232233327472503}
   m_Layer: 10
   m_Name: Bucket
   m_TagString: Bucket
@@ -485,11 +501,13 @@ MonoBehaviour:
   pourSpeed: 0.1
   isFilling: 0
   isPouring: 0
+  fillAmount: 0
   water: {fileID: 0}
   waterLevelHeightTop: 0
   waterLevelHeightBottom: 0.1
   waterLevelHeightCurrent: 0
   waterLevelRiseAmount: 0
+  currentFireInteraction: {fileID: 0}
 --- !u!114 &7206424688201829660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -576,8 +594,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 1
-  m_TeleportEnabled: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
 --- !u!136 &8213143060414362707
 CapsuleCollider:
@@ -609,6 +627,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &5167232233327472503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4993735558651106425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d34bcb97c37d2c7308a746e2adc612de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4993775609881798783
 GameObject:
   m_ObjectHideFlags: 0

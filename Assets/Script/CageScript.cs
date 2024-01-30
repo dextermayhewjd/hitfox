@@ -2,11 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
-public class CageScript : OnTrigger
+public class CageScript : MonoBehaviour
 {
     public int ownerId;
     public float x, y, z;
+
+    public GameObject hud;
+    public PhotonView playerOutside;
+    public float holdTime;
 
     [PunRPC]
     void RPC_Rescue(int playerID)
@@ -22,6 +27,60 @@ public class CageScript : OnTrigger
         x = 0;
         y = 0.3f;
         z = 0;
+        playerOutside = null;
+        holdTime = 0f;
+        hud = GameObject.Find("HUD");
+    }
+
+    void OnTriggerEnter(Collider other) {
+        if (!other.CompareTag("Player"))
+        {
+            return;
+        }
+
+        if (other.gameObject.GetComponent<PhotonView>().IsMine && !other.gameObject.GetComponent<PlayerMovement>().driving && !other.gameObject.GetComponent<PlayerMovement>().captured) {
+            hud.transform.Find("InteractButton").gameObject.SetActive(true); // show button
+            hud.transform.Find("InteractButton").Find("ActionText").gameObject.GetComponent<TextMeshProUGUI>().text = "Rescue"; // change text of action
+            playerOutside = other.gameObject.GetComponent<PhotonView>();
+        }
+    }
+
+    void OnTriggerExit(Collider other) {
+        if (!other.CompareTag("Player"))
+        {
+            return;
+        }
+
+        if (other.gameObject.GetComponent<PhotonView>().IsMine) {
+            hud.transform.Find("InteractButton").gameObject.SetActive(false); // hide button
+            playerOutside = null;
+            holdTime = 0f;
+        }
+    }
+
+    void OnTriggerStay(Collider other) {
+        if (!other.CompareTag("Player"))
+        {
+            return;
+        }
+
+        if (other.gameObject.GetComponent<PhotonView>().IsMine &&
+        !other.gameObject.GetComponent<PlayerMovement>().captured && !other.gameObject.GetComponent<PlayerMovement>().driving) 
+        {
+            Debug.Log("interacted");
+            if (Input.GetButton("Interact"))
+            {
+                holdTime += Time.deltaTime;
+                if (holdTime >= 5f) {
+                    Debug.Log("destroy");
+                    this.gameObject.GetComponent<PhotonView>().RequestOwnership();
+                    this.gameObject.GetComponent<PhotonView>().RPC("RPC_Rescue", RpcTarget.All, ownerId);
+                    PhotonNetwork.Destroy(gameObject);
+                }
+            } else {
+                holdTime = 0;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -31,19 +90,6 @@ public class CageScript : OnTrigger
         {
             Vector3 pos = new Vector3(this.transform.position.x + x, this.transform.position.y + y, this.transform.position.z + z);
             PhotonView.Find(ownerId).gameObject.transform.position = pos;
-        }
-
-        if (Input.GetButtonDown("Interact")) 
-        {
-            Debug.Log("interacted");
-            if (colliders.Find(x => x.GetComponent<PhotonView>().IsMine) != null &&
-            !colliders.Find(x => x.GetComponent<PhotonView>().IsMine).GetComponent<PlayerMovement>().captured)
-            {
-                Debug.Log("destroy");
-                base.photonView.RequestOwnership();
-                this.photonView.RPC("RPC_Rescue", RpcTarget.AllBuffered, ownerId);
-                PhotonNetwork.Destroy(gameObject);
-            }
         }
     }
 }

@@ -407,6 +407,7 @@ GameObject:
   - component: {fileID: 8793351048570617825}
   - component: {fileID: 4443863054036481369}
   - component: {fileID: 6825569104194054213}
+  - component: {fileID: 3473158642947970603}
   m_Layer: 10
   m_Name: Wine
   m_TagString: Trash
@@ -516,8 +517,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 1
-  m_TeleportEnabled: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &6825569104194054213
 MonoBehaviour:
@@ -535,3 +536,15 @@ MonoBehaviour:
   throwForce: 0
   hasBeenDeleted: 0
   hud: {fileID: 0}
+--- !u!114 &3473158642947970603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8486783653839049495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d34bcb97c37d2c7308a746e2adc612de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

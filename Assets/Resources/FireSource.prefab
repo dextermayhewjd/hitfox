@@ -51,6 +51,7 @@ MonoBehaviour:
   maxFires: 5
   fireSpreadRate: 5
   fires: 
+  points: 80
 --- !u!114 &6165312480713722321
 MonoBehaviour:
   m_ObjectHideFlags: 0

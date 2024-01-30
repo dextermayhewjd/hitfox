@@ -12,20 +12,18 @@ public class FireInteraction : MonoBehaviourPun
     // public GameObject QuestSystem = GameObject.Find("QuestManager");
     // for the fire it encounter 
     private BucketFill BucketFillInteraction;
+
+    [SerializeField] private int points;
     
     void Update(){
         // if the fire is put out
         if(health <= 0)
         {
             BucketFillInteraction.isPouring = false;
+            BucketFillInteraction.currentFireInteraction = null;
             PhotonNetwork.Destroy(this.gameObject);
-            if (PhotonNetwork.IsMasterClient) {
-                BucketFillInteraction = null;
-                GameObject objectives = GameObject.Find("Timer+point");
-                Debug.Log("20 points for putting out fire");
-                objectives.GetComponent<Timer>().IncreaseScore(20);
-                // QuestSystem.GetComponent<Quest>().missionComplete("Fire");
-            }
+            BucketFillInteraction = null;
+            // QuestSystem.GetComponent<Quest>().missionComplete("Fire");
         }
         else
         {
@@ -34,9 +32,13 @@ public class FireInteraction : MonoBehaviourPun
                 health = 1f;
             }
             health += recoverSpeed*Time.deltaTime;
+            // progressBar.value = Mathf.Clamp(health,0f,1f);
+            // this.photonView.RPC("RPC_UpdateBucket", RpcTarget.AllBuffered);
         }
-        progressBar.value = Mathf.Clamp(health,0f,1f);
-        // this.photonView.RPC("RPC_UpdateBucket", RpcTarget.AllBuffered);
+    }
+
+    void OnTriggerStay(Collider other) {
+        
     }
 
     void OnTriggerEnter(Collider collision)
@@ -54,11 +56,5 @@ public class FireInteraction : MonoBehaviourPun
         {    
             BucketFillInteraction = null;
         }
-    }
-
-    [PunRPC]
-    void RPC_UpdateBucket()
-    {
-        
     }
 }
